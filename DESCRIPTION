@@ -1,0 +1,14 @@
+Package: ensemblVEP
+Version: 0.99.1 
+Title: R Interface to Ensembl Variant Effect Predictor 
+Author: Valerie Obenchain <vobencha@fhcrc.org>,
+Maintainer: Valerie Obenchain <vobencha@fhcrc.org>
+Depends: methods, BiocGenerics, GenomicRanges
+Imports: GenomicFeatures, VariantAnnotation
+biocViews: Annotation, Bioinformatics 
+Description: Query the Ensembl Variant Effect Predictor via the perl API 
+SystemRequirements: EnsemblVEP must be installed and in the users path. 
+                    See http://www.ensembl.org/info/docs/variation/vep/index.html 
+                    for installation instructions.
+License: Artistic-2.0
+LazyLoad: yes
