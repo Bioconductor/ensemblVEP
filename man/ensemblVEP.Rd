@@ -4,23 +4,23 @@
 \alias{ensemblVEP,character-method}
 
 \title{
-  Ensembl Variant Effect Predictor (VEP)
+  Query Ensembl Variant Effect Predictor
 }
 
 \description{
   Retrieve variant annotation data from the Ensembl Variant Effect 
-  Predictor web service
+  Predictor (VEP).
 }
 
 \usage{
-\S4method{EnsemblVEP}{character}(file, ..., param=VEPParam(), genome="GRCh37")
+\S4method{ensemblVEP}{character}(file, ..., param=VEPParam(), genome="GRCh37")
 }
 
 \arguments{
   \item{file}{A  \code{character} specifying the full path to the
     file, including the file name. 
   }
-  \item{VEPParam}{An instance of \code{VEPParam} specifying the run options.
+  \item{param}{An instance of \code{VEPParam} specifying the run options.
   }
   \item{genome}{A \code{character} specifying the genome to be passed to 
     \code{readVcf{}}.
@@ -35,16 +35,19 @@
       The Ensembl VEP tool is described in detail on the home page.
       \url{http://www.ensembl.org/info/docs/variation/vep/index.html}
 
-      The \code{ensemblVEP} function wraps the perl API and requires a local 
-      install of the Ensembl VEP available in the users path. The 
+      The \code{ensemblVEP} function wraps the perl API and requires a 
+      local install of the Ensembl VEP available in the users path. The 
       \code{VEPParam} class provides a way to specify runtime options. 
-      Results are stored in a temporary file and read into a \code{VCF} 
-      object with \code{readVcf}.
+      By default, results are returned as a \code{GRanges} object. Options
+      can be set to read the data into a \code{VCF} object.
     }
   }
 }
 
-\value{A \link{VCF} object or vcf file on disk.}
+\value{
+  Default behavior returns a \code{GRanges} object. Options can be
+  set to return a \link{VCF} object or vcf file on disk.
+}
 
 \author{
   Valerie Obenchain <vobencha@fhcrc.org> 
@@ -52,6 +55,7 @@
 
 \seealso{
   \link{VEPParam-class}
+  \link{VEPToGRanges}
 }
 
 \references{
@@ -63,18 +67,28 @@
 }
 
 \examples{
-## -------------------------------------
-## ensemblVEP() results as VCF object 
-## -------------------------------------
-## The default behavior of ensemblVEP() takes a
-## vcf file as inupt and returns the output as
-## a VCF object.
+## -------------------------------------------------------------
+## Results as GRanges object 
+## -------------------------------------------------------------
+## The default behavior takes a VCF file as input and returns 
+## a GRanges.
 file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation") 
-vep <- ensemblVEP(file)
+gr <- ensemblVEP(file)
+gr
+
+## -------------------------------------------------------------
+## Results as VCF object 
+## -------------------------------------------------------------
+## To change the output to a VCF object, change the --vcf flag
+## in the output options.
+param <- VEPParam()
+output(param)$vcf
+
+output(param)$vcf <- "CSQ"
+vep <- ensemblVEP(file, param=param)
 
 ## When comparing ensemblVEP() results to the data in the
 ## original vcf we see that variant 20:1230237 was not returned.
-library(VariantAnnotation) 
 vcf <- readVcf(file, "hg19")
 rowData(vcf)
 rowData(vep)
@@ -88,27 +102,30 @@ mcols(fixed(vcf))[c("REF", "ALT")]
 ## in an info column called 'CSQ'.
 info(vep)$CSQ
 
-## This column can be parsed with parseCSQ().
-## The return value is a list the same length
-## as the number of variants.
-consequence <- parseCSQ(vep)
-names(consequence)
-
-## -------------------------------------
-## Modifying the VEPParam 
-## -------------------------------------
-## When 'param' is not specified, ensemblVEP() uses
-## the default VEPParam
-param <- VEPParam()
-
-## The VEPParam holds the runtime options in 6 slots.
-## See ?VEPParam for information on class accessors.
-param
-
 ## The results returned in the CSQ column were specified
 ## in the 'fields' field of the output slot.
 output(param)$fields
-colnames(consequence[[4]])
+
+## The CSQ column can be parsed with parseCSQ().
+consequence <- parseCSQ(vep)
+names(consequence)
+
+## -------------------------------------------------------------
+## Results as a VCF file on disk.
+## -------------------------------------------------------------
+## Change the 'output _file' value to a local path and filename.
+param$output_file <- "mypath/myfilename.vcf"
+#ensemblVEP(file, param=param)
+
+## -------------------------------------------------------------
+## The VEPParam  object
+## -------------------------------------------------------------
+## When 'param' is not specified, ensemblVEP() uses
+## the default VEPParam.
+param <- VEPParam()
+
+## The VEPParam holds the values of the runtime options.
+## See ?VEPParam for class accessors.
 
 ## Below are examples of how to modify the 'param' to
 ## control what data are returned.
@@ -119,9 +136,9 @@ basic(param)$quiet <- TRUE
 ## Add HGNC gene identifiers and SO consequence terms
 output(param)$hgnc <- TRUE
 
-## Check for existing co-located variants, output only coding sequence consequences
+## Check for existing co-located variants, output only coding 
+## sequence consequences
 filterqc(param) <- c(check_existing=TRUE, coding_only=TRUE)
-
-## Write vcf to disk instead of a VCF object in R.
-input(param)$output_file <- "ensemblvep.vcf"
 }
+
+\keyword{methods}

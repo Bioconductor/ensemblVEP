@@ -14,15 +14,25 @@
 \alias{databaseOpts}
 \alias{outputOpts}
 \alias{filterqcOpts}
-\alias{cacheOpts}
 
 % Accessors:
 \alias{basic}
+\alias{basic<-}
 \alias{input}
+\alias{input<-}
 \alias{database}
+\alias{database<-}
 \alias{output}
+\alias{output<-}
 \alias{filterqc}
-\alias{cache}
+\alias{filterqc<-}
+
+% $ and $<- methods:
+\alias{$,VEPParam-method}
+\alias{$<-,VEPParam-method}
+
+% "show" method:
+\alias{show,VEPParam-method}
 
 \title{VEPParam objects}
 
@@ -31,53 +41,160 @@
   the Ensembl Variant Effect Predictor.
 }
 
+\details{
+  The \code{VEPParam} class stores runtime options for the \code{ensemblVEP}
+  function which queries the Ensembl Variant Effect Predictor (VEP). Brief
+  descriptions of the runtime options are provided below. For complete
+  details, see the Ensembl VEP web page.
+
+  \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
+
+  Data in the \code{VEPParam} are organized into five slots, 'basic', 'input',
+  'database', 'output' and 'filterqc'. Each slot holds a \code{list} of 
+  runtime options. The 'cache' runtime options are not yet supported.
+  \describe{
+    \item{\code{basic}}{\code{list} of the following options:
+      \itemize{
+        \item{verbose:} \code{logical}; output status messages
+        \item{quiet:} \code{logical}; suppress status and warnings
+        \item{no_progress:} \code{logical}; don't show progress bars
+        \item{config:} \code{FALSE} or character string; load config file
+        \item{everything:} \code{logical}; switch on 12 flags
+        \item{fork:} \code{logical}; enable forking
+      }
+    }
+    \item{\code{input}}{\code{list} of the the following options:
+      \itemize{
+        \item{species:} \code{FALSE} or character; species for your data
+        \item{format:} \code{FALSE} or one of ensembl, vcf, pileup, hgvs, 
+          id or vep; input file format 
+        \item{output_file:} character; path where output file should be
+          written. Default writes to a temp file.
+        \item{force_overwrite:} currently should not be altered
+      }
+    }
+    \item{\code{database}}{\code{list} of the following options:
+      \itemize{
+        \item{host:} \code{logical}; define database host
+        \item{user:} \code{FALSE} or character; define database user
+        \item{password:} \code{FALSE} or character; define database password
+        \item{port:} \code{FALSE} or character; define database port
+        \item{genomes:} \code{logical}; override default connection
+          settings with those for the Ensembl Genomces public MySQL server
+        \item{refseq:} \code{logical}; use otherfeatures database to retrieve
+          transcripts
+        \item{db_version:} \code{FALSE} or character; force connection to
+          specific version
+        \item{registry:} \code{FALSE} or character; provide file to override
+          default connection settings
+      }
+    }
+    \item{\code{output}}{\code{list} of the following options:
+      \itemize{
+        \item{terms:} \code{FALSE} or 'ensembl' or 'so'; type of consequence
+          terms to output
+        \item{sift:} \code{FALSE} or 'p', 's' or 'b'; output prediction
+          term, score or both
+        \item{polyphen:} \code{FALSE} or 'p', 's' or 'b'; output prediction
+          term, score or both
+        \item{regulatory:} \code{logical}; identify overlaps with regulatory 
+          regions
+        \item{cell_type:} \code{FALSE} or character; report only regulatory 
+          regions found in the given cell type 
+        \item{hgvs:} \code{logical}; add hgvs ID's
+        \item{gene:} \code{logical}; add Ensembl gene ID's
+        \item{protein:} \code{logical}; add Ensembl protein ID's
+        \item{ccds:} \code{logical}; add CCDS transcript ID's
+        \item{canonical:} \code{logical}; indicate if transcript is
+          cononical transcript for the gene
+        \item{xref_seq:} \code{logical}; output aligned refseq mRNA ID
+        \item{numbers:} \code{logical}; output affectd exon and intron
+          numbering, format is Number/Total
+        \item{domains:} \code{logical}; output names of overlapping
+          protein domains
+        \item{most_severe:} \code{logical}; output only most severe
+          consequence per variation
+        \item{summary:} \code{logical}; output only a comma-separated
+          list of all observed consequences per variation
+        \item{per_gene:} \code{logical}; output only most severe consequence
+          per gene
+        \item{convert:} \code{FALSE} or 'ensembl', 'vcf', or 'pileup'; 
+          converts input file to specifed format
+        \item{fields:} \code{FALSE} or character vector; output additional
+          fields. Fields may be in the default output columns or any
+          that appear in the Extra column. \code{ensemblVEP} will always
+          import 'Uploaded_variation', 'Location', 'Allele', 'Gene', 
+          'Feature', 'Feature_type', 'Consequence', 'Existing_variation'.
+        \item{vcf:} \code{logical}; writes output in vcf format
+        \item{gvf:} \code{logical}; writes output in gcf format
+        \item{original:} \code{logical}; writes output as filtered set of
+          input. Must be used with --filter.
+      }
+    }
+    \item{\code{filterqc}}{\code{list} of the following options:
+      \itemize{
+        \item{check_ref:} \code{logical}; force check of supplied reference
+          allele against the sequence stored in Ensembl Core database
+        \item{coding_only:} \code{logical}; only return consequences in 
+          coding regions
+        \item{check_existing:} \code{logical}; check for existence of 
+          co-located variants 
+        \item{check_alleles:} \code{logical}; when checking for existance
+          of co-located variants only report a co-located variant is none
+          of the alleles supplied are novel 
+        \item{check_svs:} \code{logical}; check for existence of structural
+          variants that overlap your input
+        \item{gmaf:} \code{logical}; add global minor allele frequence (MAF)
+          from 1000 Genomes Phase 1 data 
+        \item{individual:} \code{FALSE} or 'all', or character vector of 
+          individuals; consider only alternate alleles present in the
+          genotypes of specified individuals
+        \item{phased:} \code{logical}; force VCF genotypes to be interpreted
+          as phased
+        \item{chr:} \code{FALSE} or character; select a subset of chromosomes
+          to be analyzed from your file
+        \item{no_intergenic:} \code{logical}; do not include intergenic
+          consequences
+        \item{check_frequency:} \code{logical}; turn on frequency filtering,
+          must also specify all of --freq flags. See web page for details. 
+        \item{freq_pop:} \code{FALSE} or character; population to use in 
+          frequency filter
+        \item{freq_freq:} \code{FALSE} or numeric; MAF to use in frequency 
+          filter
+        \item{freq_gt_lt:} \code{FALSE} or 'gt' or 'lt'; specify whether the
+          frequency of the co-located variant must be greater than or less
+          than the value specified with \code{freq_freq}.
+        \item{freq_filter:} \code{FALSE} or 'exclude' or 'include'; specify 
+          whether to include or exclude variant that pass the frequency
+          filter 
+        \item{filter:} \code{FALSE} or character vector; filter the
+          output on consequence type. See web page for details.
+        \item{failed:} \code{logical}; when checking for co-located variants
+          include or exclude variants that have been flagged as failed
+        \item{allow_non_variant:} \code{logical}; when using VCF format as
+          input and output, by default VEP will skip all non-variant lines of 
+          input (ALT is NULL). When this option is enabled, lines will be 
+          printed in the VCF output with no consequence data added.
+      }
+    }
+  }
+  The \code{cache} options are not yet supported.
+}
+
 \section{Constructor}{
   \describe{
     \item{}{
       \code{VEPParam(basic=basicOpts(), input=inputOpts(),
                      database=databaseOpts(), output=outputOpts(),
-                     filterqc=filterqcOpts(), cache=cacheOpts(), ...)}
+                     filterqc=filterqcOpts(), ...)}
       Creates a \code{VEPParam} object.
-    }
-  }
-}
-
-\details{
-  The \code{VEPParam} class stores the runtime options for the Ensembl Variant
-  Effect Predictor (VEP) as described on their web page :
-
-  \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
-
-  Data are organized into six slots:
-  \describe{
-    \item{\code{basic}}{Contains the basic options as a \code{character} 
-      vector. Fields include verbose, quiet, no_progress, config,
-      everything and fork.
-    }
-    \item{\code{input}}{Contains the input options as a \code{character}
-      vector. Fields include species, input_file, format, output_file and
-      force_overwrite.
-    }
-    \item{\code{database}}{Contains the database options as a \code{list}. 
-      Fields include host, user, password, port, genomes, refseq, db_version 
-      and registry.
-    }
-    \item{\code{output}}{Contains the output options as a \code{character}
-      vector. Fields include terms, sift, polyphen, regulatory, cell_type,
-      hgvs, gene, protein, hgnc, ccds, canonical, xref_refseq, numbers,
-      domains, most_severe, summary, per_gene, convert, fields, vcf,
-      gvf, original, custom and plugin.
-    }
-    \item{\code{filterqc}}{Contains the filter and QC options as a 
-      \code{character} vector. Fields include check_ref, coding_only,
-      check_alleles, check_svn, gmaf, individual, phased, chr, no_intergenic,
-      check_frequency, freq_pop, freq_freq, freq_gt_lt, freq_filter, filter,
-      failed and allow_non_variant. 
-    }
-    \item{\code{cache}}{Contains the cache options as a \code{character}
-      vector. Fields include no_whole_genome, cache, dir, offline,
-      buffer_size, write_cache, build, compress, skip_db_check,
-      cache_region_size and fasta. 
+      \describe{
+        \item{\code{basic}}{\code{list} of basic options}
+        \item{\code{input}}{\code{list} of input options}
+        \item{\code{database}}{\code{list} of database options}
+        \item{\code{output}}{\code{list} of output options}
+        \item{\code{filterqc}}{\code{list} of filterqc options}
+      }
     }
   }
 }
@@ -92,42 +209,49 @@
     \item{}{\code{database(x)}, \code{database(x) <- value}}
     \item{}{\code{output(x)}, \code{output(x) <- value}}
     \item{}{\code{filterqc(x)}, \code{filterqc(x) <- value}}
-    \item{}{\code{cache(x)}, \code{cache(x) <- value}}
+  }
+}
+
+\section{Subsetting}{
+  In the following code, \code{x} is a \code{VEPParam} object.
+  \describe{
+     \item{}{
+       \code{x$name}, \code{x$name <- value}:
+       Get or set a runtime option from a \code{VEPParam}.
+     }
   }
 }
 
 \section{Helper functions}{
-  These functions create the runtime options and are used in the 
-  \code{VEPParam} constructor.
+  These functions create a \code{list} of runtime options and are 
+  used in the \code{VEPParam} constructor.
   \describe{
     \item{}{
-      \code{basicOpts(verbose=logical(), quiet=logical(), 
-                      no_progress=logical(), config=logical(), 
-                      everything=logical(), fork=logical())}
+      \code{basicOpts <- function(verbose=logical(1), quiet=logical(1),
+                no_progress=logical(1), config=logical(1),
+                everything=logical(1), fork=logical(1))}
     }
     \item{}{
-      \code{inputOpts(species="homo_sapiens", input_file=character(), 
-                      format="vcf", output_file=paste0(tempdir(), "/temp.vcf", 
-                      force_overwrite=logical())}
+      \code{inputOpts(species="homo_sapiens", format="vcf", 
+                output_file=paste0(tempdir(), "/temp.vcf"), 
+                force_overwrite=TRUE)}
     }
     \item{}{
-      \code{databaseOpts(host="useastdb.ensembl.org", user=character(), 
-                         password=character(), port=character(), 
-                         genomes=character(), refseq=character(),
-                         db_version=character(), registry=character())}
+      \code{databaseOpts <- function(host="useastdb.ensembl.org", 
+                user=logical(1), password=logical(1), port=logical(1),
+                genomes=logical(1), refseq=logical(1),
+                db_version=logical(1), registry=logical(1))}
     }
     \item{}{
-      \code{outputOpts(terms=character(), sift=logical(), 
-                       polyphen=logical(), regulatory=logical(), 
-                       cell_type=list(), hgvs=logical(), gene=logical(),
-                       protein=logical(), hgnc=logical(), ccds=logical(),
-                       canonical=logical(), xref_refseq=logical(), 
-                       numbers=logical(), domains=logical(), 
-                       most_severe=logical(), summary=logical(), 
-                       per_gene=logical(), convert=character(),
-                       fields=list(), vcf=logical(), gvf=logical(), 
-                       original=logical(), custom=character(),
-                       plugin=character())}
+      \code{filterqcOpts <- function(check_ref=logical(1), 
+                coding_only=logical(1), check_existing=logical(1), 
+                check_alleles=logical(1), check_svs=logical(1), 
+                gmaf=logical(1), individual=logical(1), phased=logical(1),
+                chr=logical(1), no_intergenic=logical(1),
+                check_frequency=logical(1), freq_pop=logical(1),
+                freq_freq=logical(1), freq_gt_lt=logical(1),
+                freq_filter=logical(1), filter=logical(1),
+                failed=logical(1), allow_non_variant=logical(1))}
     }
   }
 }
@@ -139,30 +263,47 @@
 }
 
 \examples{
-  ## Note that a default VEPParam has
-  ## fields set in the 'input', 'database' and
-  ## 'output' slots.
+  ## First create the default VEPParam.
   param <- VEPParam()
+
+  ## By default, no options are set for 'basic' or 'filterqc'.
+  ## 'input' has 4 options set, 'database' has 1 and 'output' has 3.
   param
 
-  ## Use the accessors to see all available fields and current values.
+  ## View all values in the 'basic' and 'input' slots.
   basic(param)
   input(param)
 
-  ## The 'everything' flag is not currently set in the basic options.
+  ## Individual values can be accessed with slot accessors or '$'.
+  basic(param)$everything
+  param$everything
+
+  ## Change the value of the 'everything' option to TRUE.
+  basic(param)$everything <- TRUE
   basic(param)$everything
 
-  ## Switch on the flag and confirm the value change.
-  basic(param) <- c("everything"=TRUE)
-  basic(param)$everything
+  ## Using '$' directly on the VEPParam will also modify values.
+  param$everything <- FALSE
+  param$everything
 
-  ## The change
-  param
+  ## Change multiple values with a named vector.
+  basic(param) <- c(no_progress=TRUE, verbose=TRUE)
+  basic(param)
 
   ## Write the output to myfile.vcf instead of returning a VCF object.
-  ## Return the sift and polyphen predictions and scores. 
+  ## Return the sift and polyphen predictions only (not scores).
   VEPParam(input=inputOpts(output_file="path/myfile.vcf"),
-           output=outputOpts(sift="b", polyphen="b"))
+           output=outputOpts(sift="p", polyphen="p"))
+
+  ## 'sift' and 'polyphen' are runtime options that require
+  ## a character value, (i.e., 's', 'p', or 'b').
+  param$sift
+
+  ## To turn off 'sift' or 'polyphen' set the value to FALSE.
+  param$sift <- FALSE
+
+  ## Setting such values to TRUE will result in an error.
+  #param$sift <- TRUE
 }
 
 \keyword{methods}

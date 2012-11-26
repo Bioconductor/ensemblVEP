@@ -1,7 +1,7 @@
 import(BiocGenerics)
 import(GenomicRanges)
 import(VariantAnnotation)
+importClassesFrom(Biostrings, DNAStringSet)
 
 exportPattern("^[^\\.]")
 exportClassPattern("^.*$")
-

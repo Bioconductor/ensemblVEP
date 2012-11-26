@@ -6,19 +6,26 @@ setMethod("ensemblVEP", "character",
     function(file, ..., param=VEPParam(), genome="GRCh37")
     {
         ## FIXME : check for ensemblVEP installation
+        if (!is.logical(param$vcf))
+            fun <- readVcf
+        else
+            fun <- VEPToGRanges
+
         call <- paste0("variant_effect_predictor.pl ", 
                        "--input ", file, .createOpts(param)) 
         system(call)
-        readVcf(input(param)$output_file, genome)
+        fun(input(param)$output_file, ..., genome=genome)
     }
 )
 
 .createOpts <- function(param, ...)
 {
+    
     ops <- c(basic(param), input(param), database(param), 
-             output(param), filterqc(param), cache(param))
-    idx <- sapply(ops, function(elt) length(elt) > 0L)
-    paste0(" --", names(ops)[idx], " ", ops[idx], collapse=" ")
+             output(param), filterqc(param))
+    drop <- which(ops == FALSE)
+    ops[which(ops == TRUE)] <- character(1) 
+    paste0(" --", names(ops)[-drop], " ", ops[-drop], collapse=" ")
 }
 
 parseCSQ <- function(vcf)
@@ -39,6 +46,3 @@ parseCSQ <- function(vcf)
     names(lst) <- rownames(vcf)
     lst
 }
-
-
-

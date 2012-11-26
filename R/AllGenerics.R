@@ -1,4 +1,4 @@
 setGeneric("ensemblVEP", signature = "file",
-           function(file, VEPpath, ...) 
+           function(file, ...) 
                standardGeneric("ensemblVEP")
 )
