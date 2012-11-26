@@ -1,7 +1,0 @@
-import(BiocGenerics)
-import(GenomicRanges)
-import(VariantAnnotation)
-
-exportPattern("^[^\\.]")
-exportClassPattern("^.*$")
-
