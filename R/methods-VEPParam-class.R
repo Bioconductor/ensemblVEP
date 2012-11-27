@@ -230,7 +230,7 @@ filterqcOpts <- function(check_ref=logical(1), coding_only=logical(1),
 #                      skip_db_check=logical(1), cache_region_size=numeric(),
 #                      fasta=logical(1))
 #{
-#    list(no_while_genome=no_whole_genome, cache=cache, dir=dir, offline=offline,
+#    list(no_whole_genome=no_whole_genome, cache=cache, dir=dir, offline=offline,
 #         buffer_size=buffer_size, write_cache=write_cache, build=build,
 #         compress=compress, skip_db_check=skip_db_check, 
 #         cache_region_size=cache_region_size, fasta=fasta)
