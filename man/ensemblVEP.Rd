@@ -13,17 +13,14 @@
 }
 
 \usage{
-\S4method{ensemblVEP}{character}(file, ..., param=VEPParam(), genome="GRCh37")
+\S4method{ensemblVEP}{character}(file, param=VEPParam(), ...)
 }
 
 \arguments{
   \item{file}{A  \code{character} specifying the full path to the
     file, including the file name. 
   }
-  \item{param}{An instance of \code{VEPParam} specifying the run options.
-  }
-  \item{genome}{A \code{character} specifying the genome to be passed to 
-    \code{readVcf{}}.
+  \item{param}{An instance of \code{VEPParam} specifying runtime options.
   }
   \item{\dots}{Additional arguments passed to methods.
   }
@@ -39,14 +36,15 @@
       local install of the Ensembl VEP available in the users path. The 
       \code{VEPParam} class provides a way to specify runtime options. 
       By default, results are returned as a \code{GRanges} object. Options
-      can be set to read the data into a \code{VCF} object.
+      can be set to read the data into a \code{VCF} object or write a
+      file to disk.
     }
   }
 }
 
 \value{
   Default behavior returns a \code{GRanges} object. Options can be
-  set to return a \link{VCF} object or vcf file on disk.
+  set to return a \link{VCF} object or write a file to disk.
 }
 
 \author{
@@ -55,7 +53,6 @@
 
 \seealso{
   \link{VEPParam-class}
-  \link{VEPToGRanges}
 }
 
 \references{
@@ -67,78 +64,82 @@
 }
 
 \examples{
-## -------------------------------------------------------------
-## Results as GRanges object 
-## -------------------------------------------------------------
-## The default behavior takes a VCF file as input and returns 
-## a GRanges.
+## -----------------------------------------------------------------------
+## Results returned as GRanges or VCF objects
+## -----------------------------------------------------------------------
+## The default behavior returns a GRanges with the consequence
+## data as metadata columns.
 file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation") 
 gr <- ensemblVEP(file)
-gr
+gr[1:3]
 
-## -------------------------------------------------------------
-## Results as VCF object 
-## -------------------------------------------------------------
-## To change the output to a VCF object, change the --vcf flag
-## in the output options.
-param <- VEPParam()
-output(param)$vcf
+## When the 'vcf' option is TRUE, a VCF object is returned.
+myparam <- VEPParam(output=c(vcf=TRUE))
+vcf <- ensemblVEP(file, param=myparam)
+vcf
 
-output(param)$vcf <- "CSQ"
-vep <- ensemblVEP(file, param=param)
+## The consequence data are returned as the 'CSQ' column in info.
+info(vcf)$CSQ
+
+## To parse this column use parseCSQToGRanges().
+csq <- parseCSQToGRanges(vcf)
+head(csq, 4)
+
+## The columns returned are controlled by the 'fields' option. 
+## By default all fields are returned. See ?VEPParam for details.
 
 ## When comparing ensemblVEP() results to the data in the
-## original vcf we see that variant 20:1230237 was not returned.
-vcf <- readVcf(file, "hg19")
+## input vcf we see that variant 20:1230237 was not returned.
+vcf_input <- readVcf(file, "hg19")
+rowData(vcf_input)
 rowData(vcf)
-rowData(vep)
 
 ## This variant has no alternate allele and is called a
-## monomorphic reference. The EnsemblVEP drops these
+## monomorphic reference. The Ensembl VEP drops these
 ## variants. 
-mcols(fixed(vcf))[c("REF", "ALT")]
+rowData(vcf)[,c("REF", "ALT")]
 
-## The consequence results from ensemblVEP() are 
-## in an info column called 'CSQ'.
-info(vep)$CSQ
+## -----------------------------------------------------------------------
+## Results written to disk
+## -----------------------------------------------------------------------
+## By default 'output_file' is set to write to tempfile().
+param <- VEPParam()
+param
+input(param)$output_file
 
-## The results returned in the CSQ column were specified
-## in the 'fields' field of the output slot.
-output(param)$fields
+## To write a file to disk, provide a path and file name
+## as the 'output_file'.
+## Write a vcf file to myfile.vcf:
+myparam <- VEPParam(output=c(vcf=TRUE), 
+                    input=c(output_file="/path/myfile.vcf"))
+## Write a gvf file to myfile.gvf:
+myparam <- VEPParam(output=c(gvf=TRUE), 
+                    input=c(output_file="/path/myfile.gvf"))
 
-## The CSQ column can be parsed with parseCSQ().
-consequence <- parseCSQ(vep)
-names(consequence)
-
-## -------------------------------------------------------------
-## Results as a VCF file on disk.
-## -------------------------------------------------------------
-## Change the 'output _file' value to a local path and filename.
-param$output_file <- "mypath/myfilename.vcf"
-#ensemblVEP(file, param=param)
-
-## -------------------------------------------------------------
-## The VEPParam  object
-## -------------------------------------------------------------
-## When 'param' is not specified, ensemblVEP() uses
-## the default VEPParam.
+## -----------------------------------------------------------------------
+## Runtime options
+## -----------------------------------------------------------------------
+## All runtime options are controlled by specifying a VEPParam.
+## See ?VEPParam for complete details.
 param <- VEPParam()
 
-## The VEPParam holds the values of the runtime options.
-## See ?VEPParam for class accessors.
+## Logical options are turned on/off with TRUE/FALSE. By
+## default, 'quiet' is FALSE.
+basic(param)$quiet
 
-## Below are examples of how to modify the 'param' to
-## control what data are returned.
-
-## Silence the status bars and warning messages.
+## Setting 'quiet' to TRUE will suppress all status and warnings.
 basic(param)$quiet <- TRUE
 
-## Add HGNC gene identifiers and SO consequence terms
-output(param)$hgnc <- TRUE
+## Characater options are turned on/off by specifying a character 
+## value or an empty character (i.e., character()). By default no 
+## 'sift' results are returned.
+output(param)$sift
 
-## Check for existing co-located variants, output only coding 
-## sequence consequences
-filterqc(param) <- c(check_existing=TRUE, coding_only=TRUE)
+## Setting 'sift' to 'b' will return both predictions and scores.
+output(param)$sift <- 'b'
+
+## Return 'sift' to the original state of no results returned.
+output(param)$sift <- character() 
 }
 
 \keyword{methods}

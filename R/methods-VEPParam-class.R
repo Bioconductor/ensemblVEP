@@ -6,13 +6,27 @@
 ### Constructor
 ###
 
-VEPParam  <- function(basic=basicOpts(), input=inputOpts(), 
-    database=databaseOpts(), output=outputOpts(), 
-    filterqc=filterqcOpts(), 
+VEPParam  <- function(basic=list(), input=list(), database=list(), 
+    output=list(), filterqc=list(), 
     ...) 
 {
-    new("VEPParam", basic=basic, input=input, database=database, 
-       output=output, filterqc=filterqc)
+    bopts <- basicOpts()
+    bopts[names(basic)] <- basic
+
+    iopts <- inputOpts()
+    iopts[names(input)] <- input 
+
+    dbopts <- databaseOpts()
+    dbopts[names(database)] <- database
+
+    oopts <- outputOpts()
+    oopts[names(output)] <- output
+
+    fopts <- filterqcOpts()
+    fopts[names(filterqc)] <- filterqc 
+
+    new("VEPParam", basic=bopts, input=iopts, database=dbopts, 
+        output=oopts, filterqc=fopts)
 }
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -21,64 +35,106 @@ VEPParam  <- function(basic=basicOpts(), input=inputOpts(),
 
 .valid.VEPParam.basic <- function(x)
 {
-    lg <- basic(x)[!names(basic(x)) %in% "config"] 
-    if (!all(valid <- sapply(lg, is.logical)))
-        return(paste0(paste(lg[!valid], sep=","), 
+    b <- basic(x)
+    opt <- c("verbose", "quiet", "no_progress", "config",
+             "everything", "fork")
+    if (any(invalid <- !names(b) %in% opt))
+        return(paste0("invalid options: ", 
+               paste(names(b)[invalid], sep=",")))
+
+    logic <- b[names(b) != "config"]
+    if (!all(valid <- sapply(logic, is.logical)))
+        return(paste0(paste(logic[!valid], sep=","), 
                " must be TRUE or FALSE"))
 
-    config <- basic(x)$config
-    if (is.logical(config))
-        if (config)
-            return("'config' must be FALSE or a file name")
+    if (!is.character(b$config))
+        return("'config' must be character() or a file name")
     NULL 
 } 
 
 .valid.VEPParam.input <- function(x)
 {
-    format <- x$format
-    if (!format %in% c("ensembl", "vcf", "pileup", "hgvs",
-                       "id", "vep"))
-        return(paste0("'format' must be one of 'ensembl', 'vcf', ", 
-               "'pileup', 'hgvs', 'id' or 'vep'."))
-    if (!x$force_overwrite)
-        return("'force_overwrite' must be TRUE when 'format=vcf'.")
+    i <- input(x)
+    opt <- c("species", "format", "output_file", "force_overwrite")
+    if (any(invalid <- !names(i) %in% opt))
+        return(paste0("invalid options: ", 
+               paste(names(i)[invalid], sep=",")))
+    format <- i$format
+    if (!identical(character(), format))
+        if (!format %in% c("ensembl", "vcf", "pileup", "hgvs",
+                           "id", "vep"))
+            return(paste0("'format' must be one of 'ensembl', ",
+                          "'vcf', 'pileup', 'hgvs', 'id' or 'vep'."))
     NULL 
 } 
 
+.valid.VEPParam.database <- function(x)
+{
+    d <- database(x)
+    opt <- c("host", "user", "password", "port", "genomes", 
+             "refseq", "db_version", "registry")
+    if (any(invalid <- !names(d) %in% opt))
+        return(paste0("invalid options: ", 
+               paste(names(d)[invalid], sep=",")))
+    if (!is.numeric(d$port))
+        return("'port' must be numeric")
+    if (!is.numeric(d$db_version))
+        return("'db_version' must be numeric")
+    NULL
+}
+
 .valid.VEPParam.output <- function(x)
 {
-    output <- output(x)
-    lg <- output[c("regulatory", "cell_type", "hgvs",
-        "gene", "protein", "hgnc", "ccds", "canonical", "xref_refseq",
-        "numbers", "domains", "most_severe", "summary", "per_gene",
-        "gvf", "original")]  
-    if (any(nonlog <- !sapply(lg, is.logical)))
+    o <- output(x)
+    opt <- c("terms", "sift", "polyphen", "regulatory", "cell_type",
+             "hgvs", "gene", "protein", "hgnc", "ccds", "canonical", 
+             "xref_refseq", "numbers", "domains", "most_severe", 
+             "summary", "per_gene", "convert", "fields", "vcf", "gvf", 
+             "original")
+    if (any(invalid <- !names(o) %in% opt))
+        return(paste0("invalid options: ", 
+               paste(names(o)[invalid], sep=",")))
+    logic <- o[c("regulatory", "hgvs", "gene", "protein", "hgnc", 
+                 "ccds", "canonical", "xref_refseq", "numbers", 
+                 "domains", "most_severe", "summary", "per_gene",
+                 "gvf", "original")]
+    if (any(nonlog <- !sapply(logic, is.logical)))
         return(paste0(paste(names(nonlog)[nonlog], sep=","), 
                " must be TRUE or FALSE"))
-
-    if (is.logical(output$terms))
-        if (output$terms)
-            return("'terms' must be FALSE or 'all' or 'so'")
-    if (is.logical(output$sift))
-        if (output$sift)
-            return("'sift' must be FALSE or 'p', 's' or 'b'")
-    if (is.logical(output$polyphen))
-        if (output$polyphen)
-            return("'polyphen' must be FALSE or 'p', 's' or 'b'")
-    if (is.logical(output$convert))
-        if (output$convert)
-          return("'convert' must be FALSE or 'ensembl', 'vcf' or 'pileup'")
+    if (!is.character(o$cell_type))
+        return("'cell_type' must be a character'")
+    if (is.logical(o$terms))
+        if (o$terms)
+            return("'terms' must be character() or 'all' or 'so'")
+    if (is.logical(o$sift))
+        if (o$sift)
+            return("'sift' must be character() or 'p', 's' or 'b'")
+    if (is.logical(o$polyphen))
+        if (o$polyphen)
+            return("'polyphen' must be characater() or 'p', 's' or 'b'")
+    if (is.logical(o$convert))
+        if (o$convert)
+          return(paste0("'convert' must be character() or 'ensembl', ",
+                 "'vcf' or 'pileup'"))
     NULL 
 }
  
 .valid.VEPParam.filterqc <- function(x)
 {
-    filt <- filterqc(x)
-    lg <- filt[c("check_ref", "coding_only",
+    f <- filterqc(x)
+    opt <- c("check_ref", "coding_only", "check_existing", 
+             "check_alleles", "check_svs", "gmaf", "individual", 
+             "phased", "chr", "no_intergenic", "check_frequency", 
+             "freq_pop", "freq_freq", "freq_gt_lt", "freq_filter", 
+             "filter", "failed", "allow_non_variant")
+    if (any(invalid <- !names(f) %in% opt))
+        return(paste0("invalid options: ", 
+               paste(names(f)[invalid], sep=",")))
+    logic <- f[c("check_ref", "coding_only",
         "check_existing", "check_alleles", "check_svs", "gmaf", 
         "phased", "no_intergenic", "check_frequency", "failed", 
         "allow_non_variant")]
-    if (any(nonlog <- !sapply(lg, is.logical)))
+    if (any(nonlog <- !sapply(logic, is.logical)))
         return(paste0(paste(names(nonlog)[nonlog], sep=","), 
                " must be TRUE or FALSE"))
     NULL 
@@ -88,6 +144,7 @@ VEPParam  <- function(basic=basicOpts(), input=inputOpts(),
 {
     c(.valid.VEPParam.basic(x),
       .valid.VEPParam.input(x),
+      .valid.VEPParam.database(x),
       .valid.VEPParam.output(x),
       .valid.VEPParam.filterqc(x))
 }
@@ -108,34 +165,45 @@ filterqc <- function(x) slot(x, "filterqc")
 "basic<-" <- function(x, value) 
 {
     slot(x, "basic")[names(value)] <- value
-    validObject(x) 
+    msg <- .valid.VEPParam.basic(x)
+    if (!is.null(msg))
+        stop(msg) 
     x
 }
 
 "input<-" <- function(x, value) 
 {
     slot(x, "input")[names(value)] <- value
-    validObject(x) 
+    msg <- .valid.VEPParam.input(x)
+    if (!is.null(msg))
+        stop(msg) 
     x 
 }
 
 "database<-" <- function(x, value) 
 {
     slot(x, "database")[names(value)] <- value
+    msg <- .valid.VEPParam.database(x)
+    if (!is.null(msg))
+        stop(msg) 
     x 
 }
 
 "output<-" <- function(x, value) 
 {
     slot(x, "output")[names(value)] <- value
-    validObject(x) 
+    msg <- .valid.VEPParam.output(x)
+    if (!is.null(msg))
+        stop(msg) 
     x 
 }
 
 "filterqc<-" <- function(x, value) 
 {
     slot(x, "filterqc")[names(value)] <- value
-    validObject(x) 
+    msg <- .valid.VEPParam.filterqc(x)
+    if (!is.null(msg))
+        stop(msg) 
     x 
 }
 
@@ -152,7 +220,7 @@ filterqc <- function(x) slot(x, "filterqc")
 ###
 
 basicOpts <- function(verbose=logical(1), quiet=logical(1), 
-                      no_progress=logical(1), config=logical(1), 
+                      no_progress=logical(1), config=character(), 
                       everything=logical(1), fork=logical(1))
 {
     list(verbose=verbose, quiet=quiet, no_progress=no_progress,
@@ -160,46 +228,40 @@ basicOpts <- function(verbose=logical(1), quiet=logical(1),
 } 
 
 
-inputOpts <- function(species="homo_sapiens", format="vcf", 
-                      output_file=paste0(tempdir(), "/temp.vcf"), 
-                      force_overwrite=TRUE)
+inputOpts <- function(species="homo_sapiens", format=character(), 
+                      output_file=character(), 
+                      force_overwrite=logical(1))
 {
     list(species=species, format=format, output_file=output_file, 
          force_overwrite=force_overwrite)
 } 
 
-databaseOpts <- function(host="useastdb.ensembl.org", user=logical(1), 
-                         password=logical(1), port=logical(1), 
+databaseOpts <- function(host="useastdb.ensembl.org", user=character(), 
+                         password=character(), port=numeric(), 
                          genomes=logical(1), refseq=logical(1),
-                         db_version=logical(1), registry=logical(1))
+                         db_version=numeric(), registry=character())
 {
     list(host=host, user=user, password=password, 
          port=port, genomes=genomes, refseq=refseq,
          db_version=db_version, registry=registry)
 } 
 
-outputOpts <- function(terms=logical(1), sift="b", 
-                       polyphen="b", regulatory=logical(1), 
-                       cell_type=logical(1), hgvs=logical(1), gene=logical(1),
-                       protein=logical(1), hgnc=logical(1), ccds=logical(1),
-                       canonical=logical(1), xref_refseq=logical(1), 
-                       numbers=logical(1), domains=logical(1), 
-                       most_severe=logical(1), summary=logical(1), 
-                       per_gene=logical(1), convert=logical(1),
-                       fields=logical(1), vcf=logical(1), gvf=logical(1), 
-                       original=logical(1))
+outputOpts <- function(terms="so", sift=character(), 
+                       polyphen=character(), regulatory=logical(1), 
+                       cell_type=character(), hgvs=logical(1), 
+                       gene=logical(1), protein=logical(1), hgnc=logical(1), 
+                       ccds=logical(1), canonical=logical(1), 
+                       xref_refseq=logical(1), numbers=logical(1), 
+                       domains=logical(1), most_severe=logical(1), 
+                       summary=logical(1), per_gene=logical(1), 
+                       convert=character(), fields=character(), 
+                       vcf=logical(1), gvf=logical(1), original=logical(1))
 {
-    default <- c("Uploaded_variation", "Location", "Allele", "Gene", 
-        "Feature", "Feature_type", "Consequence", "Existing_variation")
-    if (is.character(fields))
-        fields <- unique(c(default, fields))
-    else
-        fields <- default
     list(terms=terms, sift=sift, polyphen=polyphen, regulatory=regulatory,
-         cell_type=cell_type, hgvs=hgvs, gene=gene, protein=protein, hgnc=hgnc,
-         ccds=ccds, canonical=canonical, xref_refseq=xref_refseq, numbers=numbers,
-         domains=domains, most_severe=most_severe, summary=summary,
-         per_gene=per_gene, convert=convert, fields=paste0(fields, collapse=","),
+         cell_type=cell_type, hgvs=hgvs, gene=gene, protein=protein, 
+         hgnc=hgnc, ccds=ccds, canonical=canonical, xref_refseq=xref_refseq, 
+         numbers=numbers, domains=domains, most_severe=most_severe, 
+         summary=summary, per_gene=per_gene, convert=convert, fields=fields, 
          vcf=vcf, gvf=gvf, original=original)
 }
  
@@ -239,32 +301,32 @@ filterqcOpts <- function(check_ref=logical(1), coding_only=logical(1),
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### $ and $<- methods
 ###
-
-setMethod("$", "VEPParam",
-    function(x, name)
-        c(basic(x), input(x), database(x), output(x),
-          filterqc(x))[[name]]
-)
-
-setReplaceMethod("$", "VEPParam",
-    function(x, name, value)
-    { 
-        if (name %in% names(basic(x)))
-            basic(x)[[name]] <- value
-        else if (name %in% names(input(x)))
-            input(x)[[name]] <- value
-        else if (name %in% names(database(x)))
-            database(x)[[name]] <- value
-        else if (name %in% names(output(x)))
-            output(x)[[name]] <- value
-        else if (name %in% names(filterqc(x)))
-            filterqc(x)[[name]] <- value
-        else
-            stop(paste0("'", name, "'", "not a valid option"))
-        x
-    }
-)
-
+#
+#setMethod("$", "VEPParam",
+#    function(x, name)
+#        c(basic(x), input(x), database(x), output(x),
+#          filterqc(x))[[name]]
+#)
+#
+#setReplaceMethod("$", "VEPParam",
+#    function(x, name, value)
+#    { 
+#        if (name %in% names(basic(x)))
+#            basic(x)[[name]] <- value
+#        else if (name %in% names(input(x)))
+#            input(x)[[name]] <- value
+#        else if (name %in% names(database(x)))
+#            database(x)[[name]] <- value
+#        else if (name %in% names(output(x)))
+#            output(x)[[name]] <- value
+#        else if (name %in% names(filterqc(x)))
+#            filterqc(x)[[name]] <- value
+#        else
+#            stop(paste0("'", name, "'", "not a valid option"))
+#        x
+#    }
+#)
+#
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### show 
 ###
@@ -280,19 +342,13 @@ setMethod(show, "VEPParam",
             cat(strwrap(txt, exdent=exdent, ...), sep="\n")
         }
         cat("class:", class(object), "\n")
-        cat("Runtime options:\n")
         slots <- c("basic", "input", "database", "output",
                    "filterqc")
-        for (i in slots) { 
-            idx <- sapply(slot(object, i), 
-                       function(elt) {
-                           if (is.logical(elt))
-                               ifelse(elt, TRUE , FALSE)
-                           else
-                               ifelse(is.character(elt), TRUE, FALSE)
-                       })
-            nms <- names(slot(object, i))[idx]
-            if (is.null(nms))
+        for (i in slots) {
+            elt <- slot(object, i)
+            drop <- elt == FALSE | elementLengths(elt) == 0L
+            drop[is.na(drop)] <- FALSE
+            if (is.null(nms <- names(elt)[!drop]))
                 nms <- character()
             scat(paste0(i, "(%d): %s\n"), nms)
         }

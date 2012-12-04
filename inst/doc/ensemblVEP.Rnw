@@ -1,0 +1,196 @@
+%\VignetteIndexEntry{ensemblVEP}
+%\VignetteDepends{GenomicRanges, VariantAnnotation, Biostrings}
+%\VignetteKeywords{annotation, variants}
+%\VignettePackage{ensemblVEP}
+\documentclass[10pt]{article}
+
+\usepackage{times}
+\usepackage{hyperref}
+
+\usepackage[margin=0.65in]{geometry}
+
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textsf{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+\newcommand{\Rcode}[1]{{\texttt{#1}}}
+
+\newcommand{\software}[1]{\textsf{#1}}
+\newcommand{\R}{\software{R}}
+\newcommand{\Bioconductor}{\software{Bioconductor}}
+
+\SweaveOpts{keep.source=TRUE}
+
+\title{Overview of \Rpackage{ensemblVEP}}
+\author{Valerie Obenchain}
+\date{Last modified: December 2012; Compiled: \today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Ensembl provides the facility to predict functional consequences 
+of known and unknown variants using the Variant Effect Predictor 
+(VEP). The \Rpackage{ensemblVEP} package wraps Ensembl VEP and 
+returns the results as \R objects or a file on disk. To use this 
+package the Ensembl VEP perl script must be installed in your path.
+
+\noindent Downloads:
+
+\url{http://uswest.ensembl.org/info/docs/variation/vep/index.html}
+
+\noindent Complete documentation for runtime options:
+
+\url{http://uswest.ensembl.org/info/docs/variation/vep/vep_script.html}
+
+\noindent To test that Ensembl VEP is properly installed, enter the
+name of the script from the command line:
+
+{\it variant\_effect\_predictor.pl}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results as \R  objects}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+<<setup>>=
+library(ensemblVEP)
+@
+
+The \Rfunction{ensemblVEP} function can return variant consequences from
+Ensembl VEP as \R objects (\Robject{GRanges} or \Robject{VCF}) or as a
+file on disk. The default behavior returns a \Robject{GRanges}. Runtime 
+options are stored in a \Robject{VEPParam} object and allow a great deal 
+of control over the content and format of the results. See the man pages 
+for more details.
+<<man_page, eval=FALSE>>=
+?ensemblVEP
+?VEPParam
+@
+
+The default runtime options can be inspected by creating a 
+\Robject{VEPParam}.
+<<default_VEPParam>>=
+param <- VEPParam()
+param
+basic(param)
+@
+
+A vcf file from the \Rpackage{VariantAnnotation} package will be 
+the input. Here we do not supply a {\it param} argument so the
+default \Robject{VEPParam} is used.
+<<rtn_GRanges>>=
+fl <- system.file("extdata", "gl_chr1.vcf", package="VariantAnnotation")
+gr <- ensemblVEP(fl)
+@
+
+Consequence data are parsed into the metadata columns of
+a \Robject{GRanges}. To control the type and amount of data 
+returned see the options in \Rcode{output(VEPParam())}.
+<<show_GRanges>>=
+head(gr, 3)
+@
+
+Next we use a vcf of structural variants as input
+<<structural_vcf>>=
+fl <- system.file("extdata", "structural.vcf", package="VariantAnnotation")
+@
+
+and request that a \Robject{VCF} object be returned by setting
+the {\it vcf} option in the {\it output} slot to TRUE. 
+<<set_vcf>>=
+param <- VEPParam(output=c(vcf=TRUE))
+@
+
+When we try to retrieve the data we get an error.
+\begin{verbatim}
+> vcf <- ensemblVEP(fl, param)
+2012-12-03 16:40:55 - Starting...
+ERROR: Could not detect input file format
+\end{verbatim}
+
+In most situations Ensembl VEP can auto-detect the input format. In 
+this case, however, it cannot so we explicitly set the {\it format} 
+option to 'vcf'.
+<<set_format>>=
+input(param)$format <- "vcf"
+@
+
+Try again.
+<<rtn_VCF>>=
+vcf <- ensemblVEP(fl, param)
+@
+
+Success! When a \Robject{VCF} is returned, consequence data are 
+included as an unparsed INFO column labeled {\it CSQ}.
+<<rtn_VCF>>=
+info(vcf)$CSQ
+@
+
+The \Rfunction{parseCSQToGRanges} function will further parse 
+these data.
+\Rfunction{parseCSQToGRanges} function.
+<<parseCSQToGRanges>>=
+csq <- parseCSQToGRanges(vcf)
+head(csq, 3)
+@ 
+
+The variant names can be used to map the {\it CSQ} data to the 
+\Robject{VCF} data.
+<<map_rownames>>=
+splt <- split(csq, names(csq))
+sapply(splt, length)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results as files on disk}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+The {\it output\_file} option controls if the results are returned as 
+\R objects or written to disk. By default {\it output\_file} writes 
+to a temp file. If instead you want results written to disk, change this 
+option to a path and filename.
+<<input_slot>>=
+input(param)
+input(param)$output_file <- "/mypath/myfile"
+@
+
+The file can be written out as a {\it vcf} or {\it gvf} by setting the
+options in the {\it output} slot to TRUE. If neither of {\it vcf}
+or {\it gvf} are TRUE the file is written out as tab delimited.
+<<ouput_slot>>=
+## Write a vcf file to myfile.vcf:
+myparam <- VEPParam(output=c(vcf=TRUE),
+                    input=c(output_file="/path/myfile.vcf"))
+## Write a gvf file to myfile.gvf:
+myparam <- VEPParam(output=c(gvf=TRUE),
+                    input=c(output_file="/path/myfile.gvf"))
+
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\Rcode{sessionInfo()}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<<sessionInfo>>=
+sessionInfo()
+@
+
+\end{document}

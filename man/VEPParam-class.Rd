@@ -27,10 +27,6 @@
 \alias{filterqc}
 \alias{filterqc<-}
 
-% $ and $<- methods:
-\alias{$,VEPParam-method}
-\alias{$<-,VEPParam-method}
-
 % "show" method:
 \alias{show,VEPParam-method}
 
@@ -52,83 +48,106 @@
   Data in the \code{VEPParam} are organized into five slots, 'basic', 'input',
   'database', 'output' and 'filterqc'. Each slot holds a \code{list} of 
   runtime options. The 'cache' runtime options are not yet supported.
+  \code{logical} options are turned on/off with TRUE and FALSE. 
+  \code{character} and \code{numeric} are 'on' when a character string is 
+  provided and 'off' when they contain an empty value (i.e., 
+  \code{character()} or \code{numeric()}.
   \describe{
     \item{\code{basic}}{\code{list} of the following options:
       \itemize{
-        \item{verbose:} \code{logical}; output status messages
-        \item{quiet:} \code{logical}; suppress status and warnings
-        \item{no_progress:} \code{logical}; don't show progress bars
-        \item{config:} \code{FALSE} or character string; load config file
-        \item{everything:} \code{logical}; switch on 12 flags
-        \item{fork:} \code{logical}; enable forking
+        \item{verbose:} \code{logical}, default FALSE; output status messages
+        \item{quiet:} \code{logical}, default FALSE; suppress status/warnings
+        \item{no_progress:} \code{logical}, default FALSE; don't show progress 
+          bars
+        \item{config:} \code{character}, default \code{character()}; name of 
+          config file
+        \item{everything:} \code{logical}, default FALSE; shortcut to switch 
+          on 12 options (sift, polyphen, ccds, hgvs, hgnc, numbers, domains,
+          regulatory, cell_type, canonical, protein and gmaf).
+        \item{fork:} \code{logical}, default FALSE; enable forking
       }
     }
     \item{\code{input}}{\code{list} of the the following options:
       \itemize{
-        \item{species:} \code{FALSE} or character; species for your data
-        \item{format:} \code{FALSE} or one of ensembl, vcf, pileup, hgvs, 
-          id or vep; input file format 
-        \item{output_file:} character; path where output file should be
-          written. Default writes to a temp file.
-        \item{force_overwrite:} currently should not be altered
+        \item{species:} \code{character}, default 'homo_sapiens'; 
+          species for the data
+        \item{format:} \code{character}, default \code{character()}; 
+          one of the following input file formats, 'ensembl', 'vcf', 
+          'pileup', 'hgvs', 'id' or 'vep'. By default the script
+          auto-detects the input file format. 
+        \item{output_file:} \code{character}, default writes to temp file; 
+          path and file name of output file
+        \item{force_overwrite:} \code{logical}, default FALSE; overwrite
+          the output file if it currently exists
       }
     }
     \item{\code{database}}{\code{list} of the following options:
       \itemize{
-        \item{host:} \code{logical}; define database host
-        \item{user:} \code{FALSE} or character; define database user
-        \item{password:} \code{FALSE} or character; define database password
-        \item{port:} \code{FALSE} or character; define database port
-        \item{genomes:} \code{logical}; override default connection
-          settings with those for the Ensembl Genomces public MySQL server
-        \item{refseq:} \code{logical}; use otherfeatures database to retrieve
-          transcripts
-        \item{db_version:} \code{FALSE} or character; force connection to
-          specific version
-        \item{registry:} \code{FALSE} or character; provide file to override
-          default connection settings
+        \item{host:} \code{character}, default 'useast.ensembl.db.org'; 
+          database host
+        \item{user:} \code{character} default \code{character()}; 
+          database user
+        \item{password:} \code{character}, default \code{character()}; 
+          database password
+        \item{port:} \code{numeric}, default \code{character()}; 
+          database port
+        \item{genomes:} \code{logical}, default FALSE; override default 
+          connection settings with those for the Ensembl Genomces public 
+          MySQL server
+        \item{refseq:} \code{logical}, default FALSE; use otherfeatures 
+          database to retrieve transcripts
+        \item{db_version:} \code{numeric}, default \code{character()}; 
+          force connection to specific version
+        \item{registry:} \code{character}, default \code{character()}; 
+          provide file to override default connection settings
       }
     }
     \item{\code{output}}{\code{list} of the following options:
       \itemize{
-        \item{terms:} \code{FALSE} or 'ensembl' or 'so'; type of consequence
-          terms to output
-        \item{sift:} \code{FALSE} or 'p', 's' or 'b'; output prediction
-          term, score or both
-        \item{polyphen:} \code{FALSE} or 'p', 's' or 'b'; output prediction
-          term, score or both
-        \item{regulatory:} \code{logical}; identify overlaps with regulatory 
-          regions
-        \item{cell_type:} \code{FALSE} or character; report only regulatory 
-          regions found in the given cell type 
-        \item{hgvs:} \code{logical}; add hgvs ID's
-        \item{gene:} \code{logical}; add Ensembl gene ID's
-        \item{protein:} \code{logical}; add Ensembl protein ID's
-        \item{ccds:} \code{logical}; add CCDS transcript ID's
-        \item{canonical:} \code{logical}; indicate if transcript is
-          cononical transcript for the gene
-        \item{xref_seq:} \code{logical}; output aligned refseq mRNA ID
-        \item{numbers:} \code{logical}; output affectd exon and intron
-          numbering, format is Number/Total
-        \item{domains:} \code{logical}; output names of overlapping
-          protein domains
-        \item{most_severe:} \code{logical}; output only most severe
-          consequence per variation
-        \item{summary:} \code{logical}; output only a comma-separated
-          list of all observed consequences per variation
-        \item{per_gene:} \code{logical}; output only most severe consequence
-          per gene
-        \item{convert:} \code{FALSE} or 'ensembl', 'vcf', or 'pileup'; 
-          converts input file to specifed format
-        \item{fields:} \code{FALSE} or character vector; output additional
-          fields. Fields may be in the default output columns or any
-          that appear in the Extra column. \code{ensemblVEP} will always
-          import 'Uploaded_variation', 'Location', 'Allele', 'Gene', 
-          'Feature', 'Feature_type', 'Consequence', 'Existing_variation'.
-        \item{vcf:} \code{logical}; writes output in vcf format
-        \item{gvf:} \code{logical}; writes output in gcf format
-        \item{original:} \code{logical}; writes output as filtered set of
-          input. Must be used with --filter.
+        \item{terms:} \code{character}, default 'so'; type of consequence 
+          terms to output, valid strings are 'ensembl' or 'so'
+        \item{sift:} \code{character}, default \code{character()}; 
+          output prediction, score
+          or both, valid strings are 'p', 's' or 'b'
+        \item{polyphen:} \code{character}, default \code{character()}; 
+          output prediction, 
+          score or both, valid strings are 'p', 's' or 'b'
+        \item{regulatory:} \code{logical}, default FALSE; identify overlaps 
+          with regulatory regions
+        \item{cell_type:} \code{character}, default \code{character()}; 
+          only report 
+          regulatory regions found in the given cell type(s) 
+        \item{hgvs:} \code{logical}, default FALSE; add hgvs ID's
+        \item{gene:} \code{logical}, default FALSE; add Ensembl gene ID's
+        \item{protein:} \code{logical}, default FALSE; add Ensembl protein ID's
+        \item{ccds:} \code{logical}, default FALSE; add CCDS transcript ID's
+        \item{canonical:} \code{logical}, default FALSE; indicate if transcript 
+          is cononical transcript for the gene
+        \item{xref_seq:} \code{logical}, default FALSE; output aligned refseq 
+          mRNA ID
+        \item{numbers:} \code{logical}, default FALSE; output affectd exon and 
+          intron numbering, format is Number/Total
+        \item{domains:} \code{logical}, default FALSE; output names of 
+          overlapping protein domains
+        \item{most_severe:} \code{logical}, default FALSE; output only most 
+          severe consequence per variation
+        \item{summary:} \code{logical}, default FALSE; output a comma-separated
+          list of all observed consequences per variation, transcript-specific
+          columns will be left blank
+        \item{per_gene:} \code{logical}, default FALSE; output only the most
+          severe consequence per gene
+        \item{convert:} \code{character}, default \code{character()}; 
+          converts input file to one of 'ensembl', 'vcf', or 'pileup'
+        \item{fields:} \code{character}, default fields are
+          'Uploaded_variation', 'Location', 'Allele', 'Gene', 'Feature', 
+          'Feature_type', 'Consequence', 'cDNA_position', 'CDS_position', 
+          'Protein_position', 'Amino_acids', 'Codons' and 'Extra'. See
+          \url{http://www.ensembl.org/info/docs/variation/vep/vep_formats.html#sv}
+          for details. 
+        \item{vcf:} \code{logical}, default FALSE; write output in vcf format
+        \item{gvf:} \code{logical}, default FALSE; write output in gcf format
+        \item{original:} \code{logical}, default FALSE; writes output as 
+          filtered set of input. Must be used with --filter.
       }
     }
     \item{\code{filterqc}}{\code{list} of the following options:
@@ -212,16 +231,6 @@
   }
 }
 
-\section{Subsetting}{
-  In the following code, \code{x} is a \code{VEPParam} object.
-  \describe{
-     \item{}{
-       \code{x$name}, \code{x$name <- value}:
-       Get or set a runtime option from a \code{VEPParam}.
-     }
-  }
-}
-
 \section{Helper functions}{
   These functions create a \code{list} of runtime options and are 
   used in the \code{VEPParam} constructor.
@@ -263,47 +272,37 @@
 }
 
 \examples{
-  ## First create the default VEPParam.
+  ## The VEPParam has five slots. By default, no options are 
+  ## set for 'basic' or 'filterqc'.
   param <- VEPParam()
-
-  ## By default, no options are set for 'basic' or 'filterqc'.
-  ## 'input' has 4 options set, 'database' has 1 and 'output' has 3.
   param
 
-  ## View all values in the 'basic' and 'input' slots.
+  ## View the values in 'basic' and 'input'.
   basic(param)
   input(param)
 
-  ## Individual values can be accessed with slot accessors or '$'.
-  basic(param)$everything
-  param$everything
 
-  ## Change the value of the 'everything' option to TRUE.
+  ## Change the value of the 'everything' to TRUE.
+  basic(param)$everything
   basic(param)$everything <- TRUE
   basic(param)$everything
 
-  ## Using '$' directly on the VEPParam will also modify values.
-  param$everything <- FALSE
-  param$everything
-
-  ## Change multiple values with a named vector.
-  basic(param) <- c(no_progress=TRUE, verbose=TRUE)
+  ## Replace multiple values with a named list.
+  basic(param) <- list(verbose=TRUE, config="myconfig.txt")
   basic(param)
 
   ## Write the output to myfile.vcf instead of returning a VCF object.
   ## Return the sift and polyphen predictions only (not scores).
-  VEPParam(input=inputOpts(output_file="path/myfile.vcf"),
-           output=outputOpts(sift="p", polyphen="p"))
+  VEPParam(input=c(output_file="path/myfile.vcf"),
+           output=c(sift="p", polyphen="p"))
 
   ## 'sift' and 'polyphen' are runtime options that require
   ## a character value, (i.e., 's', 'p', or 'b').
-  param$sift
+  output(param)$sift
 
-  ## To turn off 'sift' or 'polyphen' set the value to FALSE.
-  param$sift <- FALSE
-
-  ## Setting such values to TRUE will result in an error.
-  #param$sift <- TRUE
+  ## To turn off 'sift' or 'polyphen' set the value to an
+  ## empty character (i.e., character()).
+  output(param)$sift <- character() 
 }
 
 \keyword{methods}

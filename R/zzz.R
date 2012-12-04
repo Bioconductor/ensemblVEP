@@ -1,8 +1,9 @@
-#.onLoad <-
-#    function(libname, pkgname)
-#{
-#    if (system("perl variant_effect_predictor.pl"))
-#        warning(paste0("variant_effect_predictor.pl not found. ",
-#                       "Ensembl VEP not installed in path."))
-#}
-
+.onLoad <-
+    function(libname, pkgname)
+{
+    msg <- paste0("variant_effect_predictor.pl not found. ",
+                  "Ensembl VEP is not installed in your path.")
+    tryCatch(check <- system2("variant_effect_predictor.pl", 
+        stdout=TRUE, stderr=TRUE), 
+        error=function(e) packageStartupMessage(msg))
+}

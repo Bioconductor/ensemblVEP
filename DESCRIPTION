@@ -4,7 +4,7 @@ Title: R Interface to Ensembl Variant Effect Predictor
 Author: Valerie Obenchain <vobencha@fhcrc.org>,
 Maintainer: Valerie Obenchain <vobencha@fhcrc.org>
 Depends: methods, BiocGenerics, GenomicRanges, VariantAnnotation
-Imports: GenomicFeatures, Biostrings, IRanges
+Imports: Biostrings, IRanges
 Suggests: RUnit
 biocViews: Annotation, Bioinformatics 
 Description: Query the Ensembl Variant Effect Predictor via the perl API 
