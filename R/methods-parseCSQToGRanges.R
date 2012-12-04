@@ -14,10 +14,13 @@ setMethod("parseCSQToGRanges", "character",
 setMethod("parseCSQToGRanges", "VCF", 
     function(x, ...)
     {
+        raw <- sub("\\|$", "| ", unlist(info(x)$CSQ, use.names=FALSE))
+        raw <- strsplit(raw, "\\|")
+        mat <- matrix(unlist(raw), nrow=length(raw), byrow=TRUE) 
+        mat[!nzchar(mat)] <- NA_character_
+        csq <- DataFrame(mat)
         hd <- info(header(x))["CSQ", "Description"]
         flds <- strsplit(hd, "Format: ")[[1]][2]
-        csq <- read.csv(textConnection(unlist(info(x)$CSQ)), 
-                        sep="|", header=FALSE)
         names(csq) <- unlist(strsplit(flds, "\\|"))
 
         rd <- rowData(x)

@@ -160,7 +160,6 @@ input <- function(x) slot(x, "input")
 database <- function(x) slot(x, "database")
 output <- function(x) slot(x, "output")
 filterqc <- function(x) slot(x, "filterqc")
-#cache <- function(x) slot(x, "cache")
 
 "basic<-" <- function(x, value) 
 {
@@ -206,14 +205,6 @@ filterqc <- function(x) slot(x, "filterqc")
         stop(msg) 
     x 
 }
-
-#"cache<-" <- function(x, value) 
-#{
-#    slot(x, "cache")[names(value)] <- value
-#    .valid.VEPParam.filterqc(x) 
-#    x 
-#}
-
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### helpers / utils 
@@ -298,35 +289,6 @@ filterqcOpts <- function(check_ref=logical(1), coding_only=logical(1),
 #         cache_region_size=cache_region_size, fasta=fasta)
 #}
 
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### $ and $<- methods
-###
-#
-#setMethod("$", "VEPParam",
-#    function(x, name)
-#        c(basic(x), input(x), database(x), output(x),
-#          filterqc(x))[[name]]
-#)
-#
-#setReplaceMethod("$", "VEPParam",
-#    function(x, name, value)
-#    { 
-#        if (name %in% names(basic(x)))
-#            basic(x)[[name]] <- value
-#        else if (name %in% names(input(x)))
-#            input(x)[[name]] <- value
-#        else if (name %in% names(database(x)))
-#            database(x)[[name]] <- value
-#        else if (name %in% names(output(x)))
-#            output(x)[[name]] <- value
-#        else if (name %in% names(filterqc(x)))
-#            filterqc(x)[[name]] <- value
-#        else
-#            stop(paste0("'", name, "'", "not a valid option"))
-#        x
-#    }
-#)
-#
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### show 
 ###
