@@ -17,11 +17,11 @@ setMethod("ensemblVEP", "character",
                 fun <- parseCSQToGRanges 
                 call <- paste0(call, " --vcf --output_file ", dest)
             }
-            system(call)
+            system2("perl", call)
             fun(dest, genome="")
         } else {
         ## write to file or STDOUT
-            system(call)
+            system2("perl", call)
         }
     }
 )

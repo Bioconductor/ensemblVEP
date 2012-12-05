@@ -1,5 +1,5 @@
 Package: ensemblVEP
-Version: 0.99.4
+Version: 0.99.5
 Title: R Interface to Ensembl Variant Effect Predictor 
 Author: Valerie Obenchain <vobencha@fhcrc.org>,
 Maintainer: Valerie Obenchain <vobencha@fhcrc.org>
@@ -8,7 +8,8 @@ Imports: Biostrings, IRanges
 Suggests: RUnit
 biocViews: Annotation, Bioinformatics 
 Description: Query the Ensembl Variant Effect Predictor via the perl API 
-SystemRequirements: Ensembl VEP must be installed and in the users path. See
+SystemRequirements: Ensembl VEP must be installed and in the users path,
+                    and the Perl package DBD::mysql must be installed. See
                     http://www.ensembl.org/info/docs/variation/vep/index.html 
                     for installation instructions.
 License: Artistic-2.0
