@@ -5,7 +5,7 @@
 setMethod("ensemblVEP", "character", 
     function(file, param=VEPParam(), ...)
     {
-        call <- paste0("variant_effect_predictor.pl ", 
+        call <- paste0(Sys.which("variant_effect_predictor.pl"), " ",
                        "--input ", file, .runtimeOpts(param)) 
         if (identical(character(), input(param)$output_file)) {
         ## return R object
