@@ -5,8 +5,11 @@
 setMethod("ensemblVEP", "character", 
     function(file, param=VEPParam(), ...)
     {
+        sw <- unname(Sys.which("variant_effect_predictor.pl"))
+        warning(sprintf("whoa, sw is %s", sw))
         call <- paste0(Sys.which("variant_effect_predictor.pl"), " ",
                        "-i ", file, .runtimeOpts(param)) 
+        warning(sprintf("whoa, call is %s", call))
         if (identical(character(), input(param)$output_file)) {
         ## return R object
             dest <- file.path(tempfile())
