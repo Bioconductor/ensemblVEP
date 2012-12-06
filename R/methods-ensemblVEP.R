@@ -10,7 +10,7 @@
     {
         return(Sys.getenv("VEP_PATH"))
     }
-    unname(Sys.which(variant_effect_predictor.pl))
+    unname(Sys.which("variant_effect_predictor.pl"))
 }
 
 setMethod("ensemblVEP", "character", 
