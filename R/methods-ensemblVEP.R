@@ -2,15 +2,21 @@
 ### ensemblVEP methods 
 ### =========================================================================
 
+
+.getVepPath <- function()
+{
+    ## this should only be turned on/needed on the BioC build system
+    if (nchar(Sys.getenv("VEP_PATH")))
+    {
+        return(Sys.getenv("VEP_PATH"))
+    }
+    unname(Sys.which(variant_effect_predictor.pl))
+}
+
 setMethod("ensemblVEP", "character", 
     function(file, param=VEPParam(), ...)
     {
-        sw <- unname(Sys.which("variant_effect_predictor.pl"))
-        ls <- unname(Sys.which("ls"))
-
-        warning(sprintf("whoa, sw is %s", sw))
-        warning(sprintf("whoa, ls is %s", ls))
-        call <- paste0(Sys.which("variant_effect_predictor.pl"), " ",
+        call <- paste0(.getVepPath(), " ",
                        "-i ", file, .runtimeOpts(param)) 
         warning(sprintf("whoa, call is %s", call))
         if (identical(character(), input(param)$output_file)) {
