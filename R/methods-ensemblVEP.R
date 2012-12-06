@@ -6,7 +6,10 @@ setMethod("ensemblVEP", "character",
     function(file, param=VEPParam(), ...)
     {
         sw <- unname(Sys.which("variant_effect_predictor.pl"))
+        ls <- unname(Sys.which("ls"))
+
         warning(sprintf("whoa, sw is %s", sw))
+        warning(sprintf("whoa, ls is %s", ls))
         call <- paste0(Sys.which("variant_effect_predictor.pl"), " ",
                        "-i ", file, .runtimeOpts(param)) 
         warning(sprintf("whoa, call is %s", call))
