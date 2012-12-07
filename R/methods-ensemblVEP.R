@@ -18,7 +18,6 @@ setMethod("ensemblVEP", "character",
     {
         call <- paste0(.getVepPath(), " ",
                        "-i ", file, .runtimeOpts(param)) 
-        warning(sprintf("whoa, call is %s", call))
         if (identical(character(), input(param)$output_file)) {
         ## return R object
             dest <- file.path(tempfile())

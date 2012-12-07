@@ -104,8 +104,8 @@
     }
     \item{\code{output}}{\code{list} of the following options:
       \itemize{
-        \item{terms:} \code{character}, default 'so'; type of consequence 
-          terms to output, valid strings are 'ensembl' or 'so'
+        \item{terms:} \code{character}, default \code{character()}; type 
+          of consequence terms to output, valid strings are 'ensembl' or 'so'
         \item{sift:} \code{character}, default \code{character()}; 
           output prediction, score
           or both, valid strings are 'p', 's' or 'b'

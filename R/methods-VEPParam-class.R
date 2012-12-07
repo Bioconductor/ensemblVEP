@@ -237,7 +237,7 @@ databaseOpts <- function(host="useastdb.ensembl.org", user=character(),
          db_version=db_version, registry=registry)
 } 
 
-outputOpts <- function(terms="so", sift=character(), 
+outputOpts <- function(terms=character(), sift=character(), 
                        polyphen=character(), regulatory=logical(1), 
                        cell_type=character(), hgvs=logical(1), 
                        gene=logical(1), protein=logical(1), hgnc=logical(1), 
