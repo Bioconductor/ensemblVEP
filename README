@@ -1,0 +1,28 @@
+=========================
+Installing ensemblVEP 
+=========================
+
+To use ensemblVEP, the Ensembl Variant Effect Predictor (VEP)
+software must be installed.
+
+----------------------------------
+Download and Install Ensembl VEP
+----------------------------------
+Follow the download and installation instructions on this page:
+http://uswest.ensembl.org/info/docs/variation/vep/vep_script.html
+
+On Windows you may need to install the perl modules 
+perl-DBD-mysql and perl-DBI if you do not have them.
+All of this is documented on the Ensembl VEP web page. 
+
+----------------------------------
+Confirm installation
+----------------------------------
+Check that variant_effect_predictor.pl is executable and in
+your path.
+
+On Unix and Mac:
+  variant_effect_predictor.pl
+
+On Windows:
+  perl variant_effect_predictor.pl

@@ -14,13 +14,17 @@
 }
 
 \usage{
-\S4method{parseCSQToGRanges}{character}(x, ...)
-\S4method{parseCSQToGRanges}{VCF}(x, ...)
+\S4method{parseCSQToGRanges}{character}(x, VCFRowID=TRUE, ...)
+\S4method{parseCSQToGRanges}{VCF}(x, VCFRowID=TRUE, ...)
 }
 
 \arguments{
   \item{x}{
     The \code{character} name of a vcf file on disk or a \code{VCF} object
+  }
+  \item{VCFRowID}{
+    \code{logical}. Include a metadata column that maps the rows of
+    the expanded consequences back to the rows of the \code{VCF} object. 
   }
   \item{\dots}{
     Arguments passed to other methods.

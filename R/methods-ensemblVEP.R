@@ -2,10 +2,9 @@
 ### ensemblVEP methods 
 ### =========================================================================
 
-
 .getVepPath <- function()
 {
-    ## this should only be turned on/needed on the BioC build system
+    ## only be needed on the BioC build system
     if (nchar(Sys.getenv("VEP_PATH")))
     {
         return(Sys.getenv("VEP_PATH"))

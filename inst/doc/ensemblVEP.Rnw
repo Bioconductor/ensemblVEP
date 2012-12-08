@@ -60,10 +60,9 @@ name of the script from the command line:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results as \R  objects}
+\section{Return Ensembl VEP Results as \R{} objects}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 <<setup>>=
 library(ensemblVEP)
@@ -147,30 +146,39 @@ csq <- parseCSQToGRanges(vcf)
 head(csq, 3)
 @ 
 
-The variant names can be used to map the {\it CSQ} data to the 
-\Robject{VCF} data.
+The \Rcode{VCFRowID} columns maps the expanded {\it CSQ} data back
+to the rows in the \Rclass{VCF} object.
 <<map_rownames>>=
-splt <- split(csq, names(csq))
+splt <- splitAsList(csq, csq$VCFRowID)
+names(splt) <- dimnames(vcf)[[1]] 
 sapply(splt, length)
 @
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results as files on disk}
+\section{Write Ensembl VEP Results to a file}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+In the previous section we saw Ensembl VEP results returned as 
+\R{} objects in the workspace. Alternatively, these results can
+be written directly to a file. The flag that controls how the
+data are returned is the {\it output\_file} flag in the {\it input} 
+options.
 
-The {\it output\_file} option controls if the results are returned as 
-\R objects or written to disk. By default {\it output\_file} writes 
-to a temp file. If instead you want results written to disk, change this 
-option to a path and filename.
-<<input_slot>>=
-input(param)
+When {\it output\_file} is an empty character (default), the results
+are returned as either a \Rclass{GRanges} or \Rclass{VCF} object.
+<<output_file_default>>=
+input(param)$output_file
+@
+
+To write results directly to a file, specify a file name for the 
+{\it output\_file} flag.
+<<output_file_filename>>=
 input(param)$output_file <- "/mypath/myfile"
 @
 
-The file can be written out as a {\it vcf} or {\it gvf} by setting the
+The file can be written as a {\it vcf} or {\it gvf} by setting the
 options in the {\it output} slot to TRUE. If neither of {\it vcf}
 or {\it gvf} are TRUE the file is written out as tab delimited.
 <<ouput_slot>>=
@@ -180,8 +188,68 @@ myparam <- VEPParam(output=c(vcf=TRUE),
 ## Write a gvf file to myfile.gvf:
 myparam <- VEPParam(output=c(gvf=TRUE),
                     input=c(output_file="/path/myfile.gvf"))
-
+## Write a tab delimited file to myfile.txt:
+myparam <- VEPParam(output=c(gvf=TRUE),
+                    input=c(output_file="/path/myfile.txt"))
 @
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Configuring runtime options}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Below are a few examples of how to configure the runtime options
+in the \Rclass{VEPParam} for specific situations. Investigate
+the differences in the returned results using this sample file
+from \Rpackage{VariantAnnotation}.
+<<samplefile>>=
+fl <- system.file("extdata", "ex2.vcf", package="VariantAnnotation")
+@
+
+Please see the Ensembl VEP web page for complete details on the 
+runtime options.
+
+Add regulatory region consequences:
+<<runtime1, eval=FALSE>>=
+param <- VEPParam(output=c(regulatory=TRUE))
+gr <- ensemblVEP(fl, param) 
+@
+
+Specify the input file format as VCF, add HGNC gene identifiers,
+output SO consequence terms.
+\Rclass{character}).
+<<runtime2, eval=FALSE>>=
+param <- VEPParam(input=c(format="vcf"),
+                  output=c(hgnc=TRUE, terms="so"))
+gr <- ensemblVEP(fl, param) 
+@
+
+%Check for existing co-located variants, output only coding sequence 
+%consequences, output HGVS names:
+%<<runtime3, eval=FALSE>>=
+%param <- VEPParam(filterqc=c(check_existing=TRUE, coding_only=TRUE),
+%                  output=c(hgvs=TRUE))
+%gr <- ensemblVEP(fl, param) 
+%@
+
+Add SIFT score and prediction, PolyPhen prediction only:
+<<runtime4>>=
+param <- VEPParam(output=c(sift="b", polyphen="p"))
+@
+
+Load config from ini file, run in quiet mode:
+<<runtime5>>=
+param <- VEPParam(basic=c(quiet=TRUE, config="mypath/vep.ini"))
+@
+
+%Filter input file on consequence type to include only variants that 
+%cause a coding sequence change, write output in original input format:
+%<<runtime6>>=
+%param <- VEPParam(filterqc=c(filter="coding_change"),
+%                  output=c(original=TRUE))
+%@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

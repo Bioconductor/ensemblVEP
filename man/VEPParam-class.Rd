@@ -152,48 +152,54 @@
     }
     \item{\code{filterqc}}{\code{list} of the following options:
       \itemize{
-        \item{check_ref:} \code{logical}; force check of supplied reference
-          allele against the sequence stored in Ensembl Core database
-        \item{coding_only:} \code{logical}; only return consequences in 
-          coding regions
-        \item{check_existing:} \code{logical}; check for existence of 
+        \item{check_ref:} \code{logical}, default FALSE; force check of 
+          supplied reference allele against the sequence stored in Ensembl 
+          Core database
+        \item{coding_only:} \code{logical}, default FALSE; return 
+          consequences in coding regions only
+        \item{check_existing:} \code{logical}, default FALSE; check for 
           co-located variants 
-        \item{check_alleles:} \code{logical}; when checking for existance
-          of co-located variants only report a co-located variant is none
-          of the alleles supplied are novel 
-        \item{check_svs:} \code{logical}; check for existence of structural
-          variants that overlap your input
-        \item{gmaf:} \code{logical}; add global minor allele frequence (MAF)
-          from 1000 Genomes Phase 1 data 
-        \item{individual:} \code{FALSE} or 'all', or character vector of 
-          individuals; consider only alternate alleles present in the
-          genotypes of specified individuals
-        \item{phased:} \code{logical}; force VCF genotypes to be interpreted
-          as phased
-        \item{chr:} \code{FALSE} or character; select a subset of chromosomes
-          to be analyzed from your file
-        \item{no_intergenic:} \code{logical}; do not include intergenic
-          consequences
-        \item{check_frequency:} \code{logical}; turn on frequency filtering,
-          must also specify all of --freq flags. See web page for details. 
-        \item{freq_pop:} \code{FALSE} or character; population to use in 
-          frequency filter
-        \item{freq_freq:} \code{FALSE} or numeric; MAF to use in frequency 
-          filter
-        \item{freq_gt_lt:} \code{FALSE} or 'gt' or 'lt'; specify whether the
-          frequency of the co-located variant must be greater than or less
-          than the value specified with \code{freq_freq}.
-        \item{freq_filter:} \code{FALSE} or 'exclude' or 'include'; specify 
-          whether to include or exclude variant that pass the frequency
-          filter 
-        \item{filter:} \code{FALSE} or character vector; filter the
-          output on consequence type. See web page for details.
-        \item{failed:} \code{logical}; when checking for co-located variants
-          include or exclude variants that have been flagged as failed
-        \item{allow_non_variant:} \code{logical}; when using VCF format as
-          input and output, by default VEP will skip all non-variant lines of 
-          input (ALT is NULL). When this option is enabled, lines will be 
-          printed in the VCF output with no consequence data added.
+        \item{check_alleles:} \code{logical}, default FALSE; when checking for
+          co-located variants only report them if none of the alleles
+          supplied are novel 
+        \item{check_svs:} \code{logical}, default FALSE; check for 
+          structural variants that overlap the input variants
+        \item{gmaf:} \code{logical}, default FALSE; add global minor allele 
+          frequence (MAF) from 1000 Genomes Phase 1 data 
+        \item{individual:} \code{character}, default \code{character()}; 
+          consider only alternate alleles present in the genotypes of 
+          'all' or a character vector of specified individuals
+        \item{phased:} \code{logical}, default FALSE; force VCF genotypes 
+          to be interpreted as phased
+        \item{chr:} \code{character}, default \code{character()}; select 
+          a subset of chromosomes to be analyzed
+        \item{no_intergenic:} \code{logical}, default FALSE; do not 
+          include intergenic consequences
+        \item{check_frequency:} \code{logical}, default FALSE; turn on 
+          frequency filtering, must also specify all of the 
+          --freq\_* flags. See web page for details. 
+        \item{freq_pop:} \code{character}, default \code{character()};
+          population to use in frequency filter
+        \item{freq_freq:} \code{numeric}, default \code{numeric()}; 
+          MAF to use in frequency filter
+        \item{freq_gt_lt:} \code{character}, default \code{character()};
+          specify whether the frequency of the co-located variant must 
+          be greater than or less than the value specified. Values
+          are 'gt' or 'lt'. 
+          in the \code{freq_freq} option.
+        \item{freq_filter:} \code{character}, default \code{character()};
+          specify whether to exclude or include variants that pass 
+          the frequency filter. Values are 'exclude' or 'include'. 
+        \item{filter:} \code{character}, default \code{character()}; 
+          filter the output on consequence type. See web page for details.
+        \item{failed:} \code{logical}, default FALSE; when checking for 
+          co-located variants include or exclude variants that have been 
+          flagged as failed
+        \item{allow_non_variant:} \code{logical}, default FALSE; when using 
+          VCF format as input and output, by default VEP will skip all 
+          non-variant lines of input (i.e., where the ALT is NULL). When 
+          this option is enabled, lines will be printed in the VCF output 
+          with no consequence data added.
       }
     }
   }

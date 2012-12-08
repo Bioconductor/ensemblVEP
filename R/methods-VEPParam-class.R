@@ -11,19 +11,19 @@ VEPParam  <- function(basic=list(), input=list(), database=list(),
     ...) 
 {
     bopts <- basicOpts()
-    bopts[names(basic)] <- basic
+    bopts[names(basic)] <- .asLogical(basic)
 
     iopts <- inputOpts()
-    iopts[names(input)] <- input 
+    iopts[names(input)] <- .asLogical(input)
 
     dbopts <- databaseOpts()
-    dbopts[names(database)] <- database
+    dbopts[names(database)] <- .asLogical(database)
 
     oopts <- outputOpts()
-    oopts[names(output)] <- output
+    oopts[names(output)] <- .asLogical(output)
 
     fopts <- filterqcOpts()
-    fopts[names(filterqc)] <- filterqc 
+    fopts[names(filterqc)] <- .asLogical(filterqc) 
 
     new("VEPParam", basic=bopts, input=iopts, database=dbopts, 
         output=oopts, filterqc=fopts)
@@ -161,8 +161,19 @@ database <- function(x) slot(x, "database")
 output <- function(x) slot(x, "output")
 filterqc <- function(x) slot(x, "filterqc")
 
+.asLogical <- function(x)
+{
+    if (is.list(x))
+        return(x)
+    x <- as.list(x)
+    idx <- x %in% c("TRUE", "FALSE")
+    x[idx] <- as.logical(x[idx]) 
+    x
+} 
+
 "basic<-" <- function(x, value) 
 {
+    value <- .asLogical(value)
     slot(x, "basic")[names(value)] <- value
     msg <- .valid.VEPParam.basic(x)
     if (!is.null(msg))
@@ -172,6 +183,7 @@ filterqc <- function(x) slot(x, "filterqc")
 
 "input<-" <- function(x, value) 
 {
+    value <- .asLogical(value)
     slot(x, "input")[names(value)] <- value
     msg <- .valid.VEPParam.input(x)
     if (!is.null(msg))
@@ -181,6 +193,7 @@ filterqc <- function(x) slot(x, "filterqc")
 
 "database<-" <- function(x, value) 
 {
+    value <- .asLogical(value)
     slot(x, "database")[names(value)] <- value
     msg <- .valid.VEPParam.database(x)
     if (!is.null(msg))
@@ -190,6 +203,7 @@ filterqc <- function(x) slot(x, "filterqc")
 
 "output<-" <- function(x, value) 
 {
+    value <- .asLogical(value)
     slot(x, "output")[names(value)] <- value
     msg <- .valid.VEPParam.output(x)
     if (!is.null(msg))
@@ -199,6 +213,7 @@ filterqc <- function(x) slot(x, "filterqc")
 
 "filterqc<-" <- function(x, value) 
 {
+    value <- .asLogical(value)
     slot(x, "filterqc")[names(value)] <- value
     msg <- .valid.VEPParam.filterqc(x)
     if (!is.null(msg))
@@ -259,11 +274,11 @@ outputOpts <- function(terms=character(), sift=character(),
 filterqcOpts <- function(check_ref=logical(1), coding_only=logical(1),
                          check_existing=logical(1), check_alleles=logical(1), 
                          check_svs=logical(1), gmaf=logical(1),
-                         individual=logical(1), phased=logical(1),
-                         chr=logical(1), no_intergenic=logical(1),
-                         check_frequency=logical(1), freq_pop=logical(1),
-                         freq_freq=logical(1), freq_gt_lt=logical(1),
-                         freq_filter=logical(1), filter=logical(1),
+                         individual=character(), phased=logical(1),
+                         chr=character(), no_intergenic=logical(1),
+                         check_frequency=logical(1), freq_pop=character(),
+                         freq_freq=logical(1), freq_gt_lt=character(),
+                         freq_filter=character(), filter=character(),
                          failed=logical(1), allow_non_variant=logical(1))
 {
     list(check_ref=check_ref, coding_only=coding_only,

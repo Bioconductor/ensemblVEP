@@ -3,7 +3,7 @@
 ### =========================================================================
 
 setMethod("parseCSQToGRanges", "character", 
-    function(x, ..., VCFRowID=TRUE)
+    function(x, VCFRowID=TRUE, ...)
     {
         vcf <- readVcf(x, "", 
             param=ScanVcfParam(info="CSQ", geno=NA_character_))
@@ -12,8 +12,10 @@ setMethod("parseCSQToGRanges", "character",
 )
 
 setMethod("parseCSQToGRanges", "VCF", 
-    function(x, ..., VCFRowID=TRUE)
+    function(x, VCFRowID=TRUE, ...)
     {
+        if (all(is.na(ulst <- unlist(info(x)$CSQ, use.names=FALSE))))
+            return(rowData(x))
         raw <- sub("\\|$", "||", unlist(info(x)$CSQ, use.names=FALSE))
         raw <- strsplit(raw, "\\|")
         mat <- matrix(unlist(raw), nrow=length(raw), byrow=TRUE) 

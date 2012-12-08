@@ -4,6 +4,6 @@ setGeneric("ensemblVEP", signature = "file",
 )
 
 setGeneric("parseCSQToGRanges", signature = "x",
-           function(x, ...) 
+           function(x, VCFRowID=TRUE, ...) 
                standardGeneric("parseCSQToGRanges")
 )
