@@ -18,7 +18,10 @@
 
 \arguments{
   \item{file}{A  \code{character} specifying the full path to the
-    file, including the file name. 
+    file, including the file name.
+
+    Valid input file types are described on the Ensembl VEP web page.
+    \url{http://www.ensembl.org/info/docs/variation/vep/vep_formats.html} 
   }
   \item{param}{An instance of \code{VEPParam} specifying runtime options.
   }
@@ -33,11 +36,11 @@
       \url{http://www.ensembl.org/info/docs/variation/vep/index.html}
 
       The \code{ensemblVEP} function wraps the perl API and requires a 
-      local install of the Ensembl VEP available in the users path. The 
+      local install of the Ensembl VEP available in the user's path. The 
       \code{VEPParam} class provides a way to specify runtime options. 
-      By default, results are returned as a \code{GRanges} object. Options
-      can be set to read the data into a \code{VCF} object or write a
-      file to disk.
+      Results are returned from Ensembl VEP as \code{GRanges} (default)
+      or \code{VCF} objects. Alternatively, results can be written
+      directly to a file.
     }
   }
 }

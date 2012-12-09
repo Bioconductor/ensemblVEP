@@ -47,15 +47,17 @@ package the Ensembl VEP perl script must be installed in your path.
 \noindent Downloads:
 
 \url{http://uswest.ensembl.org/info/docs/variation/vep/index.html}
-
+\\
 \noindent Complete documentation for runtime options:
 
 \url{http://uswest.ensembl.org/info/docs/variation/vep/vep_script.html}
-
+\\
 \noindent To test that Ensembl VEP is properly installed, enter the
 name of the script from the command line:
 
 {\it variant\_effect\_predictor.pl}
+\\
+See the package README for more details on installing Ensembl VEP.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -200,7 +202,7 @@ myparam <- VEPParam(output=c(gvf=TRUE),
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Below are a few examples of how to configure the runtime options
+Below are some examples of how to configure the runtime options
 in the \Rclass{VEPParam} for specific situations. Investigate
 the differences in the returned results using this sample file
 from \Rpackage{VariantAnnotation}.
@@ -211,14 +213,15 @@ fl <- system.file("extdata", "ex2.vcf", package="VariantAnnotation")
 Please see the Ensembl VEP web page for complete details on the 
 runtime options.
 
-Add regulatory region consequences:
+\begin{itemize}
+  \item Add regulatory region consequences:
 <<runtime1, eval=FALSE>>=
 param <- VEPParam(output=c(regulatory=TRUE))
 gr <- ensemblVEP(fl, param) 
 @
 
-Specify the input file format as VCF, add HGNC gene identifiers,
-output SO consequence terms.
+  \item Specify input file format as VCF, add HGNC gene 
+        identifiers, output SO consequence terms:
 \Rclass{character}).
 <<runtime2, eval=FALSE>>=
 param <- VEPParam(input=c(format="vcf"),
@@ -226,29 +229,40 @@ param <- VEPParam(input=c(format="vcf"),
 gr <- ensemblVEP(fl, param) 
 @
 
-%Check for existing co-located variants, output only coding sequence 
-%consequences, output HGVS names:
-%<<runtime3, eval=FALSE>>=
-%param <- VEPParam(filterqc=c(check_existing=TRUE, coding_only=TRUE),
-%                  output=c(hgvs=TRUE))
-%gr <- ensemblVEP(fl, param) 
-%@
-
-Add SIFT score and prediction, PolyPhen prediction only:
-<<runtime4>>=
-param <- VEPParam(output=c(sift="b", polyphen="p"))
+  \item Check for co-located variants, output only coding 
+        sequence consequences, output HGVS names:
+<<runtime3, eval=FALSE>>=
+param <- VEPParam(filterqc=c(check_existing=TRUE, coding_only=TRUE),
+                  output=c(hgvs=TRUE))
+gr <- ensemblVEP(fl, param) 
 @
 
-Load config from ini file, run in quiet mode:
-<<runtime5>>=
-param <- VEPParam(basic=c(quiet=TRUE, config="mypath/vep.ini"))
-@
+  \item Add SIFT score and prediction, PolyPhen prediction only, 
+        output results as \Rcode{VCF}:
+\begin{verbatim}
+fl <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
+param <- VEPParam(output=c(sift="b", polyphen="p", vcf=TRUE))
+vcf <- ensemblVEP(fl, param)
+csq <- parseCSQToGRanges(vcf)
 
-%Filter input file on consequence type to include only variants that 
-%cause a coding sequence change, write output in original input format:
-%<<runtime6>>=
+> head(levels(mcols(csq)$SIFT))
+[1] "deleterious(0)"    "deleterious(0.01)" "deleterious(0.02)"
+[4] "deleterious(0.03)" "deleterious(0.04)" "deleterious(0.05)"
+
+> levels(mcols(csq)$PolyPhen)
+[1] "benign"            "possibly_damaging" "probably_damaging"
+[4] "unknown" 
+\end{verbatim}
+\end{itemize}
+
+%  \item Filter input on consequence type to include only variants that 
+%        cause a coding sequence change, write output in same format
+%        as input:
+%<<runtime5>>=
+%fl <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
 %param <- VEPParam(filterqc=c(filter="coding_change"),
 %                  output=c(original=TRUE))
+%vcf <- ensemblVEP(fl, param)
 %@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

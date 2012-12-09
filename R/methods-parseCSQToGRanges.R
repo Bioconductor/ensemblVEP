@@ -18,6 +18,10 @@ setMethod("parseCSQToGRanges", "VCF",
             return(rowData(x))
         raw <- sub("\\|$", "||", unlist(info(x)$CSQ, use.names=FALSE))
         raw <- strsplit(raw, "\\|")
+        if (any(naidx <- is.na(raw))) {
+            maxl <- max(sapply(raw, length))
+            raw[naidx] <- lapply(raw[naidx], rep, NA_character_, maxl)
+        } 
         mat <- matrix(unlist(raw), nrow=length(raw), byrow=TRUE) 
         mat[!nzchar(mat)] <- NA_character_
         csq <- DataFrame(mat)
