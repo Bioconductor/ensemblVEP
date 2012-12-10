@@ -43,6 +43,7 @@ of known and unknown variants using the Variant Effect Predictor
 (VEP). The \Rpackage{ensemblVEP} package wraps Ensembl VEP and 
 returns the results as \R objects or a file on disk. To use this 
 package the Ensembl VEP perl script must be installed in your path.
+See the package README for details.
 
 \noindent Downloads:
 
@@ -57,12 +58,11 @@ name of the script from the command line:
 
 {\it variant\_effect\_predictor.pl}
 \\
-See the package README for more details on installing Ensembl VEP.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Return Ensembl VEP Results as \R{} objects}
+\section{Results as \R{} objects}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -71,8 +71,8 @@ library(ensemblVEP)
 @
 
 The \Rfunction{ensemblVEP} function can return variant consequences from
-Ensembl VEP as \R objects (\Robject{GRanges} or \Robject{VCF}) or as a
-file on disk. The default behavior returns a \Robject{GRanges}. Runtime 
+Ensembl VEP as \R objects (\Robject{GRanges} or \Robject{VCF}) or write
+them to a file. The default behavior returns a \Robject{GRanges}. Runtime 
 options are stored in a \Robject{VEPParam} object and allow a great deal 
 of control over the content and format of the results. See the man pages 
 for more details.
@@ -89,16 +89,15 @@ param
 basic(param)
 @
 
-A vcf file from the \Rpackage{VariantAnnotation} package will be 
-the input. Here we do not supply a {\it param} argument so the
-default \Robject{VEPParam} is used.
+Using a vcf file from \Rpackage{VariantAnnotation} as input, we query 
+Ensembl VEP with the default runtime parameters.
 <<rtn_GRanges>>=
 fl <- system.file("extdata", "gl_chr1.vcf", package="VariantAnnotation")
 gr <- ensemblVEP(fl)
 @
 
 Consequence data are parsed into the metadata columns of
-a \Robject{GRanges}. To control the type and amount of data 
+the \Robject{GRanges}. To control the type and amount of data 
 returned see the options in \Rcode{output(VEPParam())}.
 <<show_GRanges>>=
 head(gr, 3)
@@ -115,7 +114,7 @@ the {\it vcf} option in the {\it output} slot to TRUE.
 param <- VEPParam(output=c(vcf=TRUE))
 @
 
-When we try to retrieve the data we get an error.
+An call to \Rfunction{ensemblVEP} results in an error.
 \begin{verbatim}
 > vcf <- ensemblVEP(fl, param)
 2012-12-03 16:40:55 - Starting...
@@ -140,9 +139,8 @@ included as an unparsed INFO column labeled {\it CSQ}.
 info(vcf)$CSQ
 @
 
-The \Rfunction{parseCSQToGRanges} function will further parse 
-these data.
-\Rfunction{parseCSQToGRanges} function.
+The \Rfunction{parseCSQToGRanges} function parses these data
+into a \Robject{GRanges}.
 <<parseCSQToGRanges>>=
 csq <- parseCSQToGRanges(vcf)
 head(csq, 3)
@@ -158,7 +156,7 @@ sapply(splt, length)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Write Ensembl VEP Results to a file}
+\section{Write results to a file}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -191,8 +189,7 @@ myparam <- VEPParam(output=c(vcf=TRUE),
 myparam <- VEPParam(output=c(gvf=TRUE),
                     input=c(output_file="/path/myfile.gvf"))
 ## Write a tab delimited file to myfile.txt:
-myparam <- VEPParam(output=c(gvf=TRUE),
-                    input=c(output_file="/path/myfile.txt"))
+myparam <- VEPParam(input=c(output_file="/path/myfile.txt"))
 @
 
 
@@ -202,16 +199,15 @@ myparam <- VEPParam(output=c(gvf=TRUE),
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Below are some examples of how to configure the runtime options
-in the \Rclass{VEPParam} for specific situations. Investigate
-the differences in the returned results using this sample file
-from \Rpackage{VariantAnnotation}.
+The Ensembl VEP web page has complete descriptions of all runtime
+options.
+\url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
+Below are examples of how to configure the runtime options
+in the \Rclass{VEPParam} for specific situations. Investigate the 
+differences in results using a sample file from \Rpackage{VariantAnnotation}.
 <<samplefile>>=
 fl <- system.file("extdata", "ex2.vcf", package="VariantAnnotation")
 @
-
-Please see the Ensembl VEP web page for complete details on the 
-runtime options.
 
 \begin{itemize}
   \item Add regulatory region consequences:
@@ -222,7 +218,6 @@ gr <- ensemblVEP(fl, param)
 
   \item Specify input file format as VCF, add HGNC gene 
         identifiers, output SO consequence terms:
-\Rclass{character}).
 <<runtime2, eval=FALSE>>=
 param <- VEPParam(input=c(format="vcf"),
                   output=c(hgnc=TRUE, terms="so"))
