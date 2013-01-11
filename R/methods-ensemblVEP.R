@@ -4,12 +4,15 @@
 
 .getVepPath <- function()
 {
-    ## only be needed on the BioC build system
+    ## only needed on the BioC build system
     if (nchar(Sys.getenv("VEP_PATH")))
     {
         return(Sys.getenv("VEP_PATH"))
     }
-    unname(Sys.which("variant_effect_predictor.pl"))
+    loc <- unname(Sys.which("variant_effect_predictor.pl"))
+    if (!grepl("variant_effect_predictor", loc))
+        stop()
+    loc
 }
 
 setMethod("ensemblVEP", "character", 
