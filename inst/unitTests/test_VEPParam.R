@@ -7,7 +7,7 @@ test_VEPParam_construction <- function()
     checkException(VEPParam(basic=c(verbose="foo")), silent=TRUE)
 }
 
-test_VEPParam_options <- function()
+test_VEPParam_option_names <- function()
 {
     p <- VEPParam()
     opt <- c("verbose", "quiet", "no_progress", "config",
@@ -32,23 +32,12 @@ test_VEPParam_options <- function()
     checkIdentical(opt, names(filterqc(p)))
 }
 
-test_VEPParam_defaults <- function()
+test_VEPParam_option_defaults <- function()
 {
     p <- VEPParam()
-    fields <- c("Uploaded_variation", "Location", "Allele", 
-                "Gene", "Feature", "Feature_type", "Consequence", 
-                "Existing_variation")
-    checkTrue(all(fields %in% unlist(strsplit(p$fields, ","))))
-    checkTrue(p$species == "homo_sapiens")
-    checkTrue(p$format == "vcf")
-    checkTrue(p$output_file == paste0(tempdir(), "/temp.vcf"))
-    checkTrue(p$force_overwrite ==  TRUE)
-}
-
-test_VEPParam_extract <- function()
-{
-    p <- VEPParam()
-    checkIdentical(p$fields, output(p)$fields)
+    checkIdentical(input(p)$species, "homo_sapiens")
+    checkIdentical(input(p)$force_overwrite, FALSE)
+    checkIdentical(database(p)$host, "useastdb.ensembl.org")
 }
 
 test_VEPParam_replace <- function()
@@ -58,9 +47,12 @@ test_VEPParam_replace <- function()
     basic(p1) <- list(verbose=TRUE)
     basic(p2) <- c(verbose=TRUE)
     checkIdentical(p1, p2) 
+    checkException(basic(p1)$verbose <- "foo", silent=TRUE)
+    checkException(basic(p1)$config <- TRUE, silent=TRUE)
 
     ## multiple values
-    p <- VEPParam()
-    checkException(basic(p) <- c(verbose=TRUE, 
-        config="myconfig.txt"), silent=TRUE)
+    p1 <- p2  <- VEPParam()
+    basic(p1) <- c(verbose=TRUE, config="myconfig.txt")
+    basic(p2) <- list(verbose=TRUE, config="myconfig.txt")
+    checkIdentical(p1, p2) 
 }
