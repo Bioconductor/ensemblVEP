@@ -1,4 +1,4 @@
-test_VEPParam_construction <- function
+test_VEPParam_construction <- function()
 {
     p <- VEPParam()
     p <- VEPParam(basic=list())
