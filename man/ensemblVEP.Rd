@@ -98,8 +98,8 @@ rowData(vcf_input)
 rowData(vcf)
 
 ## This variant has no alternate allele and is called a
-## monomorphic reference. The Ensembl VEP drops these
-## variants. 
+## monomorphic reference. The Ensembl VEP automatically
+## drops these variants. 
 rowData(vcf)[,c("REF", "ALT")]
 
 ## -----------------------------------------------------------------------

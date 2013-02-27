@@ -43,7 +43,7 @@ setMethod("ensemblVEP", "character",
 {
     ops <- c(basic(param), input(param), database(param), 
              output(param), filterqc(param))
-    drop <- c(which(ops == FALSE), which(elementLengths(ops) == 0L)) 
-    ops[which(ops == TRUE)] <- character(1) 
-    paste0(" --", names(ops)[-drop], " ", ops[-drop], collapse=" ")
+    keep <- sapply(ops, function(x) 
+        ifelse (is.logical(x), x == TRUE, length(x) > 0)) 
+    paste0(" --", names(ops)[keep], " ", ops[keep], collapse=" ")
 }

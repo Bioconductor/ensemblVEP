@@ -42,7 +42,7 @@ VEPParam  <- function(basic=list(), input=list(), database=list(),
         return(paste0("invalid options: ", 
                paste(names(b)[invalid], sep=",")))
 
-    logic <- b[names(b) != "config"]
+    logic <- b[!names(b) %in% c("config", "fork")]
     if (!all(valid <- sapply(logic, is.logical)))
         return(paste0(paste(logic[!valid], sep=","), 
                " must be TRUE or FALSE"))
@@ -227,7 +227,7 @@ filterqc <- function(x) slot(x, "filterqc")
 
 basicOpts <- function(verbose=logical(1), quiet=logical(1), 
                       no_progress=logical(1), config=character(), 
-                      everything=logical(1), fork=logical(1))
+                      everything=logical(1), fork=integer(0))
 {
     list(verbose=verbose, quiet=quiet, no_progress=no_progress,
          config=config, everything=everything, fork=fork)
