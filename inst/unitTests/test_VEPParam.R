@@ -15,8 +15,8 @@ test_VEPParam_option_names <- function()
     checkIdentical(opt, names(basic(p)))
     opt <- c("species", "format", "output_file", "force_overwrite")
     checkIdentical(opt, names(input(p)))
-    opt <- c("host", "user", "password", "port", "genomes", "refseq",
-             "db_version", "registry")
+    opt <- c("database", "host", "user", "password", "port", "genomes", 
+             "refseq", "db_version", "registry")
     checkIdentical(opt, names(database(p)))
     opt <- c("terms", "sift", "polyphen", "regulatory", "cell_type",
              "hgvs", "gene", "protein", "hgnc", "ccds", "canonical", 

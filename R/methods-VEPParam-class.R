@@ -71,8 +71,8 @@ VEPParam  <- function(basic=list(), input=list(), database=list(),
 .valid.VEPParam.database <- function(x)
 {
     d <- database(x)
-    opt <- c("host", "user", "password", "port", "genomes", 
-             "refseq", "db_version", "registry")
+    opt <- c("database", "host", "user", "password", "port", 
+             "genomes", "refseq", "db_version", "registry")
     if (any(invalid <- !names(d) %in% opt))
         return(paste0("invalid options: ", 
                paste(names(d)[invalid], sep=",")))
@@ -242,12 +242,13 @@ inputOpts <- function(species="homo_sapiens", format=character(),
          force_overwrite=force_overwrite)
 } 
 
-databaseOpts <- function(host="useastdb.ensembl.org", user=character(), 
-                         password=character(), port=numeric(), 
-                         genomes=logical(1), refseq=logical(1),
-                         db_version=numeric(), registry=character())
+databaseOpts <- function(database=TRUE, host="useastdb.ensembl.org", 
+                         user=character(), password=character(), 
+                         port=numeric(), genomes=logical(1), 
+                         refseq=logical(1), db_version=numeric(), 
+                         registry=character())
 {
-    list(host=host, user=user, password=password, 
+    list(database=database, host=host, user=user, password=password, 
          port=port, genomes=genomes, refseq=refseq,
          db_version=db_version, registry=registry)
 } 

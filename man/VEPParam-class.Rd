@@ -83,6 +83,8 @@
     }
     \item{\code{database}}{\code{list} of the following options:
       \itemize{
+        \item{database:} \code{logical}, default TRUE; enable the VEP to
+          use local or remote databases
         \item{host:} \code{character}, default 'useast.ensembl.db.org'; 
           database host
         \item{user:} \code{character} default \code{character()}; 

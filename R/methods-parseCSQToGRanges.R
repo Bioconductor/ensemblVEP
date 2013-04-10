@@ -30,12 +30,16 @@ setMethod("parseCSQToGRanges", "VCF",
  
         if (VCFRowID) {
             VCFRowID <- rep(seq_len(nrow(x)), elt)
-            csq <- cbind(VCFRowID, csq)
+            csq <- DataFrame(VCFRowID=VCFRowID, csq)
         }
         rd <- rowData(x)
         gr <- rd[rep(seq_len(length(rd)), elt)]
-        mcols(gr) <- DataFrame(csq) 
+        mcols(gr) <- csq 
         genome(gr) <- genome(x)
         gr 
     }
 )
+
+
+
+
