@@ -130,28 +130,30 @@ input(param)$format <- "vcf"
 
 Try again.
 <<rtn_VCF>>=
-vcf <- ensemblVEP(fl, param)
+vep <- ensemblVEP(fl, param)
 @
 
 Success! When a \Robject{VCF} is returned, consequence data are 
 included as an unparsed INFO column labeled {\it CSQ}.
 <<rtn_VCF>>=
-info(vcf)$CSQ
+info(vep)$CSQ
 @
 
 The \Rfunction{parseCSQToGRanges} function parses these data
-into a \Robject{GRanges}.
+into a \Robject{GRanges}. When the rownames of the original
+VCF are provided as \Rcode{VCFRowID} a metadata column of the
+same name is included in the output.
 <<parseCSQToGRanges>>=
-csq <- parseCSQToGRanges(vcf)
+vcf <- readVcf(fl, "hg19")
+csq <- parseCSQToGRanges(vep, VCFRowID=rownames(vcf))
 head(csq, 3)
 @ 
 
 The \Rcode{VCFRowID} columns maps the expanded {\it CSQ} data back
-to the rows in the \Rclass{VCF} object.
+to the rows in the \Rclass{VCF} object. This index can be used to
+subset the original VCF.
 <<map_rownames>>=
-splt <- splitAsList(csq, csq$VCFRowID)
-names(splt) <- dimnames(vcf)[[1]] 
-sapply(splt, length)
+vcf[csq$"VCFRowID"]
 @
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
