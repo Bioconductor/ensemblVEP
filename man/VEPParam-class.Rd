@@ -324,7 +324,7 @@
                 summary=logical(1), per_gene=logical(1), 
                 convert=character(), fields=character(), 
                 vcf=logical(1), gvf=logical(1), original=logical(1),
-                custom=character(), plugins=character())}
+                custom=character(), plugin=character())}
     }
     \item{}{
       \code{filterqcOpts <- function(check_ref=logical(1), 

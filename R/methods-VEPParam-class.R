@@ -286,14 +286,14 @@ outputOpts <- function(terms="so", sift=character(),
                        summary=logical(1), per_gene=logical(1), 
                        convert=character(), fields=character(), 
                        vcf=logical(1), gvf=logical(1), original=logical(1),
-                       custom=character(), plugins=character())
+                       custom=character(), plugin=character())
 {
     list(terms=terms, sift=sift, polyphen=polyphen, regulatory=regulatory,
          cell_type=cell_type, hgvs=hgvs, gene=gene, protein=protein, 
          hgnc=hgnc, ccds=ccds, canonical=canonical, xref_refseq=xref_refseq, 
          numbers=numbers, domains=domains, most_severe=most_severe, 
          summary=summary, per_gene=per_gene, convert=convert, fields=fields, 
-         vcf=vcf, gvf=gvf, original=original, custom=custom, plugins=plugins)
+         vcf=vcf, gvf=gvf, original=original, custom=custom, plugin=plugin)
 }
 
 filterqcOpts <- function(check_ref=logical(1), coding_only=logical(1),
