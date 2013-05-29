@@ -11,21 +11,27 @@
 % Helpers:
 \alias{basicOpts}
 \alias{inputOpts}
-\alias{databaseOpts}
+\alias{cacheOpts}
 \alias{outputOpts}
 \alias{filterqcOpts}
+\alias{databaseOpts}
+\alias{advancedOpts}
 
 % Accessors:
 \alias{basic}
 \alias{basic<-}
 \alias{input}
 \alias{input<-}
-\alias{database}
-\alias{database<-}
+\alias{cache}
+\alias{cache<-}
 \alias{output}
 \alias{output<-}
 \alias{filterqc}
 \alias{filterqc<-}
+\alias{database}
+\alias{database<-}
+\alias{advanced}
+\alias{advanced<-}
 
 % "show" method:
 \alias{show,VEPParam-method}
@@ -45,12 +51,12 @@
 
   \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
 
-  Data in the \code{VEPParam} are organized into five slots, 'basic', 'input',
-  'database', 'output' and 'filterqc'. Each slot holds a \code{list} of 
-  runtime options. The 'cache' runtime options are not yet supported.
-  \code{logical} options are turned on/off with TRUE and FALSE. 
-  \code{character} and \code{numeric} are 'on' when a character string is 
-  provided and 'off' when they contain an empty value (i.e., 
+  Data in the \code{VEPParam} are organized into five slots, \sQuote{basic}, 
+  \sQuote{input}, \sQuote{cache}, \sQuote{output}, \sQuote{filterqc},
+  \sQuote{database} and \sQuote{advanced}. Each slot holds a \code{list} of 
+  runtime options. \code{logical} options are turned on/off with TRUE and 
+  FALSE. \code{character} and \code{numeric} are \sQuote{on} when a character 
+  string is provided and \sQuote{off} when they contain an empty value (i.e., 
   \code{character()} or \code{numeric()}.
   \describe{
     \item{\code{basic}}{\code{list} of the following options:
@@ -64,7 +70,7 @@
         \item{everything:} \code{logical}, default FALSE; shortcut to switch 
           on 12 options (sift, polyphen, ccds, hgvs, hgnc, numbers, domains,
           regulatory, cell_type, canonical, protein and gmaf).
-        \item{fork:} \code{logical}, default FALSE; enable forking
+        \item{fork:} \code{numeric}, default \code{numeric()}; enable forking
       }
     }
     \item{\code{input}}{\code{list} of the the following options:
@@ -79,34 +85,28 @@
           path and file name of output file
         \item{force_overwrite:} \code{logical}, default FALSE; overwrite
           the output file if it currently exists
+        \item{stats_file:} \code{character}, default \code{character()}; 
+          summary stats file name
+        \item{no_stats:} \code{logical}, default FALSE; do not generate
+          a stats file 
+        \item{html:} \code{logical}, default FALSE; generate html version
+          of the output file 
       }
     }
-    \item{\code{database}}{\code{list} of the following options:
+    \item{\code{cache}}{\code{list} of the following options:
       \itemize{
-        \item{database:} \code{logical}, default TRUE; enable the VEP to
-          use local or remote databases
-        \item{host:} \code{character}, default 'useast.ensembl.db.org'; 
-          database host
-        \item{user:} \code{character} default \code{character()}; 
-          database user
-        \item{password:} \code{character}, default \code{character()}; 
-          database password
-        \item{port:} \code{numeric}, default \code{character()}; 
-          database port
-        \item{genomes:} \code{logical}, default FALSE; override default 
-          connection settings with those for the Ensembl Genomces public 
-          MySQL server
-        \item{refseq:} \code{logical}, default FALSE; use otherfeatures 
-          database to retrieve transcripts
-        \item{db_version:} \code{numeric}, default \code{character()}; 
-          force connection to specific version
-        \item{registry:} \code{character}, default \code{character()}; 
-          provide file to override default connection settings
+        \item{cache:} \code{logical}, default FALSE; enable use of cache 
+        \item{dir:} \code{character}, default '$HOME/.vep/'; base cache
+          to be used 
+        \item{offline:} \code{logical}, default FALSE; enable offline mode,
+          no database connections will be made 
+        \item{fasta:} \code{character}, default \code{character()}; FASTA
+          filename or directory to files to use for reference sequences 
       }
     }
     \item{\code{output}}{\code{list} of the following options:
       \itemize{
-        \item{terms:} \code{character}, default \code{character()}; type 
+        \item{terms:} \code{character}, default 'so'; type 
           of consequence terms to output, valid strings are 'ensembl' or 'so'
         \item{sift:} \code{character}, default \code{character()}; 
           output prediction, score
@@ -150,6 +150,11 @@
         \item{gvf:} \code{logical}, default FALSE; write output in gcf format
         \item{original:} \code{logical}, default FALSE; writes output as 
           filtered set of input. Must be used with --filter.
+        \item{custom:} \code{character}, default \code{character()}; name of
+          custom annotation file to add to output. Currently only a single
+          annotation is supported.
+        \item{plugin:} \code{character}, default \code{character()}; name of
+          plugin module. Currently only a single module is supported.
       }
     }
     \item{\code{filterqc}}{\code{list} of the following options:
@@ -168,6 +173,8 @@
           structural variants that overlap the input variants
         \item{gmaf:} \code{logical}, default FALSE; add global minor allele 
           frequence (MAF) from 1000 Genomes Phase 1 data 
+        \item{maf_1kg:} \code{logical}, default FALSE; add MAF from 
+          continental populations of 1000 Genomes Phase 1 data  
         \item{individual:} \code{character}, default \code{character()}; 
           consider only alternate alleles present in the genotypes of 
           'all' or a character vector of specified individuals
@@ -204,23 +211,69 @@
           with no consequence data added.
       }
     }
+    \item{\code{database}}{\code{list} of the following options:
+      \itemize{
+        \item{database:} \code{logical}, default TRUE; enable the VEP to
+          use local or remote databases
+        \item{host:} \code{character}, default 'useast.ensembl.db.org'; 
+          database host
+        \item{user:} \code{character} default \code{character()}; 
+          database user
+        \item{password:} \code{character}, default \code{character()}; 
+          database password
+        \item{port:} \code{numeric}, default \code{character()}; 
+          database port
+        \item{genomes:} \code{logical}, default FALSE; override default 
+          connection settings with those for the Ensembl Genomces public 
+          MySQL server
+        \item{refseq:} \code{logical}, default FALSE; use otherfeatures 
+          database to retrieve transcripts
+        \item{db_version:} \code{numeric}, default \code{character()}; 
+          force connection to specific version
+        \item{registry:} \code{character}, default \code{character()}; 
+          provide file to override default connection settings
+      }
+    }
+    \item{\code{advanced}}{\code{list} of the following options:
+      \itemize{
+        \item{no_whole_genome:} \code{logical}, default FALSE; run in
+          non-whole genome mode, variants analyzed one at a time, no caching
+        \item{buffer_size:} \code{numeric}, default 5000; internal buffer 
+          size corresponding to number of variations read into memory
+          simultaneously
+        \item{write_cache:} \code{logical}, default FALSE; enable writing
+          to the cache 
+        \item{build:} \code{character}, default \code{character()}; build
+          cache for the selected species from the database (See --chr flag)
+        \item{compress:} \code{character}, default \code{character()}; 
+          specify utility to decompress cached files (zcat is default) 
+        \item{skip_db_check:} \code{logical}, default FALSE; force the script
+          to use a cache built from a different host than specified with
+          --host 
+        \item{cache_region_size:} \code{numeric}, default \code{numeric()};
+          size in base-pairs of the region covered by one file in the cache,
+          see full description of this flag on the web site for details 
+      }
+    }
   }
-  The \code{cache} options are not yet supported.
 }
 
 \section{Constructor}{
   \describe{
     \item{}{
       \code{VEPParam(basic=basicOpts(), input=inputOpts(),
-                     database=databaseOpts(), output=outputOpts(),
-                     filterqc=filterqcOpts(), ...)}
+                     cache=cacheOpts(), output=outputOpts(),
+                     filterqc=filterqcOpts(), database=databaseOpts(), 
+                     advanced=advancedOpts(), ...)}
       Creates a \code{VEPParam} object.
       \describe{
         \item{\code{basic}}{\code{list} of basic options}
         \item{\code{input}}{\code{list} of input options}
-        \item{\code{database}}{\code{list} of database options}
+        \item{\code{cache}}{\code{list} of cache options}
         \item{\code{output}}{\code{list} of output options}
         \item{\code{filterqc}}{\code{list} of filterqc options}
+        \item{\code{database}}{\code{list} of database options}
+        \item{\code{advanced}}{\code{list} of advanced options}
       }
     }
   }
@@ -233,9 +286,11 @@
   \describe{
     \item{}{\code{basic(x)}, \code{basic(x) <- value}}
     \item{}{\code{input(x)}, \code{input(x) <- value}}
-    \item{}{\code{database(x)}, \code{database(x) <- value}}
+    \item{}{\code{cache(x)}, \code{cache(x) <- value}}
     \item{}{\code{output(x)}, \code{output(x) <- value}}
     \item{}{\code{filterqc(x)}, \code{filterqc(x) <- value}}
+    \item{}{\code{database(x)}, \code{database(x) <- value}}
+    \item{}{\code{advanced(x)}, \code{advanced(x) <- value}}
   }
 }
 
@@ -245,30 +300,56 @@
   \describe{
     \item{}{
       \code{basicOpts <- function(verbose=logical(1), quiet=logical(1),
-                no_progress=logical(1), config=logical(1),
-                everything=logical(1), fork=logical(1))}
+                no_progress=logical(1), config=character(),
+                everything=logical(1), fork=numeric())}
     }
     \item{}{
-      \code{inputOpts(species="homo_sapiens", format="vcf", 
-                output_file=paste0(tempdir(), "/temp.vcf"), 
-                force_overwrite=TRUE)}
+      \code{inputOpts <- function(species="homo_sapiens", 
+                format=character(), output_file=character(), 
+                force_overwrite=logical(1), stats_file=character(), 
+                no_stats=logical(1), html=logical(1))} 
     }
     \item{}{
-      \code{databaseOpts <- function(host="useastdb.ensembl.org", 
-                user=logical(1), password=logical(1), port=logical(1),
-                genomes=logical(1), refseq=logical(1),
-                db_version=logical(1), registry=logical(1))}
+      \code{cacheOpts <- function(cache=logical(1), dir="$HOME/.vep",
+                offline=logical(1), fasta=character())}
+    }
+    \item{}{
+      \code{outputOpts <- function(terms="SO", sift=character(), 
+                polyphen=character(), regulatory=logical(1), 
+                cell_type=character(), hgvs=logical(1), 
+                gene=logical(1), protein=logical(1), hgnc=logical(1), 
+                ccds=logical(1), canonical=logical(1), 
+                xref_refseq=logical(1), numbers=logical(1), 
+                domains=logical(1), most_severe=logical(1), 
+                summary=logical(1), per_gene=logical(1), 
+                convert=character(), fields=character(), 
+                vcf=logical(1), gvf=logical(1), original=logical(1),
+                custom=character(), plugins=character())}
     }
     \item{}{
       \code{filterqcOpts <- function(check_ref=logical(1), 
                 coding_only=logical(1), check_existing=logical(1), 
                 check_alleles=logical(1), check_svs=logical(1), 
-                gmaf=logical(1), individual=logical(1), phased=logical(1),
-                chr=logical(1), no_intergenic=logical(1),
-                check_frequency=logical(1), freq_pop=logical(1),
-                freq_freq=logical(1), freq_gt_lt=logical(1),
-                freq_filter=logical(1), filter=logical(1),
+                gmaf=logical(1), maf_1kg=logical(1), individual=character(), 
+                phased=logical(1), chr=character(), 
+                no_intergenic=logical(1), filter_common=logical(1),
+                check_frequency=logical(1), freq_pop=character(),
+                freq_freq=logical(1), freq_gt_lt=character(),
+                freq_filter=character(), filter=character(),
                 failed=logical(1), allow_non_variant=logical(1))}
+    }
+    \item{}{
+      \code{databaseOpts <- function(database=TRUE, 
+                host="useastdb.ensembl.org", user=character(), 
+                password=character(), port=numeric(), genomes=logical(1), 
+                refseq=logical(1), db_version=numeric(), 
+                registry=character())}
+    }
+    \item{}{
+      \code{advancedOpts <- function(no_whole_genome=logical(1), 
+                buffer_size=5000, write_cache=logical(1), build=character(),
+                compress=character(), skip_db_check=logical(1),
+                cache_region_size=numeric())}
     }
   }
 }

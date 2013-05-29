@@ -14,8 +14,8 @@
 }
 
 \usage{
-\S4method{parseCSQToGRanges}{character}(x, VCFRowID=NULL, ...)
-\S4method{parseCSQToGRanges}{VCF}(x, VCFRowID=NULL, ...)
+\S4method{parseCSQToGRanges}{character}(x, VCFRowID=character(), ...)
+\S4method{parseCSQToGRanges}{VCF}(x, VCFRowID=character(), ...)
 }
 
 \arguments{
@@ -23,15 +23,13 @@
     The \code{character} name of a vcf file on disk or a \code{VCF} object
   }
   \item{VCFRowID}{
-    Default \code{NULL} or a \code{character} vector of rownames from
-    the original VCF. 
+    A \code{character} vector of rownames from the original VCF. 
+    When provided, the result includes a metadata column named 
+    \sQuote{VCFRowID} which maps the result back to the row 
+    (variant) in the original VCF.
 
-    When rownames are provided, a metadata column named \sQuote{VCFRowID}
-    is included in the result which maps back to the row (variant) in the 
-    original VCF.
-
-    When \code{VCFRowID=NULL} or is not specified, no \sQuote{VCFRowID}
-    column is included in the output. 
+    When \code{VCFRowID} is not provided no \sQuote{VCFRowID}
+    column is included. 
   }
   \item{\dots}{
     Arguments passed to other methods. Currently not used.

@@ -6,8 +6,9 @@ setClass("VEPParam",
     representation(
         basic="list",
         input="list",
-        database="list",
+        cache="list",
         output="list",
         filterqc="list",
-        cache="list")
+        database="list",
+        advanced="list")
 )

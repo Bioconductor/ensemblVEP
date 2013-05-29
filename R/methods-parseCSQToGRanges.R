@@ -3,16 +3,16 @@
 ### =========================================================================
 
 setMethod("parseCSQToGRanges", "character", 
-    function(x, VCFRowID=NULL, ...)
+    function(x, VCFRowID=character(), ...)
     {
-        vcf <- readVcf(x, "", 
-            param=ScanVcfParam(info="CSQ", geno=NA_character_))
-        callGeneric(vcf, NULL, ...)
+        param=ScanVcfParam(info="CSQ", geno=NA_character_)
+        vcf <- readVcf(x, "", param=param) 
+        callGeneric(vcf, VCFRowID, ...)
     }
 )
 
 setMethod("parseCSQToGRanges", "VCF", 
-    function(x, VCFRowID=NULL, ...)
+    function(x, VCFRowID=character(), ...)
     {
         ulst <- unlist(info(x)$CSQ, use.names=FALSE)
         if (all(is.na(ulst)))
@@ -30,7 +30,7 @@ setMethod("parseCSQToGRanges", "VCF",
  
         rd <- rowData(x)
         gr <- rd[rep(seq_along(rd), elt)]
-        if (!is.null(VCFRowID)) {
+        if (length(VCFRowID)) {
             if (any(no_match <- !VCFRowID %in% rownames(x)))
                 warning(paste0("rownames not found in 'x' : ",
                         paste(VCFRowID[no_match], collapse=",")))
