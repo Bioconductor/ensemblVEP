@@ -10,8 +10,8 @@
         return(Sys.getenv("VEP_PATH"))
     }
     loc <- unname(Sys.which("variant_effect_predictor.pl"))
-    if (!grepl("variant_effect_predictor", loc))
-        stop()
+    if (!grepl("varian", loc, ignore.case=TRUE))
+        stop("Couldn't find variant_effect_predictor.pl in your PATH.")
     loc
 }
 
