@@ -13,6 +13,9 @@
 \alias{inputOpts}
 \alias{cacheOpts}
 \alias{outputOpts}
+\alias{identifierOpts}
+\alias{colocatedVariantsOpts}
+\alias{dataformatOpts}
 \alias{filterqcOpts}
 \alias{databaseOpts}
 \alias{advancedOpts}
@@ -26,6 +29,12 @@
 \alias{cache<-}
 \alias{output}
 \alias{output<-}
+\alias{identifier}
+\alias{identifier<-}
+\alias{colocatedVariants}
+\alias{colocatedVariants<-}
+\alias{dataformat}
+\alias{dataformat<-}
 \alias{filterqc}
 \alias{filterqc<-}
 \alias{database}
@@ -51,13 +60,14 @@
 
   \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
 
-  Data in the \code{VEPParam} are organized into five slots, \sQuote{basic}, 
-  \sQuote{input}, \sQuote{cache}, \sQuote{output}, \sQuote{filterqc},
-  \sQuote{database} and \sQuote{advanced}. Each slot holds a \code{list} of 
-  runtime options. \code{logical} options are turned on/off with TRUE and 
-  FALSE. \code{character} and \code{numeric} are \sQuote{on} when a character 
-  string is provided and \sQuote{off} when they contain an empty value (i.e., 
-  \code{character()} or \code{numeric()}.
+  Data in the \code{VEPParam} are organized into the following categories, 
+  \sQuote{basic}, \sQuote{input}, \sQuote{cache}, \sQuote{output}, 
+  \sQuote{identifier}, \sQuote{colocatedVariants}, \sQuote{dataformat},
+  \sQuote{filterqc}, \sQuote{database} and \sQuote{advanced}. Each category
+  is a \code{list} of runtime options. \code{logical} options are turned on/off 
+  with TRUE and FALSE. \code{character} and \code{numeric} are \sQuote{on} when 
+  a character string is provided and \sQuote{off} when they contain an empty value 
+  (i.e., \code{character()} or \code{numeric()}.
   \describe{
     \item{\code{basic}}{\code{list} of the following options:
       \itemize{
@@ -89,6 +99,8 @@
           summary stats file name
         \item{no_stats:} \code{logical}, default FALSE; do not generate
           a stats file 
+        \item{stats_text:} \code{logical}, default FALSE; generate a plain
+          text stats file instead of html
         \item{html:} \code{logical}, default FALSE; generate html version
           of the output file 
       }
@@ -96,7 +108,11 @@
     \item{\code{cache}}{\code{list} of the following options:
       \itemize{
         \item{cache:} \code{logical}, default FALSE; enable use of cache 
-        \item{dir:} \code{character}, default '$HOME/.vep/'; base cache
+        \item{dir:} \code{character}, default '$HOME/.vep/'; cache/plugin
+          to be used 
+        \item{dir_cache:} \code{character}, default '$HOME/.vep/'; cache 
+          to be used 
+        \item{dir_plugins:} \code{character}, default '$HOME/.vep/'; plugin 
           to be used 
         \item{offline:} \code{logical}, default FALSE; enable offline mode,
           no database connections will be made 
@@ -106,8 +122,6 @@
     }
     \item{\code{output}}{\code{list} of the following options:
       \itemize{
-        \item{terms:} \code{character}, default 'so'; type 
-          of consequence terms to output, valid strings are 'ensembl' or 'so'
         \item{sift:} \code{character}, default \code{character()}; 
           output prediction, score
           or both, valid strings are 'p', 's' or 'b'
@@ -119,51 +133,46 @@
         \item{cell_type:} \code{character}, default \code{character()}; 
           only report 
           regulatory regions found in the given cell type(s) 
-        \item{hgvs:} \code{logical}, default FALSE; add hgvs ID's
-        \item{gene:} \code{logical}, default FALSE; add Ensembl gene ID's
-        \item{protein:} \code{logical}, default FALSE; add Ensembl protein ID's
-        \item{ccds:} \code{logical}, default FALSE; add CCDS transcript ID's
-        \item{canonical:} \code{logical}, default FALSE; indicate if transcript 
-          is cononical transcript for the gene
-        \item{xref_seq:} \code{logical}, default FALSE; output aligned refseq 
-          mRNA ID
-        \item{numbers:} \code{logical}, default FALSE; output affectd exon and 
-          intron numbering, format is Number/Total
-        \item{domains:} \code{logical}, default FALSE; output names of 
-          overlapping protein domains
-        \item{most_severe:} \code{logical}, default FALSE; output only most 
-          severe consequence per variation
-        \item{summary:} \code{logical}, default FALSE; output a comma-separated
-          list of all observed consequences per variation, transcript-specific
-          columns will be left blank
-        \item{per_gene:} \code{logical}, default FALSE; output only the most
-          severe consequence per gene
-        \item{convert:} \code{character}, default \code{character()}; 
-          converts input file to one of 'ensembl', 'vcf', or 'pileup'
-        \item{fields:} \code{character}, default fields are
-          'Uploaded_variation', 'Location', 'Allele', 'Gene', 'Feature', 
-          'Feature_type', 'Consequence', 'cDNA_position', 'CDS_position', 
-          'Protein_position', 'Amino_acids', 'Codons' and 'Extra'. See
-          \url{http://www.ensembl.org/info/docs/variation/vep/vep_formats.html#sv}
-          for details. 
-        \item{vcf:} \code{logical}, default FALSE; write output in vcf format
-        \item{gvf:} \code{logical}, default FALSE; write output in gcf format
-        \item{original:} \code{logical}, default FALSE; writes output as 
-          filtered set of input. Must be used with --filter.
         \item{custom:} \code{character}, default \code{character()}; name of
           custom annotation file to add to output. Currently only a single
           annotation is supported.
         \item{plugin:} \code{character}, default \code{character()}; name of
           plugin module. Currently only a single module is supported.
+        \item{individual:} \code{character}, default \code{character()}; 
+          consider only alternate alleles present in the genotypes of 
+          'all' or a character vector of specified individuals
+        \item{phased:} \code{logical}, default FALSE; force VCF genotypes 
+          to be interpreted as phased
+        \item{allele_number:} \code{logical}, default FALSE; identify allele 
+          number from VCF input (1=first ALT, 2=second ALT, etc.) 
+        \item{total_length:} \code{character}, default \code{character()};  
+          cDNA, CDS and protein positions as position/length
+        \item{numbers:} \code{logical}, default FALSE; output affectd exon and 
+          intron numbering, format is Number/Total
+        \item{domains:} \code{logical}, default FALSE; output names of 
+          overlapping protein domains
+        \item{no_escape:} \code{logical}, default FALSE; 
+          don't URI escape HGVS string
+        \item{terms:} \code{character}, default 'so'; type 
+          of consequence terms to output, valid strings are 'ensembl' or 'so'
       }
     }
-    \item{\code{filterqc}}{\code{list} of the following options:
+    \item{\code{identifiers}}{\code{list} of the following options:
       \itemize{
-        \item{check_ref:} \code{logical}, default FALSE; force check of 
-          supplied reference allele against the sequence stored in Ensembl 
-          Core database
-        \item{coding_only:} \code{logical}, default FALSE; return 
-          consequences in coding regions only
+        \item{hgvs:} \code{logical}, default FALSE; add hgvs ID's
+        \item{protein:} \code{logical}, default FALSE; add Ensembl protein ID's
+        \item{symbol:} \code{logical}, default FALSE; add gene symbol
+          (e.g. HGNC) (where available) to the output
+        \item{ccds:} \code{logical}, default FALSE; add CCDS transcript ID's
+        \item{canonical:} \code{logical}, default FALSE; indicate if transcript 
+          is cononical transcript for the gene
+        \item{biotype:} \code{logical}, default FALSE; add biotype of transcript
+        \item{xref_seq:} \code{logical}, default FALSE; output aligned refseq 
+          mRNA ID
+      }
+    }
+    \item{\code{colocatedVariants}}{\code{list} of the following options:
+      \itemize{
         \item{check_existing:} \code{logical}, default FALSE; check for 
           co-located variants 
         \item{check_alleles:} \code{logical}, default FALSE; when checking for
@@ -174,16 +183,54 @@
         \item{gmaf:} \code{logical}, default FALSE; add global minor allele 
           frequence (MAF) from 1000 Genomes Phase 1 data 
         \item{maf_1kg:} \code{logical}, default FALSE; add MAF from 
-          continental populations of 1000 Genomes Phase 1 data  
-        \item{individual:} \code{character}, default \code{character()}; 
-          consider only alternate alleles present in the genotypes of 
-          'all' or a character vector of specified individuals
-        \item{phased:} \code{logical}, default FALSE; force VCF genotypes 
-          to be interpreted as phased
+          continental populations of 1000 Genomes Phase 1 data;
+          must be use with --cache 
+        \item{maf_esp:} \code{logical}, default FALSE; add MAF from 
+          NHLBI-ESP populations; must be used with --cache 
+        \item{pubmed:} \code{logical}, default FALSE; 
+           report Pubmed IDs for publications that cite existing variant;
+           must be used with --cache
+        \item{failed:} \code{logical}, default FALSE; when checking for 
+          co-located variants include or exclude variants that have been 
+          flagged as failed
+      }
+    }
+    \item{\code{dataformat}}{\code{list} of the following options:
+      \itemize{
+        \item{vcf:} \code{logical}, default FALSE; write output in vcf format
+        \item{gvf:} \code{logical}, default FALSE; write output in gcf format
+        \item{original:} \code{logical}, default FALSE; writes output as 
+          filtered set of input. Must be used with --filter.
+        \item{fields:} \code{character}, default fields are
+          'Uploaded_variation', 'Location', 'Allele', 'Gene', 'Feature', 
+          'Feature_type', 'Consequence', 'cDNA_position', 'CDS_position', 
+          'Protein_position', 'Amino_acids', 'Codons' and 'Extra'. See
+          \url{http://www.ensembl.org/info/docs/variation/vep/vep_formats.html#sv}
+          for details. 
+        \item{convert:} \code{character}, default \code{character()}; 
+          converts input file to one of 'ensembl', 'vcf', or 'pileup'
+      }
+    }
+    \item{\code{filterqc}}{\code{list} of the following options:
+      \itemize{
+        \item{check_ref:} \code{logical}, default FALSE; force check of 
+          supplied reference allele against the sequence stored in Ensembl 
+          Core database
+        \item{coding_only:} \code{logical}, default FALSE; return 
+          consequences in coding regions only
         \item{chr:} \code{character}, default \code{character()}; select 
           a subset of chromosomes to be analyzed
         \item{no_intergenic:} \code{logical}, default FALSE; do not 
           include intergenic consequences
+        \item{most_severe:} \code{logical}, default FALSE; output only most 
+          severe consequence per variation
+        \item{summary:} \code{logical}, default FALSE; output a comma-separated
+          list of all observed consequences per variation, transcript-specific
+          columns will be left blank
+        \item{per_gene:} \code{logical}, default FALSE; output only the most
+          severe consequence per gene
+        \item{filter_common:} \code{logical}, default FALSE; shortcut flag
+          to turn on filters, See web page for details. 
         \item{check_frequency:} \code{logical}, default FALSE; turn on 
           frequency filtering, must also specify all of the 
           --freq\_* flags. See web page for details. 
@@ -201,9 +248,6 @@
           the frequency filter. Values are 'exclude' or 'include'. 
         \item{filter:} \code{character}, default \code{character()}; 
           filter the output on consequence type. See web page for details.
-        \item{failed:} \code{logical}, default FALSE; when checking for 
-          co-located variants include or exclude variants that have been 
-          flagged as failed
         \item{allow_non_variant:} \code{logical}, default FALSE; when using 
           VCF format as input and output, by default VEP will skip all 
           non-variant lines of input (i.e., where the ALT is NULL). When 
@@ -263,14 +307,19 @@
     \item{}{
       \code{VEPParam(basic=basicOpts(), input=inputOpts(),
                      cache=cacheOpts(), output=outputOpts(),
-                     filterqc=filterqcOpts(), database=databaseOpts(), 
-                     advanced=advancedOpts(), ...)}
+                     identifier=identifierOpts(), 
+                     colocatedVariants=colocatedVariantsOpts(),
+                     dataformat=dataformatOpts(), filterqc=filterqcOpts(), 
+                     database=databaseOpts(), advanced=advancedOpts(), ...)}
       Creates a \code{VEPParam} object.
       \describe{
         \item{\code{basic}}{\code{list} of basic options}
         \item{\code{input}}{\code{list} of input options}
         \item{\code{cache}}{\code{list} of cache options}
         \item{\code{output}}{\code{list} of output options}
+        \item{\code{identifier}}{\code{list} of identifier options}
+        \item{\code{colocatedVariants}}{\code{list} of colocatedVariants options}
+        \item{\code{dataformat}}{\code{list} of dataformat options}
         \item{\code{filterqc}}{\code{list} of filterqc options}
         \item{\code{database}}{\code{list} of database options}
         \item{\code{advanced}}{\code{list} of advanced options}
@@ -288,6 +337,9 @@
     \item{}{\code{input(x)}, \code{input(x) <- value}}
     \item{}{\code{cache(x)}, \code{cache(x) <- value}}
     \item{}{\code{output(x)}, \code{output(x) <- value}}
+    \item{}{\code{identifier(x)}, \code{identifier(x) <- value}}
+    \item{}{\code{colocatedVariants(x)}, \code{colocatedVariants(x) <- value}}
+    \item{}{\code{dataformat(x)}, \code{dataformat(x) <- value}}
     \item{}{\code{filterqc(x)}, \code{filterqc(x) <- value}}
     \item{}{\code{database(x)}, \code{database(x) <- value}}
     \item{}{\code{advanced(x)}, \code{advanced(x) <- value}}
@@ -298,59 +350,16 @@
   These functions create a \code{list} of runtime options and are 
   used in the \code{VEPParam} constructor.
   \describe{
-    \item{}{
-      \code{basicOpts <- function(verbose=logical(1), quiet=logical(1),
-                no_progress=logical(1), config=character(),
-                everything=logical(1), fork=numeric())}
-    }
-    \item{}{
-      \code{inputOpts <- function(species="homo_sapiens", 
-                format=character(), output_file=character(), 
-                force_overwrite=logical(1), stats_file=character(), 
-                no_stats=logical(1), html=logical(1))} 
-    }
-    \item{}{
-      \code{cacheOpts <- function(cache=logical(1), dir="$HOME/.vep",
-                offline=logical(1), fasta=character())}
-    }
-    \item{}{
-      \code{outputOpts <- function(terms="SO", sift=character(), 
-                polyphen=character(), regulatory=logical(1), 
-                cell_type=character(), hgvs=logical(1), 
-                gene=logical(1), protein=logical(1), hgnc=logical(1), 
-                ccds=logical(1), canonical=logical(1), 
-                xref_refseq=logical(1), numbers=logical(1), 
-                domains=logical(1), most_severe=logical(1), 
-                summary=logical(1), per_gene=logical(1), 
-                convert=character(), fields=character(), 
-                vcf=logical(1), gvf=logical(1), original=logical(1),
-                custom=character(), plugin=character())}
-    }
-    \item{}{
-      \code{filterqcOpts <- function(check_ref=logical(1), 
-                coding_only=logical(1), check_existing=logical(1), 
-                check_alleles=logical(1), check_svs=logical(1), 
-                gmaf=logical(1), maf_1kg=logical(1), individual=character(), 
-                phased=logical(1), chr=character(), 
-                no_intergenic=logical(1), filter_common=logical(1),
-                check_frequency=logical(1), freq_pop=character(),
-                freq_freq=logical(1), freq_gt_lt=character(),
-                freq_filter=character(), filter=character(),
-                failed=logical(1), allow_non_variant=logical(1))}
-    }
-    \item{}{
-      \code{databaseOpts <- function(database=TRUE, 
-                host="useastdb.ensembl.org", user=character(), 
-                password=character(), port=numeric(), genomes=logical(1), 
-                refseq=logical(1), db_version=numeric(), 
-                registry=character())}
-    }
-    \item{}{
-      \code{advancedOpts <- function(no_whole_genome=logical(1), 
-                buffer_size=5000, write_cache=logical(1), build=character(),
-                compress=character(), skip_db_check=logical(1),
-                cache_region_size=numeric())}
-    }
+    \item{}{\code{basicOpts()}}
+    \item{}{\code{inputOpts()}}
+    \item{}{\code{cacheOpts()}}
+    \item{}{\code{outputOpts()}}
+    \item{}{\code{identifierOpts()}}
+    \item{}{\code{colocatedVariantsOpts()}}
+    \item{}{\code{dataformatOpts()}}
+    \item{}{\code{filterqcOpts()}}
+    \item{}{\code{databaseOpts()}}
+    \item{}{\code{advancedOpts()}}
   }
 }
 

@@ -23,7 +23,7 @@ setMethod("ensemblVEP", "character",
         if (identical(character(), input(param)$output_file)) {
         ## return R object
             dest <- file.path(tempfile())
-            if (output(param)$vcf) {
+            if (dataformat(param)$vcf) {
                 fun <- readVcf 
                 call <- paste0(call, " --output_file ", dest)
             } else {
@@ -41,8 +41,10 @@ setMethod("ensemblVEP", "character",
 
 .runtimeOpts <- function(param, ...)
 {
-    ops <- c(basic(param), input(param), database(param), 
-             output(param), filterqc(param))
+    ops <- c(basic(param), input(param), cache(param),
+             output(param), identifier(param),
+             colocatedVariants(param), dataformat(param),
+             filterqc(param), database(param), advanced(param))
     keep <- sapply(ops, function(x) 
         ifelse (is.logical(x), x == TRUE, length(x) > 0)) 
     paste0(" --", names(ops)[keep], " ", ops[keep], collapse=" ")

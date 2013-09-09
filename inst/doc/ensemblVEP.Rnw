@@ -109,9 +109,9 @@ fl <- system.file("extdata", "structural.vcf", package="VariantAnnotation")
 @
 
 and request that a \Robject{VCF} object be returned by setting
-the {\it vcf} option in the {\it output} slot to TRUE. 
+the {\it vcf} option in the {\it dataformat} slot to TRUE. 
 <<set_vcf>>=
-param <- VEPParam(output=c(vcf=TRUE))
+param <- VEPParam(dataformat=c(vcf=TRUE))
 @
 
 An call to \Rfunction{ensemblVEP} results in an error.
@@ -181,14 +181,14 @@ input(param)$output_file <- "/mypath/myfile"
 @
 
 The file can be written as a {\it vcf} or {\it gvf} by setting the
-options in the {\it output} slot to TRUE. If neither of {\it vcf}
+options in the {\it dataformat} slot to TRUE. If neither of {\it vcf}
 or {\it gvf} are TRUE the file is written out as tab delimited.
 <<ouput_slot>>=
 ## Write a vcf file to myfile.vcf:
-myparam <- VEPParam(output=c(vcf=TRUE),
+myparam <- VEPParam(dataformat=c(vcf=TRUE),
                     input=c(output_file="/path/myfile.vcf"))
 ## Write a gvf file to myfile.gvf:
-myparam <- VEPParam(output=c(gvf=TRUE),
+myparam <- VEPParam(dataformat=c(gvf=TRUE),
                     input=c(output_file="/path/myfile.gvf"))
 ## Write a tab delimited file to myfile.txt:
 myparam <- VEPParam(input=c(output_file="/path/myfile.txt"))
@@ -222,15 +222,17 @@ gr <- ensemblVEP(fl, param)
         identifiers, output SO consequence terms:
 <<runtime2, eval=FALSE>>=
 param <- VEPParam(input=c(format="vcf"),
-                  output=c(hgnc=TRUE, terms="so"))
+                  output=c(terms="so"),
+                  identifiers=c(symbol=TRUE))
 gr <- ensemblVEP(fl, param) 
 @
 
   \item Check for co-located variants, output only coding 
         sequence consequences, output HGVS names:
 <<runtime3, eval=FALSE>>=
-param <- VEPParam(filterqc=c(check_existing=TRUE, coding_only=TRUE),
-                  output=c(hgvs=TRUE))
+param <- VEPParam(filterqc=c(coding_only=TRUE),
+                  colocatedVariants=c(check_existing=TRUE),
+                  identifiers=c(symbol=TRUE))
 gr <- ensemblVEP(fl, param) 
 @
 
@@ -238,13 +240,14 @@ gr <- ensemblVEP(fl, param)
         output results as \Rcode{VCF}:
 \begin{verbatim}
 fl <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
-param <- VEPParam(output=c(sift="b", polyphen="p", vcf=TRUE))
+param <- VEPParam(output=c(sift="b", polyphen="p"), 
+                  dataformat=c(vcf=TRUE))
 vcf <- ensemblVEP(fl, param)
 csq <- parseCSQToGRanges(vcf)
 
 > head(levels(mcols(csq)$SIFT))
-[1] "deleterious(0)"    "deleterious(0.01)" "deleterious(0.02)"
-[4] "deleterious(0.03)" "deleterious(0.04)" "deleterious(0.05)"
+[1] "deleterious(0.01)" "deleterious(0.02)" "deleterious(0.03)"
+[4] "deleterious(0.04)" "deleterious(0.05)" "deleterious(0)" 
 
 > levels(mcols(csq)$PolyPhen)
 [1] "benign"            "possibly_damaging" "probably_damaging"
@@ -252,15 +255,6 @@ csq <- parseCSQToGRanges(vcf)
 \end{verbatim}
 \end{itemize}
 
-%  \item Filter input on consequence type to include only variants that 
-%        cause a coding sequence change, write output in same format
-%        as input:
-%<<runtime5>>=
-%fl <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
-%param <- VEPParam(filterqc=c(filter="coding_change"),
-%                  output=c(original=TRUE))
-%vcf <- ensemblVEP(fl, param)
-%@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -74,7 +74,7 @@
 
 \examples{
 file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation") 
-vep <- ensemblVEP(file, param=VEPParam(output=c(vcf=TRUE)))
+vep <- ensemblVEP(file, param=VEPParam(dataformat=c(vcf=TRUE)))
 
 ## The returned 'CSQ' data are unparsed.
 info(vep)$CSQ

@@ -77,7 +77,7 @@ gr <- ensemblVEP(file)
 gr[1:3]
 
 ## When the 'vcf' option is TRUE, a VCF object is returned.
-myparam <- VEPParam(output=c(vcf=TRUE))
+myparam <- VEPParam(dataformat=c(vcf=TRUE))
 vcf <- ensemblVEP(file, param=myparam)
 vcf
 
@@ -105,18 +105,15 @@ rowData(vcf)[,c("REF", "ALT")]
 ## -----------------------------------------------------------------------
 ## Results written to disk
 ## -----------------------------------------------------------------------
-## By default 'output_file' is set to write to tempfile().
-param <- VEPParam()
-param
-input(param)$output_file
+## Write a file to disk by providing a path and file name as 'output_file'.
+## Different output file formats are specified using the 'dataformat' 
+## runtime options.
 
-## To write a file to disk, provide a path and file name
-## as the 'output_file'.
 ## Write a vcf file to myfile.vcf:
-myparam <- VEPParam(output=c(vcf=TRUE), 
+myparam <- VEPParam(dataformat=c(vcf=TRUE), 
                     input=c(output_file="/path/myfile.vcf"))
 ## Write a gvf file to myfile.gvf:
-myparam <- VEPParam(output=c(gvf=TRUE), 
+myparam <- VEPParam(dataformat=c(gvf=TRUE), 
                     input=c(output_file="/path/myfile.gvf"))
 
 ## -----------------------------------------------------------------------
