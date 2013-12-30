@@ -1,4 +1,4 @@
-.onLoad <-
+.onAttach <-
     function(libname, pkgname)
 {
     msg <- paste0("variant_effect_predictor.pl not found. ",

@@ -1,8 +1,15 @@
 test_VEPParam_construction <- function()
 {
+    p73 <- VEPParam()
+    checkIdentical(VEPParam(73), p73) 
+    p67 <- VEPParam(67)
+    checkTrue(all(slotNames(p67) %in% slotNames(p73)))
+    new73 <- c("identifier", "colocatedVariants", "dataformat")
+    checkTrue(all(new73 %in% slotNames(p73)))
+
     p <- VEPParam()
     p <- VEPParam(basic=list())
-    checkIdentical(VEPParam(foo=list()), p)
+    checkException(VEPParam(foo=list()), p, silent=TRUE)
     checkException(VEPParam(basic=list(foo="")), silent=TRUE)
     checkException(VEPParam(basic=list(quiet="yes")), silent=TRUE)
     checkException(VEPParam(basic=c(verbose="foo")), silent=TRUE)

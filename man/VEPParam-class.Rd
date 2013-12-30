@@ -4,6 +4,10 @@
 % Classes:
 \alias{class:VEPParam}
 \alias{VEPParam-class}
+\alias{class:VEPParam67}
+\alias{VEPParam67-class}
+\alias{class:VEPParam73}
+\alias{VEPParam73-class}
 
 % Constructors:
 \alias{VEPParam}
@@ -23,24 +27,53 @@
 % Accessors:
 \alias{basic}
 \alias{basic<-}
+\alias{basic,VEPParam-method}
+\alias{basic<-,VEPParam-method}
 \alias{input}
 \alias{input<-}
+\alias{input,VEPParam-method}
+\alias{input<-,VEPParam-method}
 \alias{cache}
 \alias{cache<-}
+\alias{cache,VEPParam-method}
+\alias{cache<-,VEPParam-method}
 \alias{output}
 \alias{output<-}
-\alias{identifier}
-\alias{identifier<-}
-\alias{colocatedVariants}
-\alias{colocatedVariants<-}
-\alias{dataformat}
-\alias{dataformat<-}
+\alias{output,VEPParam-method}
+\alias{output<-,VEPParam-method}
 \alias{filterqc}
 \alias{filterqc<-}
+\alias{filterqc,VEPParam-method}
+\alias{filterqc<-,VEPParam-method}
 \alias{database}
 \alias{database<-}
+\alias{database,VEPParam-method}
+\alias{database<-,VEPParam-method}
 \alias{advanced}
 \alias{advanced<-}
+\alias{advanced,VEPParam-method}
+\alias{advanced<-,VEPParam-method}
+\alias{version}
+\alias{version<-}
+\alias{version,VEPParam-method}
+\alias{version<-,VEPParam-method}
+
+\alias{identifier}
+\alias{identifier<-}
+\alias{identifier,VEPParam73-method}
+\alias{identifier<-,VEPParam73-method}
+\alias{dataformat}
+\alias{dataformat<-}
+\alias{dataformat,VEPParam73-method}
+\alias{dataformat<-,VEPParam73-method}
+\alias{colocatedVariants}
+\alias{colocatedVariants<-}
+\alias{colocatedVariants,VEPParam73-method}
+\alias{colocatedVariants<-,VEPParam73-method}
+
+% helpers:
+\alias{currentVEPVersion}
+\alias{supportedVEPVersions}
 
 % "show" method:
 \alias{show,VEPParam-method}
@@ -48,15 +81,16 @@
 \title{VEPParam objects}
 
 \description{
-  A \code{VEPParam} object is a container for storing runtime options for the
-  the Ensembl Variant Effect Predictor.
+  \code{VEPParam} is a VIRTUAL class with concrete subclasses 
+  \code{VEPParam67} and \code{VEPParam73}. These objects store 
+  runtime options for the Ensembl Variant Effect Predictor.
 }
 
 \details{
-  The \code{VEPParam} class stores runtime options for the \code{ensemblVEP}
-  function which queries the Ensembl Variant Effect Predictor (VEP). Brief
-  descriptions of the runtime options are provided below. For complete
-  details, see the Ensembl VEP web page.
+  The \code{VEPParam} family of objects stores runtime options for the 
+  \code{ensemblVEP} function which queries the Ensembl Variant Effect 
+  Predictor (VEP). Brief descriptions of the runtime options are provided 
+  below. For complete details, see the Ensembl VEP web page.
 
   \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
 
@@ -68,6 +102,9 @@
   with TRUE and FALSE. \code{character} and \code{numeric} are \sQuote{on} when 
   a character string is provided and \sQuote{off} when they contain an empty value 
   (i.e., \code{character()} or \code{numeric()}.
+
+  \sQuote{identifier}, \sQuote{colocatedVariants}, \sQuote{dataformat}
+  are supported for VEPParam73 and later.
   \describe{
     \item{\code{basic}}{\code{list} of the following options:
       \itemize{
@@ -305,7 +342,7 @@
 \section{Constructor}{
   \describe{
     \item{}{
-      \code{VEPParam(basic=basicOpts(), input=inputOpts(),
+      \code{VEPParam(version=73, ..., basic=basicOpts(), input=inputOpts(),
                      cache=cacheOpts(), output=outputOpts(),
                      identifier=identifierOpts(), 
                      colocatedVariants=colocatedVariantsOpts(),
@@ -313,16 +350,34 @@
                      database=databaseOpts(), advanced=advancedOpts(), ...)}
       Creates a \code{VEPParam} object.
       \describe{
-        \item{\code{basic}}{\code{list} of basic options}
-        \item{\code{input}}{\code{list} of input options}
-        \item{\code{cache}}{\code{list} of cache options}
-        \item{\code{output}}{\code{list} of output options}
-        \item{\code{identifier}}{\code{list} of identifier options}
-        \item{\code{colocatedVariants}}{\code{list} of colocatedVariants options}
-        \item{\code{dataformat}}{\code{list} of dataformat options}
-        \item{\code{filterqc}}{\code{list} of filterqc options}
-        \item{\code{database}}{\code{list} of database options}
-        \item{\code{advanced}}{\code{list} of advanced options}
+        \item{\code{version}}{
+          Numeric specifying the version of the Ensembl API. Live web
+          queries are available for the most current version only
+          (currentVEPVersion()). Running a previous version requires
+          a local cache of the corresponding version of the data.}
+        \item{\code{basic}}{
+          \code{list} of basic options}
+        \item{\code{input}}{
+          \code{list} of input options}
+        \item{\code{cache}}{
+          \code{list} of cache options}
+        \item{\code{output}}{
+          \code{list} of output options}
+        \item{\code{filterqc}}{
+          \code{list} of filterqc options}
+        \item{\code{database}}{
+          \code{list} of database options}
+        \item{\code{advanced}}{
+          \code{list} of advanced options}
+      }
+      Supported for VEPParam73 and later:
+      \describe{
+        \item{\code{identifier}}{
+          \code{list} of identifier options}
+        \item{\code{colocatedVariants}}{
+          \code{list} of colocatedVariants options}
+        \item{\code{dataformat}}{
+          \code{list} of dataformat options}
       }
     }
   }
@@ -337,12 +392,16 @@
     \item{}{\code{input(x)}, \code{input(x) <- value}}
     \item{}{\code{cache(x)}, \code{cache(x) <- value}}
     \item{}{\code{output(x)}, \code{output(x) <- value}}
-    \item{}{\code{identifier(x)}, \code{identifier(x) <- value}}
-    \item{}{\code{colocatedVariants(x)}, \code{colocatedVariants(x) <- value}}
-    \item{}{\code{dataformat(x)}, \code{dataformat(x) <- value}}
     \item{}{\code{filterqc(x)}, \code{filterqc(x) <- value}}
     \item{}{\code{database(x)}, \code{database(x) <- value}}
     \item{}{\code{advanced(x)}, \code{advanced(x) <- value}}
+    \item{}{\code{version(x)}, \code{version(x) <- value}}
+  }
+  Supported for VEPParam73 and later:
+  \describe{
+    \item{}{\code{identifier(x)}, \code{identifier(x) <- value}}
+    \item{}{\code{colocatedVariants(x)}, \code{colocatedVariants(x) <- value}}
+    \item{}{\code{dataformat(x)}, \code{dataformat(x) <- value}}
   }
 }
 
@@ -350,16 +409,19 @@
   These functions create a \code{list} of runtime options and are 
   used in the \code{VEPParam} constructor.
   \describe{
-    \item{}{\code{basicOpts()}}
-    \item{}{\code{inputOpts()}}
-    \item{}{\code{cacheOpts()}}
-    \item{}{\code{outputOpts()}}
-    \item{}{\code{identifierOpts()}}
-    \item{}{\code{colocatedVariantsOpts()}}
-    \item{}{\code{dataformatOpts()}}
-    \item{}{\code{filterqcOpts()}}
-    \item{}{\code{databaseOpts()}}
-    \item{}{\code{advancedOpts()}}
+    \item{}{\code{basicOpts(version, ...)}}
+    \item{}{\code{inputOpts(version, ...)}}
+    \item{}{\code{cacheOpts(version, ...)}}
+    \item{}{\code{outputOpts(version, ...)}}
+    \item{}{\code{filterqcOpts(version, ...)}}
+    \item{}{\code{databaseOpts(version, ...)}}
+    \item{}{\code{advancedOpts(version, ...)}}
+  }
+  Supported for VEPParam73 and later:
+  \describe{
+    \item{}{\code{identifierOpts(version, ...)}}
+    \item{}{\code{colocatedVariantsOpts(version, ...)}}
+    \item{}{\code{dataformatOpts(version, ...)}}
   }
 }
 
@@ -370,15 +432,21 @@
 }
 
 \examples{
-  ## The VEPParam has five slots. By default, no options are 
-  ## set for 'basic' or 'filterqc'.
+  ## The default constructor supports the most current version
+  ## of the Ensembl API.
   param <- VEPParam()
-  param
+  class(param)
+  version(param)
+
+  ## Display what API versions are currently supported.
+  supportedVEPVersions()
+
+  ## Create a version '67' VEPParam.
+  VEPParam(67) 
 
   ## View the values in 'basic' and 'input'.
   basic(param)
   input(param)
-
 
   ## Change the value of the 'everything' to TRUE.
   basic(param)$everything
@@ -391,8 +459,8 @@
 
   ## Write the output to myfile.vcf instead of returning a VCF object.
   ## Return the sift and polyphen predictions only (not scores).
-  VEPParam(input=c(output_file="path/myfile.vcf"),
-           output=c(sift="p", polyphen="p"))
+  param <- VEPParam(input=c(output_file="path/myfile.vcf"),
+                    output=c(sift="p", polyphen="p"))
 
   ## 'sift' and 'polyphen' are runtime options that require
   ## a character value, (i.e., 's', 'p', or 'b').

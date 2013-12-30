@@ -67,79 +67,79 @@
 }
 
 \examples{
-## -----------------------------------------------------------------------
-## Results returned as GRanges or VCF objects
-## -----------------------------------------------------------------------
-## The default behavior returns a GRanges with the consequence
-## data as metadata columns.
-file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation") 
-gr <- ensemblVEP(file)
-gr[1:3]
-
-## When the 'vcf' option is TRUE, a VCF object is returned.
-myparam <- VEPParam(dataformat=c(vcf=TRUE))
-vcf <- ensemblVEP(file, param=myparam)
-vcf
-
-## The consequence data are returned as the 'CSQ' column in info.
-info(vcf)$CSQ
-
-## To parse this column use parseCSQToGRanges().
-csq <- parseCSQToGRanges(vcf)
-head(csq, 4)
-
-## The columns returned are controlled by the 'fields' option. 
-## By default all fields are returned. See ?VEPParam for details.
-
-## When comparing ensemblVEP() results to the data in the
-## input vcf we see that variant 20:1230237 was not returned.
-vcf_input <- readVcf(file, "hg19")
-rowData(vcf_input)
-rowData(vcf)
-
-## This variant has no alternate allele and is called a
-## monomorphic reference. The Ensembl VEP automatically
-## drops these variants. 
-rowData(vcf)[,c("REF", "ALT")]
-
-## -----------------------------------------------------------------------
-## Results written to disk
-## -----------------------------------------------------------------------
-## Write a file to disk by providing a path and file name as 'output_file'.
-## Different output file formats are specified using the 'dataformat' 
-## runtime options.
-
-## Write a vcf file to myfile.vcf:
-myparam <- VEPParam(dataformat=c(vcf=TRUE), 
-                    input=c(output_file="/path/myfile.vcf"))
-## Write a gvf file to myfile.gvf:
-myparam <- VEPParam(dataformat=c(gvf=TRUE), 
-                    input=c(output_file="/path/myfile.gvf"))
-
-## -----------------------------------------------------------------------
-## Runtime options
-## -----------------------------------------------------------------------
-## All runtime options are controlled by specifying a VEPParam.
-## See ?VEPParam for complete details.
-param <- VEPParam()
-
-## Logical options are turned on/off with TRUE/FALSE. By
-## default, 'quiet' is FALSE.
-basic(param)$quiet
-
-## Setting 'quiet' to TRUE will suppress all status and warnings.
-basic(param)$quiet <- TRUE
-
-## Characater options are turned on/off by specifying a character 
-## value or an empty character (i.e., character()). By default no 
-## 'sift' results are returned.
-output(param)$sift
-
-## Setting 'sift' to 'b' will return both predictions and scores.
-output(param)$sift <- 'b'
-
-## Return 'sift' to the original state of no results returned.
-output(param)$sift <- character() 
+  ## -----------------------------------------------------------------------
+  ## Results returned as GRanges or VCF objects
+  ## -----------------------------------------------------------------------
+  ## The default behavior returns a GRanges with the consequence
+  ## data as metadata columns.
+  file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation") 
+  gr <- ensemblVEP(file)
+  gr[1:3]
+ 
+  ## When the 'vcf' option is TRUE, a VCF object is returned.
+  myparam <- VEPParam(dataformat=c(vcf=TRUE))
+  vcf <- ensemblVEP(file, param=myparam)
+  vcf
+ 
+  ## The consequence data are returned as the 'CSQ' column in info.
+  info(vcf)$CSQ
+ 
+  ## To parse this column use parseCSQToGRanges().
+  csq <- parseCSQToGRanges(vcf)
+  head(csq, 4)
+ 
+  ## The columns returned are controlled by the 'fields' option. 
+  ## By default all fields are returned. See ?VEPParam for details.
+ 
+  ## When comparing ensemblVEP() results to the data in the
+  ## input vcf we see that variant 20:1230237 was not returned.
+  vcf_input <- readVcf(file, "hg19")
+  rowData(vcf_input)
+  rowData(vcf)
+ 
+  ## This variant has no alternate allele and is called a
+  ## monomorphic reference. The Ensembl VEP automatically
+  ## drops these variants. 
+  rowData(vcf)[,c("REF", "ALT")]
+ 
+  ## -----------------------------------------------------------------------
+  ## Results written to disk
+  ## -----------------------------------------------------------------------
+  ## Write a file to disk by providing a path and file name as 'output_file'.
+  ## Different output file formats are specified using the 'dataformat' 
+  ## runtime options.
+ 
+  ## Write a vcf file to myfile.vcf:
+  myparam <- VEPParam(dataformat=c(vcf=TRUE), 
+                      input=c(output_file="/path/myfile.vcf"))
+  ## Write a gvf file to myfile.gvf:
+  myparam <- VEPParam(dataformat=c(gvf=TRUE), 
+                      input=c(output_file="/path/myfile.gvf"))
+ 
+  ## -----------------------------------------------------------------------
+  ## Runtime options
+  ## -----------------------------------------------------------------------
+  ## All runtime options are controlled by specifying a VEPParam.
+  ## See ?VEPParam for complete details.
+  param <- VEPParam()
+ 
+  ## Logical options are turned on/off with TRUE/FALSE. By
+  ## default, 'quiet' is FALSE.
+  basic(param)$quiet
+ 
+  ## Setting 'quiet' to TRUE will suppress all status and warnings.
+  basic(param)$quiet <- TRUE
+ 
+  ## Characater options are turned on/off by specifying a character 
+  ## value or an empty character (i.e., character()). By default no 
+  ## 'sift' results are returned.
+  output(param)$sift
+ 
+  ## Setting 'sift' to 'b' will return both predictions and scores.
+  output(param)$sift <- 'b'
+ 
+  ## Return 'sift' to the original state of no results returned.
+  output(param)$sift <- character() 
 }
 
 \keyword{methods}

@@ -1,11 +1,11 @@
 Package: ensemblVEP
-Version: 1.3.1
+Version: 1.3.2
 Title: R Interface to Ensembl Variant Effect Predictor 
 Author: Valerie Obenchain <vobencha@fhcrc.org>,
 Maintainer: Valerie Obenchain <vobencha@fhcrc.org>
 Depends: methods, BiocGenerics, GenomicRanges, VariantAnnotation
-Imports: Biostrings, IRanges
-Suggests: RUnit, BiocGenerics
+Imports: Biostrings
+Suggests: RUnit
 biocViews: Annotation, Bioinformatics 
 Description: Query the Ensembl Variant Effect Predictor via the perl API 
 SystemRequirements: Ensembl VEP (API version 73) and the Perl package 

@@ -17,153 +17,60 @@
     x
 } 
 
-VEPParam  <- function(basic=list(), input=list(), cache=list(),
-                      output=list(), identifier=list(),
-                      colocatedVariants=list(), dataformat=list(),
-                      filterqc=list(), database=list(), advanced=list(), ...) 
+VEPParam  <- function(version=73, basic=list(), input=list(), cache=list(),
+                      output=list(), filterqc=list(), database=list(), 
+                      advanced=list(), identifier=list(),
+                      colocatedVariants=list(), dataformat=list(), ...)
 {
-    basic_opts <- basicOpts()
+    basic_opts <- basicOpts(version)
     basic_opts[names(basic)] <- .formatList(basic)
 
-    input_opts <- inputOpts()
+    input_opts <- inputOpts(version)
     input_opts[names(input)] <- .formatList(input)
 
-    cache_opts <- cacheOpts()
+    cache_opts <- cacheOpts(version)
     cache_opts[names(cache)] <- .formatList(cache)
 
-    output_opts <- outputOpts()
+    output_opts <- outputOpts(version)
     output_opts[names(output)] <- .formatList(output)
 
-    identifier_opts <- identifierOpts()
-    identifier_opts[names(identifier)] <- .formatList(identifier)
-
-    colocated_opts <- colocatedVariantsOpts()
-    colocated_opts[names(colocatedVariants)] <- .formatList(colocatedVariants)
-
-    dataformat_opts <- dataformatOpts()
-    dataformat_opts[names(dataformat)] <- .formatList(dataformat)
-
-    filterqc_opts <- filterqcOpts()
+    filterqc_opts <- filterqcOpts(version)
     filterqc_opts[names(filterqc)] <- .formatList(filterqc) 
 
-    database_opts <- databaseOpts()
+    database_opts <- databaseOpts(version)
     database_opts[names(database)] <- .formatList(database)
 
-    advanced_opts <- advancedOpts()
+    advanced_opts <- advancedOpts(version)
     advanced_opts[names(advanced)] <- .formatList(advanced)
 
-    new("VEPParam", basic=basic_opts, input=input_opts, 
-        cache=cache_opts, output=output_opts, 
-        identifier=identifier_opts, colocatedVariants=colocated_opts, 
-        dataformat=dataformat_opts, filterqc=filterqc_opts, 
-        database=database_opts, advanced=advanced_opts) 
+    if (version == 73) {
+        identifier_opts <- identifierOpts(version)
+        identifier_opts[names(identifier)] <- .formatList(identifier)
+
+        colocated_opts <- colocatedVariantsOpts(version)
+        colocated_opts[names(colocatedVariants)] <- 
+            .formatList(colocatedVariants)
+
+        dataformat_opts <- dataformatOpts(version)
+        dataformat_opts[names(dataformat)] <- .formatList(dataformat)
+
+        new("VEPParam73", ..., basic=basic_opts, 
+            database=database_opts, advanced=advanced_opts,
+            input=input_opts, cache=cache_opts, 
+            output=output_opts, filterqc=filterqc_opts, 
+            identifier=identifier_opts, colocatedVariants=colocated_opts, 
+            dataformat=dataformat_opts)
+    } else {
+        new("VEPParam67", ..., basic=basic_opts, input=input_opts,
+            cache=cache_opts, output=output_opts,
+            filterqc=filterqc_opts, database=database_opts,
+            advanced=advanced_opts)
+    }
 }
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Validity 
 ###
-
-.valid.VEPParam.basic <- function(x)
-{
-    current <- basic(x)
-    if (!is.numeric(current$fork))
-        return("'fork' must be numeric")
-    if (!is.character(current$config))
-        return("'config' must be character() or a file name")
-
-    target <- basicOpts()
-    c(.checkNames(current, target), .checkLogicals(current, target))
-} 
-
-.valid.VEPParam.input <- function(x)
-{
-    current <- input(x)
-    if (!identical(character(), current$format))
-        if (!current$format %in% 
-            c("ensembl", "vcf", "pileup", "hgvs", "id", "vep"))
-            return(paste0("'format' must be one of 'ensembl', ",
-                          "'vcf', 'pileup', 'hgvs', 'id' or 'vep'."))
-    target <- inputOpts()
-    c(.checkNames(current, target), .checkLogicals(current, target))
-} 
-
-.valid.VEPParam.cache <- function(x)
-{
-    current <- cache(x)
-    target <- cacheOpts()
-    c(.checkNames(current, target), .checkLogicals(current, target))
-}
-
-.valid.VEPParam.database <- function(x)
-{
-    current <- database(x)
-    if (!is.numeric(current$port))
-        return("'port' must be numeric")
-    if (!is.numeric(current$db_version))
-        return("'db_version' must be numeric")
-
-    target <- databaseOpts()
-    c(.checkNames(current, target), .checkLogicals(current, target))
-}
-
-.valid.VEPParam.output <- function(x)
-{
-    current <- output(x)
-    if (!is.character(current$cell_type))
-        return("'cell_type' must be a character'")
-    if (!is.character(current$terms))
-        return("'terms' must be character() or 'all' or 'so'")
-    if (!is.character(current$sift))
-        return("'sift' must be character() or 'p', 's' or 'b'")
-    if (!is.character(current$polyphen))
-        return("'polyphen' must be character() or 'p', 's' or 'b'")
-    if (!is.character(current$custom))
-        return("'custom' must be a character'")
-    if (!is.character(current$plugin))
-        return("'plugin' must be a character'")
-
-    target <- outputOpts()
-    c(.checkNames(current, target), .checkLogicals(current, target))
-}
- 
-.valid.VEPParam.identifier <- function(x)
-{
-    current <- identifier(x)
-    target <- identifierOpts()
-    c(.checkNames(current, target), .checkLogicals(current, target))
-}
-
-.valid.VEPParam.colocated <- function(x)
-{
-    current <- colocatedVariants(x)
-    target <- colocatedVariantsOpts()
-    c(.checkNames(current, target), .checkLogicals(current, target))
-}
-
-.valid.VEPParam.dataformat <- function(x)
-{
-    current <- dataformat(x)
-    if (!is.character(current$convert))
-        return(paste0("'convert' must be character() or 'ensembl', ",
-               "'vcf' or 'pileup'"))
-
-    target <- dataformatOpts()
-    c(.checkNames(current, target), .checkLogicals(current, target))
-}
-
-.valid.VEPParam.filterqc <- function(x)
-{
-    current <- filterqc(x)
-    target <- filterqcOpts()
-    c(.checkNames(current, target), .checkLogicals(current, target))
-}
-
-.valid.VEPParam.advanced <- function(x)
-{
-    current <- advanced(x)
-    target <- advancedOpts()
-    c(.checkNames(current, target), .checkLogicals(current, target))
-}
 
 .checkNames <- function(current, target)
 {
@@ -185,38 +92,89 @@ VEPParam  <- function(basic=list(), input=list(), cache=list(),
     NULL 
 }
 
-.valid.VEPParam <- function(x)
+.valid.VEPParam.basic <- function(x)
 {
-    c(.valid.VEPParam.basic(x),
-      .valid.VEPParam.input(x),
-      .valid.VEPParam.cache(x),
-      .valid.VEPParam.output(x),
-      .valid.VEPParam.identifier(x),
-      .valid.VEPParam.colocated(x),
-      .valid.VEPParam.dataformat(x),
-      .valid.VEPParam.filterqc(x),
-      .valid.VEPParam.database(x),
-      .valid.VEPParam.advanced(x))
+    current <- basic(x)
+    if (!is.numeric(current$fork))
+        return("'fork' must be numeric")
+    if (!is.character(current$config))
+        return("'config' must be character() or a file name")
+
+    target <- basicOpts(version(x))
+    c(.checkNames(current, target), .checkLogicals(current, target))
+} 
+
+.valid.VEPParam.input <- function(x)
+{
+    current <- input(x)
+    if (!identical(character(), current$format))
+        if (!current$format %in% 
+            c("ensembl", "vcf", "pileup", "hgvs", "id", "vep"))
+            return(paste0("'format' must be one of 'ensembl', ",
+                          "'vcf', 'pileup', 'hgvs', 'id' or 'vep'."))
+    target <- inputOpts(version(x))
+    c(.checkNames(current, target), .checkLogicals(current, target))
+} 
+
+.valid.VEPParam.cache <- function(x)
+{
+    current <- cache(x)
+    target <- cacheOpts(version(x))
+    c(.checkNames(current, target), .checkLogicals(current, target))
 }
 
-setValidity2("VEPParam", .valid.VEPParam)
+.valid.VEPParam.database <- function(x)
+{
+    current <- database(x)
+    if (!is.numeric(current$port))
+        return("'port' must be numeric")
+    if (!is.numeric(current$db_version))
+        return("'db_version' must be numeric")
+
+    target <- databaseOpts(version(x))
+    c(.checkNames(current, target), .checkLogicals(current, target))
+}
+
+.valid.VEPParam.output <- function(x)
+{
+    current <- output(x)
+    if (!is.character(current$cell_type))
+        return("'cell_type' must be a character'")
+    if (!is.character(current$terms))
+        return("'terms' must be character() or 'all' or 'so'")
+    if (!is.character(current$sift))
+        return("'sift' must be character() or 'p', 's' or 'b'")
+    if (!is.character(current$polyphen))
+        return("'polyphen' must be character() or 'p', 's' or 'b'")
+    if (!is.character(current$custom))
+        return("'custom' must be a character'")
+    if (!is.character(current$plugin))
+        return("'plugin' must be a character'")
+
+}
+
+.valid.VEPParam.filterqc <- function(x)
+{
+    current <- filterqc(x)
+    target <- filterqcOpts(version(x))
+    c(.checkNames(current, target), .checkLogicals(current, target))
+}
+
+.valid.VEPParam.advanced <- function(x)
+{
+    current <- advanced(x)
+    target <- advancedOpts(version(x))
+    c(.checkNames(current, target), .checkLogicals(current, target))
+}
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Getters and Setters
 ###
 
-basic <- function(x) slot(x, "basic") 
-input <- function(x) slot(x, "input") 
-cache <- function(x) slot(x, "cache") 
-output <- function(x) slot(x, "output")
-identifier <- function(x) slot(x, "identifier")
-colocatedVariants <- function(x) slot(x, "colocatedVariants")
-dataformat <- function(x) slot(x, "dataformat")
-filterqc <- function(x) slot(x, "filterqc")
-database <- function(x) slot(x, "database")
-advanced <- function(x) slot(x, "advanced")
-
-"basic<-" <- function(x, value) 
+setMethod("basic", "VEPParam",
+    function(x) slot(x, "basic")) 
+setMethod("basic<-", "VEPParam",
+    function(x, value) 
 {
     value <- .formatList(value)
     slot(x, "basic")[names(value)] <- value
@@ -224,9 +182,12 @@ advanced <- function(x) slot(x, "advanced")
     if (!is.null(msg))
         stop(msg) 
     x
-}
+})
 
-"input<-" <- function(x, value) 
+setMethod("input", "VEPParam",
+    function(x) slot(x, "input")) 
+setMethod("input<-", "VEPParam",
+    function(x, value) 
 {
     value <- .formatList(value)
     slot(x, "input")[names(value)] <- value
@@ -234,9 +195,12 @@ advanced <- function(x) slot(x, "advanced")
     if (!is.null(msg))
         stop(msg) 
     x 
-}
+})
 
-"cache<-" <- function(x, value) 
+setMethod("cache", "VEPParam",
+    function(x) slot(x, "cache")) 
+setMethod("cache<-", "VEPParam",
+    function(x, value) 
 {
     value <- .formatList(value)
     slot(x, "cache")[names(value)] <- value
@@ -244,9 +208,12 @@ advanced <- function(x) slot(x, "advanced")
     if (!is.null(msg))
         stop(msg) 
     x 
-}
+})
 
-"output<-" <- function(x, value) 
+setMethod("output", "VEPParam",
+    function(x) slot(x, "output"))
+setMethod("output<-", "VEPParam",
+    function(x, value) 
 {
     value <- .formatList(value)
     slot(x, "output")[names(value)] <- value
@@ -254,39 +221,12 @@ advanced <- function(x) slot(x, "advanced")
     if (!is.null(msg))
         stop(msg) 
     x 
-}
+})
 
-"identifier<-" <- function(x, value) 
-{
-    value <- .formatList(value)
-    slot(x, "identifier")[names(value)] <- value
-    msg <- .valid.VEPParam.identifier(x)
-    if (!is.null(msg))
-        stop(msg) 
-    x 
-}
-
-"colocatedVariants<-" <- function(x, value) 
-{
-    value <- .formatList(value)
-    slot(x, "colocatedVariants")[names(value)] <- value
-    msg <- .valid.VEPParam.colocated(x)
-    if (!is.null(msg))
-        stop(msg) 
-    x 
-}
-
-"dataformat<-" <- function(x, value) 
-{
-    value <- .formatList(value)
-    slot(x, "dataformat")[names(value)] <- value
-    msg <- .valid.VEPParam.dataformat(x)
-    if (!is.null(msg))
-        stop(msg) 
-    x 
-}
-
-"filterqc<-" <- function(x, value) 
+setMethod("filterqc", "VEPParam",
+    function(x) slot(x, "filterqc"))
+setMethod("filterqc<-", "VEPParam",
+    function(x, value) 
 {
     value <- .formatList(value)
     slot(x, "filterqc")[names(value)] <- value
@@ -294,9 +234,12 @@ advanced <- function(x) slot(x, "advanced")
     if (!is.null(msg))
         stop(msg) 
     x 
-}
+})
 
-"database<-" <- function(x, value) 
+setMethod("database", "VEPParam",
+    function(x) slot(x, "database"))
+setMethod("database<-", "VEPParam",
+    function(x, value) 
 {
     value <- .formatList(value)
     slot(x, "database")[names(value)] <- value
@@ -304,9 +247,12 @@ advanced <- function(x) slot(x, "advanced")
     if (!is.null(msg))
         stop(msg) 
     x 
-}
+})
 
-"advanced<-" <- function(x, value) 
+setMethod("advanced", "VEPParam",
+    function(x) slot(x, "advanced"))
+setMethod("advanced<-", "VEPParam",
+    function(x, value) 
 {
     value <- .formatList(value)
     slot(x, "advanced")[names(value)] <- value
@@ -314,118 +260,21 @@ advanced <- function(x) slot(x, "advanced")
     if (!is.null(msg))
         stop(msg) 
     x 
-}
+})
+
+setMethod("version", "VEPParam",
+    function(x) slot(x, "version"))
+setMethod("version<-", "VEPParam",
+    function(x, value) 
+        initialize(x, version=as.numeric(value))
+)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### helpers / utils 
 ###
 
-basicOpts <- function(verbose=logical(1), quiet=logical(1), 
-                      no_progress=logical(1), config=character(), 
-                      everything=logical(1), fork=numeric())
-{
-    list(verbose=verbose, quiet=quiet, no_progress=no_progress,
-         config=config, everything=everything, fork=fork)
-} 
-
-## 'input_file' is omitted because it's an argument to ensemblVEP()
-inputOpts <- function(species="homo_sapiens", format=character(), 
-                      output_file=character(), force_overwrite=logical(1),
-                      stats_file=character(), no_stats=logical(1),
-                      stats_text=logical(1), html=logical(1))
-{
-    list(species=species, format=format, output_file=output_file, 
-         force_overwrite=force_overwrite, stats_file=stats_file,
-         no_stats=no_stats, stats_text=stats_text, html=html)
-} 
-
-cacheOpts <- function(cache=logical(1), dir="$HOME/.vep", 
-                      dir_cache="$HOME/.vep",dir_plugins="$HOME/.vep", 
-                      offline=logical(1), fasta=character())
-{
-    list(cache=cache, dir=dir, dir_cache=dir_cache, dir_plugins=dir_plugins,
-         offline=offline, fasta=fasta)
-}
-
-outputOpts <- function(sift=character(), polyphen=character(), 
-                       regulatory=logical(1), cell_type=character(), 
-                       custom=character(), plugin=character(),
-                       individual=character(), phased=logical(1),
-                       allele_number=integer(), total_length=character(),
-                       numbers=character(), domains=character(),
-                       no_escape=logical(1), terms="so") 
-{
-    list(sift=sift, polyphen=polyphen, regulatory=regulatory,
-         cell_type=cell_type, custom=custom, plugin=plugin,
-         individual=individual, phased=phased, allele_number=allele_number,
-         total_length=total_length, numbers=numbers, domains=domains,
-         no_escape=no_escape, terms=terms)
-} 
-
-identifierOpts <- function(hgvs=logical(1), protein=logical(1), 
-                           symbol=logical(1), ccds=logical(1),
-                           canonical=logical(1), biotype=logical(1),
-                           xref_refseq=logical(1)) 
-{
-    list(hgvs=hgvs, protein=protein, symbol=symbol, ccds=ccds, 
-         canonical=canonical, biotype=biotype, xref_refseq=xref_refseq)
-}
-
-colocatedVariantsOpts <- function(check_existing=logical(1), check_alleles=logical(1), 
-                                  check_svs=logical(1), gmaf=logical(1),
-                                  maf_1kg=logical(1), maf_esp=logical(1), 
-                                  pubmed=logical(1), failed=logical(1)) 
-{
-    list(check_existing=check_existing, check_alleles=check_alleles,
-         check_svs=check_svs, gmaf=gmaf, maf_1kg=maf_1kg, maf_esp=maf_esp, 
-         pubmed=pubmed, failed=failed)
-}
-
-dataformatOpts <- function(vcf=logical(1), gvf=logical(1), original=logical(1),
-                           fields=character(), convert=character())
-{
-    list(vcf=vcf, gvf=gvf, original=original, fields=fields, convert=convert)
-}
-
-filterqcOpts <- function(check_ref=logical(1), coding_only=logical(1),
-                         chr=character(), no_intergenic=logical(1),
-                         most_severe=logical(1), summary=logical(1),
-                         per_gene=logical(1), filter_common=logical(1),
-                         check_frequency=logical(1), freq_pop=character(),
-                         freq_freq=logical(1), freq_gt_lt=character(),
-                         freq_filter=character(), filter=character(),
-                         allow_non_variant=logical(1))
-{
-    list(check_ref=check_ref, coding_only=coding_only, chr=chr,
-         no_intergenic=no_intergenic, most_severe=most_severe,
-         summary=summary, per_gene=per_gene, filter_common=filter_common,
-         check_frequency=check_frequency, freq_pop=freq_pop,
-         freq_freq=freq_freq, freq_gt_lt=freq_gt_lt, 
-         freq_filter=freq_filter, filter=filter, 
-         allow_non_variant=allow_non_variant) 
-}
-
-databaseOpts <- function(database=TRUE, host="useastdb.ensembl.org", 
-                         user=character(), password=character(), 
-                         port=numeric(), genomes=logical(1), 
-                         refseq=logical(1), db_version=numeric(), 
-                         registry=character())
-{
-    list(database=database, host=host, user=user, password=password, 
-         port=port, genomes=genomes, refseq=refseq,
-         db_version=db_version, registry=registry)
-} 
-
-advancedOpts <- function(no_whole_genome=logical(1), buffer_size=5000,
-                         write_cache=logical(1), build=character(),
-                         compress=character(), skip_db_check=logical(1),
-                         cache_region_size=numeric())
-{
-    list(no_whole_genome=no_whole_genome, buffer_size=buffer_size,
-         write_cache=write_cache, build=build, compress=compress,
-         skip_db_check=skip_db_check, cache_region_size=cache_region_size)
-}
-
+supportedVEPVersions <- function() c(67, 73)
+currentVEPVersion <- function() max(supportedVEPVersions()) 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### show 
@@ -433,25 +282,22 @@ advancedOpts <- function(no_whole_genome=logical(1), buffer_size=5000,
 
 setMethod(show, "VEPParam",
     function(object)
+{
+    scat <- function(fmt, vals=character(), exdent=2, ...)
     {
-        scat <- function(fmt, vals=character(), exdent=2, ...)
-        {
-            vals <- ifelse(nzchar(vals), vals, "''")
-            lbls <- paste(BiocGenerics:::selectSome(vals), collapse=", ")
-            txt <- sprintf(fmt, length(vals), lbls)
-            cat(strwrap(txt, exdent=exdent, ...), sep="\n")
-        }
-        cat("class:", class(object), "\n")
-        slots <- c("basic", "input", "cache", "output", "identifier",
-                   "colocatedVariants", "dataformat", "filterqc", "database", 
-                   "advanced")
-        for (i in slots) {
-            elt <- slot(object, i)
-            drop <- elt == FALSE | elementLengths(elt) == 0L
-            drop[is.na(drop)] <- FALSE
-            if (is.null(nms <- names(elt)[!drop]))
-                nms <- character()
-            scat(paste0(i, "(%d): %s\n"), nms)
-        }
-   }
-)
+        vals <- ifelse(nzchar(vals), vals, "''")
+        lbls <- paste(BiocGenerics:::selectSome(vals), collapse=", ")
+        txt <- sprintf(fmt, length(vals), lbls)
+        cat(strwrap(txt, exdent=exdent, ...), sep="\n")
+    }
+    cat("class:", class(object), "\n")
+    nms <- slotNames(class(object))
+    for (i in nms[nms != "version"]) {
+        elt <- slot(object, i)
+        drop <- elt == FALSE | elementLengths(elt) == 0L
+        drop[is.na(drop)] <- FALSE
+        if (is.null(nms <- names(elt)[!drop]))
+            nms <- character()
+        scat(paste0(i, "(%d): %s\n"), nms)
+    }
+})

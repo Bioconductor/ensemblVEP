@@ -42,7 +42,3 @@ setMethod("parseCSQToGRanges", "VCF",
         gr 
     }
 )
-
-
-
-

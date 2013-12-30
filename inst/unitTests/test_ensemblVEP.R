@@ -11,4 +11,3 @@ test_ensemblVEP <- function()
                 "Codons", "Existing_variation", "DISTANCE")
     checkTrue(all(names(mcols(gr)) %in% target))
 }
-
