@@ -273,8 +273,8 @@ setMethod("version<-", "VEPParam",
 ### helpers / utils 
 ###
 
-supportedVEPVersions <- function() c(67, 73)
-currentVEPVersion <- function() max(supportedVEPVersions()) 
+supportedVEP <- function() c(67, 73)
+currentVEP <- function() max(supportedVEP()) 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### show 

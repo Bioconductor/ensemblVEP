@@ -3,14 +3,14 @@
 ### =========================================================================
 
 .version_error <- paste0("'version' must be one of ", 
-                         paste(supportedVEPVersions(), collapse=","))
+                         paste(supportedVEP(), collapse=","))
 
 ### basicOpts, databaseOpts and advancedOpts are the same for versions 67, 73
 basicOpts <- function(version, ..., verbose=logical(1), quiet=logical(1), 
                       no_progress=logical(1), config=character(), 
                       everything=logical(1), fork=numeric())
 {
-    if (!any(version %in% supportedVEPVersions()))
+    if (!any(version %in% supportedVEP()))
         stop(.version_error)
     list(verbose=verbose, quiet=quiet, no_progress=no_progress,
          config=config, everything=everything, fork=fork)
@@ -23,7 +23,7 @@ databaseOpts <- function(version, ..., database=TRUE,
                          refseq=logical(1), db_version=numeric(), 
                          registry=character())
 {
-    if (!any(version %in% supportedVEPVersions()))
+    if (!any(version %in% supportedVEP()))
         stop(.version_error)
     list(database=database, host=host, user=user, password=password, 
          port=port, genomes=genomes, refseq=refseq,
@@ -35,7 +35,7 @@ advancedOpts <- function(version, ..., no_whole_genome=logical(1),
                          build=character(), compress=character(), 
                          skip_db_check=logical(1), cache_region_size=numeric())
 {
-    if (!any(version %in% supportedVEPVersions()))
+    if (!any(version %in% supportedVEP()))
         stop(.version_error)
     list(no_whole_genome=no_whole_genome, buffer_size=buffer_size,
          write_cache=write_cache, build=build, compress=compress,
@@ -153,12 +153,12 @@ identifierOpts <- function(version, ..., hgvs=logical(1),
                            ccds=logical(1), canonical=logical(1), 
                            biotype=logical(1), xref_refseq=logical(1)) 
 {
-    if (version == currentVEPVersion())
+    if (version == currentVEP())
         list(hgvs=hgvs, protein=protein, symbol=symbol, ccds=ccds, 
              canonical=canonical, biotype=biotype, xref_refseq=xref_refseq)
     else
         stop(paste0("'identifierOpts' supported for VEP version ",
-             currentVEPVersion(), " only"))
+             currentVEP(), " only"))
 }
 
 colocatedVariantsOpts <- function(version, ..., check_existing=logical(1), 
@@ -167,22 +167,22 @@ colocatedVariantsOpts <- function(version, ..., check_existing=logical(1),
                                   maf_1kg=logical(1), maf_esp=logical(1), 
                                   pubmed=logical(1), failed=logical(1)) 
 {
-    if (version == currentVEPVersion())
+    if (version == currentVEP())
         list(check_existing=check_existing, check_alleles=check_alleles,
              check_svs=check_svs, gmaf=gmaf, maf_1kg=maf_1kg, maf_esp=maf_esp, 
              pubmed=pubmed, failed=failed)
     else
         stop(paste0("'colocatedVariantsOpts' supported for VEP version ",
-             currentVEPVersion(), " only"))
+             currentVEP(), " only"))
 }
 
 dataformatOpts <- function(version, ..., vcf=logical(1), gvf=logical(1), 
                            original=logical(1), fields=character(), 
                            convert=character())
 {
-    if (version == currentVEPVersion())
+    if (version == currentVEP())
         list(vcf=vcf, gvf=gvf, original=original, fields=fields, convert=convert)
     else
         stop(paste0("'dataformatOpts' supported for VEP version ",
-             currentVEPVersion(), " only"))
+             currentVEP(), " only"))
 }

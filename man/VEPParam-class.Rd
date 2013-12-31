@@ -72,8 +72,8 @@
 \alias{colocatedVariants<-,VEPParam73-method}
 
 % helpers:
-\alias{currentVEPVersion}
-\alias{supportedVEPVersions}
+\alias{currentVEP}
+\alias{supportedVEP}
 
 % "show" method:
 \alias{show,VEPParam-method}
@@ -94,6 +94,17 @@
 
   \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
 
+  The \code{VEPParam} class supports multiple versions of the Ensembl VEP
+  API. The helper function \code{supportedVEP()} returns all versions
+  supported and \code{currentVEP()} returns the most current. The
+  most current version is used as the default in the \code{VEPParam}
+  constructor and is the only version that performs a live query against
+  Ensembl VEP web site. Previous versions use cached data.
+ 
+  FIXME: Update with runtime options. 
+}
+
+\section{Runtime options}{
   Data in the \code{VEPParam} are organized into the following categories, 
   \sQuote{basic}, \sQuote{input}, \sQuote{cache}, \sQuote{output}, 
   \sQuote{identifier}, \sQuote{colocatedVariants}, \sQuote{dataformat},
@@ -353,7 +364,7 @@
         \item{\code{version}}{
           Numeric specifying the version of the Ensembl API. Live web
           queries are available for the most current version only
-          (currentVEPVersion()). Running a previous version requires
+          (\code{currentVEP()}). Running a previous version requires
           a local cache of the corresponding version of the data.}
         \item{\code{basic}}{
           \code{list} of basic options}
@@ -406,7 +417,22 @@
 }
 
 \section{Helper functions}{
-  These functions create a \code{list} of runtime options and are 
+  \describe{
+    \item{}{
+      \code{currentVEP()}:
+      Invoked with no arguments.
+      Return the most current version of the Ensembl VEP API
+      supported by the \code{ensemblVEP} R package. This version
+      is used as the default in the \code{VEPParam} constructor.
+    }
+    \item{}{
+      \code{supportedVEP()}:
+      Invoked with no arguments.
+      Return all versions of the Ensembl VEP API supported
+      by the \code{ensemblVEP} R package. 
+    }
+  }
+  The following functions create a \code{list} of runtime options and are 
   used in the \code{VEPParam} constructor.
   \describe{
     \item{}{\code{basicOpts(version, ...)}}
@@ -439,7 +465,7 @@
   version(param)
 
   ## Display what API versions are currently supported.
-  supportedVEPVersions()
+  supportedVEP()
 
   ## Create a version '67' VEPParam.
   VEPParam(67) 
