@@ -57,6 +57,8 @@
 \alias{version<-}
 \alias{version,VEPParam-method}
 \alias{version<-,VEPParam-method}
+\alias{scriptPath}
+\alias{scriptPath<-}
 
 \alias{identifier}
 \alias{identifier<-}
@@ -87,21 +89,56 @@
 }
 
 \details{
-  The \code{VEPParam} family of objects stores runtime options for the 
-  \code{ensemblVEP} function which queries the Ensembl Variant Effect 
-  Predictor (VEP). Brief descriptions of the runtime options are provided 
-  below. For complete details, see the Ensembl VEP web page.
+  \itemize{
+    \item{}{
+      The \code{VEPParam} family of objects stores runtime options for querying 
+      the Ensembl Variant Effect Predictor (VEP). Brief descriptions of the 
+      options are provided below. For complete details, see the Ensembl VEP web page.
 
-  \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
+      \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
+    }
+    \item{VEPParam subclasses}:{
+      Currently there are two subclasses of \code{VEPParam}, \code{VEPParam67}
+      and \code{VEPParam73}. \code{VEPParam67} supports version 67 only while
+      \code{VEPParam73} supports >= 73. By default, the \code{VEPParam} 
+      constructor creates a \code{VEPParam} object for the most current version. 
 
-  The \code{VEPParam} class supports multiple versions of the Ensembl VEP
-  API. The helper function \code{supportedVEP()} returns all versions
-  supported and \code{currentVEP()} returns the most current. The
-  most current version is used as the default in the \code{VEPParam}
-  constructor and is the only version that performs a live query against
-  Ensembl VEP web site. Previous versions use cached data.
- 
-  FIXME: Update with runtime options. 
+      In versions >= 1.3.3 of \code{ensemblVEP}, a new subclass of 
+      \code{VEPParam} will be created when there is a substantial change 
+      in the Ensembl variant database API. These 'substantial' version jumps 
+      are returned by the \code{supportedVEP()} helper function. Versions
+      that do not have significant API changes and therefore do not require
+      a new subclass are supported by the class before it. For example,
+      \code{VEPParam73} supports all versions >= 73 up to the next version 
+      with substantial API changes. These are implementation details and
+      in general will not concern the user. The appropriate \code{VEPParam}
+      will be created when \code{version} is supplied to the 
+      \code{VEPParam} constructor.
+    }
+    \item{Archived versions}:{
+      Past versions of the VEP script and corresponding data are available
+      on the Ensembl archive page. Archived scripts perform live queries 
+      against the databases they are associated with. Alternatively, a local 
+      cache can be created by downloading data from the archive site.
+
+      \url{http://uswest.ensembl.org/info/website/archives/index.html}
+
+      For example, version 67 of the VEP script and data are found here:
+
+      \url{http://may2012.archive.ensembl.org/info/docs/variation/vep/vep_script.html}
+
+      It is necessary to create a version-specific \code{VEPParam} when running
+      archived versions because the runtime options have changed. This is
+      done by supplying the appropriate \code{version} to the \code{VEPParam} 
+      constructor.
+    }
+    \item{Multiple versions}:{
+      By default, the variant_effect_predictor.pl script found in the 
+      PATH is the script used. If multiple versions of the script are 
+      installed locally the path to the desired version can be provided 
+      as the \code{scriptPath} argument to the \code{VEPParam} constructor. 
+    }
+  }
 }
 
 \section{Runtime options}{
@@ -407,6 +444,7 @@
     \item{}{\code{database(x)}, \code{database(x) <- value}}
     \item{}{\code{advanced(x)}, \code{advanced(x) <- value}}
     \item{}{\code{version(x)}, \code{version(x) <- value}}
+    \item{}{\code{scriptPath(x)}, \code{scriptPath(x) <- value}}
   }
   Supported for VEPParam73 and later:
   \describe{
@@ -421,15 +459,16 @@
     \item{}{
       \code{currentVEP()}:
       Invoked with no arguments.
-      Return the most current version of the Ensembl VEP API
-      supported by the \code{ensemblVEP} R package. This version
-      is used as the default in the \code{VEPParam} constructor.
+      Returns the most current version of Ensembl that
+      resulted in a new \code{VEPParam} subclass. This
+      version is used as the default in the \code{VEPParam} 
+      constructor.
     }
     \item{}{
       \code{supportedVEP()}:
       Invoked with no arguments.
-      Return all versions of the Ensembl VEP API supported
-      by the \code{ensemblVEP} R package. 
+      Returns the Ensembl versions that resulted in a new
+      subclass of \code{VEPParam}.
     }
   }
   The following functions create a \code{list} of runtime options and are 
@@ -464,7 +503,9 @@
   class(param)
   version(param)
 
-  ## Display what API versions are currently supported.
+  ## Ensembl versions with substantial changes to the
+  ## variant API result in a new subclass of VEPParam.
+  ## These versions are found with the supportedVEP helper.
   supportedVEP()
 
   ## Create a version '67' VEPParam.

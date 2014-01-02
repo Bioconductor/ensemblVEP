@@ -13,7 +13,8 @@ setClass("VEPParam",
         filterqc="list",
         database="list",
         advanced="list",
-        version="numeric"),
+        version="numeric",
+        scriptPath="character"),
     validity=.validity)
 
 setClass("VEPParam67", contains="VEPParam",

@@ -20,8 +20,10 @@
 VEPParam  <- function(version=73, basic=list(), input=list(), cache=list(),
                       output=list(), filterqc=list(), database=list(), 
                       advanced=list(), identifier=list(),
-                      colocatedVariants=list(), dataformat=list(), ...)
+                      colocatedVariants=list(), dataformat=list(), 
+                      scriptPath=character(), ...)
 {
+    .version_error(version)
     basic_opts <- basicOpts(version)
     basic_opts[names(basic)] <- .formatList(basic)
 
@@ -59,12 +61,12 @@ VEPParam  <- function(version=73, basic=list(), input=list(), cache=list(),
             input=input_opts, cache=cache_opts, 
             output=output_opts, filterqc=filterqc_opts, 
             identifier=identifier_opts, colocatedVariants=colocated_opts, 
-            dataformat=dataformat_opts)
+            dataformat=dataformat_opts, scriptPath=scriptPath)
     } else {
         new("VEPParam67", ..., basic=basic_opts, input=input_opts,
             cache=cache_opts, output=output_opts,
             filterqc=filterqc_opts, database=database_opts,
-            advanced=advanced_opts)
+            advanced=advanced_opts, scriptPath=scriptPath)
     }
 }
 
@@ -268,6 +270,15 @@ setMethod("version<-", "VEPParam",
     function(x, value) 
         initialize(x, version=as.numeric(value))
 )
+
+scriptPath <- function(x)
+    slot(x, "scriptPath")
+
+`scriptPath<-` <- function(x, value)
+{
+    slot(x, "scriptPath") <- value
+    x
+}
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### helpers / utils 
