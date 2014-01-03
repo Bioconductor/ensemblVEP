@@ -135,8 +135,21 @@
     \item{Multiple versions}:{
       By default, the variant_effect_predictor.pl script found in the 
       PATH is the script used. If multiple versions of the script are 
-      installed locally the path to the desired version can be provided 
-      as the \code{scriptPath} argument to the \code{VEPParam} constructor. 
+      installed locally a few steps must be taken to ensure the
+      proper version is used.
+
+      \itemize{
+        \item{scriptPath}{
+          Specify the full path to the variant_effect_predictor.pl script
+          as the \code{scriptPath} argument to the \code{VEPParam} constructor. 
+        }
+        \item{cache directories}{
+          By default, the cache runtime options \code{dir}, \code{dir_cache} 
+          and \code{dir_plugins} are set to $HOME/.vep. These locations
+          need to be specified if the data are not in the default
+          $HOME/.vep location. 
+        }
+      }
     }
   }
 }
@@ -390,19 +403,17 @@
 \section{Constructor}{
   \describe{
     \item{}{
-      \code{VEPParam(version=73, ..., basic=basicOpts(), input=inputOpts(),
+      \code{VEPParam(version=currentVEP(), basic=basicOpts(), input=inputOpts(),
                      cache=cacheOpts(), output=outputOpts(),
-                     identifier=identifierOpts(), 
+                     filterqc=filterqcOpts(), database=databaseOpts(), 
+                     advanced=advancedOpts(), identifier=identifierOpts(), 
                      colocatedVariants=colocatedVariantsOpts(),
-                     dataformat=dataformatOpts(), filterqc=filterqcOpts(), 
-                     database=databaseOpts(), advanced=advancedOpts(), ...)}
+                     dataformat=dataformatOpts(), scriptPath=character(), 
+                     ...)}
       Creates a \code{VEPParam} object.
       \describe{
         \item{\code{version}}{
-          Numeric specifying the version of the Ensembl API. Live web
-          queries are available for the most current version only
-          (\code{currentVEP()}). Running a previous version requires
-          a local cache of the corresponding version of the data.}
+          Numeric specifying the version of the Ensembl API.}
         \item{\code{basic}}{
           \code{list} of basic options}
         \item{\code{input}}{
@@ -417,6 +428,9 @@
           \code{list} of database options}
         \item{\code{advanced}}{
           \code{list} of advanced options}
+        \item{\code{scriptPath}}{
+          \code{character} path to variant_effect_predictor.pl script;
+          applicable when multiple versions of the script are installed locally}
       }
       Supported for VEPParam73 and later:
       \describe{
