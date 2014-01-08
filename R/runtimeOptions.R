@@ -4,32 +4,18 @@
 
 .version_error <- function(x)
 {
-    if (!any(x %in% supportedVEP()))
+    if (!any(x %in% unlist(supportedVEP())))
         stop(paste0("'version' must be one of ", 
-             paste(supportedVEP(), collapse=",")))
+             paste(unname(unlist(supportedVEP())), collapse=",")))
 }
 
-### basicOpts, databaseOpts and advancedOpts are the same for versions 67, 73
+### basicOpts, advancedOpts are the same for versions 67, 73
 basicOpts <- function(version, ..., verbose=logical(1), quiet=logical(1), 
                       no_progress=logical(1), config=character(), 
                       everything=logical(1), fork=numeric())
 {
-    .version_error(version)
     list(verbose=verbose, quiet=quiet, no_progress=no_progress,
          config=config, everything=everything, fork=fork)
-}
-
-databaseOpts <- function(version, ..., database=TRUE, 
-                         host="useastdb.ensembl.org", 
-                         user=character(), password=character(), 
-                         port=numeric(), genomes=logical(1), 
-                         refseq=logical(1), db_version=numeric(), 
-                         registry=character())
-{
-    .version_error(version)
-    list(database=database, host=host, user=user, password=password, 
-         port=port, genomes=genomes, refseq=refseq,
-         db_version=db_version, registry=registry)
 }
 
 advancedOpts <- function(version, ..., no_whole_genome=logical(1), 
@@ -37,20 +23,18 @@ advancedOpts <- function(version, ..., no_whole_genome=logical(1),
                          build=character(), compress=character(), 
                          skip_db_check=logical(1), cache_region_size=numeric())
 {
-    .version_error(version)
     list(no_whole_genome=no_whole_genome, buffer_size=buffer_size,
          write_cache=write_cache, build=build, compress=compress,
          skip_db_check=skip_db_check, cache_region_size=cache_region_size)
 }
 
-### inputOpts, cacheOpts, outputOpts and filterqcOpts are
+### inputOpts, cacheOpts, outputOpts, databaseOpts and filterqcOpts are
 ### different for versions 67, 73
 inputOpts <- function(version, ..., species="homo_sapiens", format=character(), 
                       output_file=character(), force_overwrite=logical(1),
                       stats_file=character(), no_stats=logical(1),
                       stats_text=logical(1), html=logical(1))
 {
-    .version_error(version)
     if (version == 67) {
         list(species=species, format=format, output_file=output_file,
              force_overwrite=force_overwrite, stats_file=stats_file,
@@ -66,7 +50,6 @@ cacheOpts <- function(version, ..., cache=logical(1), dir="$HOME/.vep",
                       dir_cache="$HOME/.vep",dir_plugins="$HOME/.vep", 
                       offline=logical(1), fasta=character())
 {
-    .version_error(version)
     if (version == 67) {
         list(cache=cache, dir=dir, offline=offline, fasta=fasta)
     } else {
@@ -90,7 +73,6 @@ outputOpts <- function(version, ..., sift=character(), polyphen=character(),
                        fields=character(), vcf=logical(1), gvf=logical(1), 
                        original=logical(1))
 {
-    .version_error(version)
     if (version == 67) {
         list(terms=terms, sift=sift, polyphen=polyphen, regulatory=regulatory,
              cell_type=cell_type, hgvs=hgvs, gene=gene, protein=protein,
@@ -107,6 +89,23 @@ outputOpts <- function(version, ..., sift=character(), polyphen=character(),
     }
 }
 
+databaseOpts <- function(version, ..., database=TRUE, 
+                         host="useastdb.ensembl.org", 
+                         user=character(), password=character(), 
+                         port=numeric(), genomes=logical(1), 
+                         refseq=logical(1), db_version=numeric(), 
+                         registry=character())
+{
+    opts <-  list(host=host, user=user, password=password, 
+             port=port, genomes=genomes, refseq=refseq,
+             db_version=db_version, registry=registry)
+    if (version == 67)
+        host <- "ensembldb.ensembl.org"
+    else
+        opts$database <- database
+    opts 
+}
+
 filterqcOpts <- function(version, ..., check_ref=logical(1), 
                          coding_only=logical(1),
                          chr=character(), no_intergenic=logical(1),
@@ -121,7 +120,6 @@ filterqcOpts <- function(version, ..., check_ref=logical(1),
                          maf_1kg=logical(1), individual=character(),
                          phased=logical(1), failed=logical(1))
 {
-    .version_error(version)
     if (version == 67) {
         list(check_ref=check_ref, coding_only=coding_only,
              check_existing=check_existing, check_alleles=check_alleles,
@@ -150,12 +148,12 @@ identifierOpts <- function(version, ..., hgvs=logical(1),
                            ccds=logical(1), canonical=logical(1), 
                            biotype=logical(1), xref_refseq=logical(1)) 
 {
-    if (version >= currentVEP())
+    if (version > 67)
         list(hgvs=hgvs, protein=protein, symbol=symbol, ccds=ccds, 
              canonical=canonical, biotype=biotype, xref_refseq=xref_refseq)
     else
         stop(paste0("'identifierOpts' supported for VEP versions >= ",
-             currentVEP()))
+             unname(unlist(currentVEP()))))
 }
 
 colocatedVariantsOpts <- function(version, ..., check_existing=logical(1), 
@@ -164,22 +162,22 @@ colocatedVariantsOpts <- function(version, ..., check_existing=logical(1),
                                   maf_1kg=logical(1), maf_esp=logical(1), 
                                   pubmed=logical(1), failed=logical(1)) 
 {
-    if (version >= currentVEP())
+    if (version > 67)
         list(check_existing=check_existing, check_alleles=check_alleles,
              check_svs=check_svs, gmaf=gmaf, maf_1kg=maf_1kg, maf_esp=maf_esp, 
              pubmed=pubmed, failed=failed)
     else
         stop(paste0("'colocatedVariantsOpts' supported for VEP versions >= ",
-             currentVEP()))
+             unname(unlist(currentVEP()))))
 }
 
 dataformatOpts <- function(version, ..., vcf=logical(1), gvf=logical(1), 
                            original=logical(1), fields=character(), 
                            convert=character())
 {
-    if (version >= currentVEP())
+    if (version > 67)
         list(vcf=vcf, gvf=gvf, original=original, fields=fields, convert=convert)
     else
         stop(paste0("'dataformatOpts' supported for VEP versions >= ",
-             currentVEP()))
+             unname(unlist(currentVEP()))))
 }

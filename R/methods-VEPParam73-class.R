@@ -37,15 +37,6 @@
     c(.checkNames(current, target), .checkLogicals(current, target))
 }
 
-.valid.VEPParam73.version <- function(x)
-{
-    v <- 73
-    if (version(x) != v)
-        paste0("version(x) must be ", v)
-    else
-        NULL 
-}
-
 setMethod(.validity, "VEPParam73",
     function(object)
 {
@@ -56,10 +47,10 @@ setMethod(.validity, "VEPParam73",
       .valid.VEPParam.cache(object),
       .valid.VEPParam.output(object),
       .valid.VEPParam.filterqc(object),
+      .valid.VEPParam.version(object),
       .valid.VEPParam73.identifier(object),
       .valid.VEPParam73.colocated(object),
-      .valid.VEPParam73.dataformat(object),
-      .valid.VEPParam73.version(object))
+      .valid.VEPParam73.dataformat(object))
 })
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

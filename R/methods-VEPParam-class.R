@@ -17,11 +17,11 @@
     x
 } 
 
-VEPParam  <- function(version=currentVEP(), basic=list(), input=list(), 
-                      cache=list(), output=list(), filterqc=list(), 
-                      database=list(), advanced=list(), identifier=list(),
-                      colocatedVariants=list(), dataformat=list(), 
-                      scriptPath=character(), ...)
+VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(), 
+                      input=list(), cache=list(), output=list(), 
+                      filterqc=list(), database=list(), advanced=list(), 
+                      identifier=list(), colocatedVariants=list(), 
+                      dataformat=list(), scriptPath=character(), ...)
 {
     .version_error(version)
     basic_opts <- basicOpts(version)
@@ -45,7 +45,7 @@ VEPParam  <- function(version=currentVEP(), basic=list(), input=list(),
     advanced_opts <- advancedOpts(version)
     advanced_opts[names(advanced)] <- .formatList(advanced)
 
-    if (version == 73) {
+    if (any(version %in% unlist(currentVEP()))) {
         identifier_opts <- identifierOpts(version)
         identifier_opts[names(identifier)] <- .formatList(identifier)
 
@@ -169,6 +169,16 @@ VEPParam  <- function(version=currentVEP(), basic=list(), input=list(),
     c(.checkNames(current, target), .checkLogicals(current, target))
 }
 
+.valid.VEPParam.version <- function(x)
+{
+    s <- supportedVEP()
+    v <- unname(unlist(s[names(s) == class(x)]))
+    if (version(x) != v)
+        paste0("for class ", class(x), " version(x) must be one of ", v)
+    else
+        NULL 
+}
+
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Getters and Setters
 ###
@@ -264,12 +274,14 @@ setMethod("advanced<-", "VEPParam",
     x 
 })
 
-setMethod("version", "VEPParam",
-    function(x) slot(x, "version"))
-setMethod("version<-", "VEPParam",
-    function(x, value) 
+version <- function(x)
+    slot(x, "version")
+`version<-` <- function(x, value) 
+{
+    if (!is.numeric(value))
+        stop("'value' must be numeric") 
         initialize(x, version=as.numeric(value))
-)
+}
 
 scriptPath <- function(x)
     slot(x, "scriptPath")
@@ -284,8 +296,8 @@ scriptPath <- function(x)
 ### helpers / utils 
 ###
 
-supportedVEP <- function() c(67, 73)
-currentVEP <- function() max(supportedVEP()) 
+supportedVEP <- function() list("VEPParam67"=67, "VEPParam73"=c(73, 74))
+currentVEP <- function() tail(supportedVEP(), 1) 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### show 
@@ -303,7 +315,7 @@ setMethod(show, "VEPParam",
     }
     cat("class:", class(object), "\n")
     nms <- slotNames(class(object))
-    for (i in nms[nms != "version"]) {
+    for (i in nms[!nms %in% c("version", "scriptPath")]) {
         elt <- slot(object, i)
         drop <- elt == FALSE | elementLengths(elt) == 0L
         drop[is.na(drop)] <- FALSE
@@ -311,4 +323,6 @@ setMethod(show, "VEPParam",
             nms <- character()
         scat(paste0(i, "(%d): %s\n"), nms)
     }
+    scat(paste0("version", "(%d): %s\n"), version(object))
+    scat(paste0("scriptPath", "(%d): %s\n"), scriptPath(object))
 })

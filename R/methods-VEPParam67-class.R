@@ -12,15 +12,6 @@
 ### Validity 
 ###
 
-.valid.VEPParam67.version <- function(x)
-{
-    v <- 67
-    if (version(x) != v)
-        paste0("version(x) must be ", v)
-    else
-        NULL 
-}
-
 setMethod(.validity, "VEPParam67",
     function(object)
 {
@@ -31,6 +22,5 @@ setMethod(.validity, "VEPParam67",
       .valid.VEPParam.cache(object),
       .valid.VEPParam.output(object),
       .valid.VEPParam.filterqc(object),
-      .valid.VEPParam67.version(object))
+      .valid.VEPParam.version(object))
 })
-

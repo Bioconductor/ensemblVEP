@@ -51,6 +51,4 @@ setGeneric("colocatedVariants",
 setGeneric("colocatedVariants<-",
     function(x, value) standardGeneric("colocatedVariants<-"))
 setGeneric("dataformat", function(x) standardGeneric("dataformat"))
-setGeneric("version<-", function(x, value) standardGeneric("version<-"))
-setGeneric("version", function(x) standardGeneric("version"))
 setGeneric("dataformat<-", function(x, value) standardGeneric("dataformat<-"))
