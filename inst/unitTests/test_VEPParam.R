@@ -15,7 +15,7 @@ test_VEPParam_construction <- function()
     checkException(VEPParam(basic=c(verbose="foo")), silent=TRUE)
 }
 
-test_VEPParam_option_defaults <- function()
+test_VEPParam73_defaults <- function()
 {
     p <- VEPParam()
     checkIdentical(input(p)$species, "homo_sapiens")
@@ -25,6 +25,19 @@ test_VEPParam_option_defaults <- function()
     checkIdentical(cache(p)$dir, "$HOME/.vep")
     checkIdentical(output(p)$terms, "so")
     checkIdentical(advanced(p)$buffer_size, 5000)
+    checkIdentical(version(p), c(73, 74))
+}
+
+test_VEPParam67_defaults <- function()
+{
+    p <- VEPParam(67)
+    checkIdentical(input(p)$species, "homo_sapiens")
+    checkIdentical(input(p)$force_overwrite, FALSE)
+    checkIdentical(database(p)$host, "ensembldb.ensembl.org")
+    checkIdentical(cache(p)$dir, "$HOME/.vep")
+    checkIdentical(output(p)$terms, "so")
+    checkIdentical(advanced(p)$buffer_size, 5000)
+    checkIdentical(version(p), 67)
 }
 
 test_VEPParam_replace <- function()

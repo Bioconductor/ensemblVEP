@@ -112,10 +112,10 @@
 
       \url{http://uswest.ensembl.org/info/website/archives/index.html}
 
-      Archived scripts can perform live queries against the European mirror 
-      or against cached data (the US mirror, useastdb, hosts only the 
-      current release). The appropriate version of cached data can be 
-      downloaded from the same page as the archived script. 
+      Archived scripts can query cached data or perform a live query
+      against the European mirror. (The US mirror, useastdb, hosts 
+      the current release only.) The appropriate version of cached data 
+      can be downloaded from the same page as the archived script. 
 
       For example, API version 67 script and data are found here:
 
@@ -268,19 +268,44 @@
 }
 
 \examples{
+  ## -----------------------------------------------------------------------
+  ## Current API version
+  ## -----------------------------------------------------------------------
   ## The default constructor supports the most current version
-  ## of the Ensembl API.
+  ## of the Ensembl variant API.
   param <- VEPParam()
   class(param)
+
+  ## The 'version' slot lists all API versions supported by the class.
   version(param)
 
-  ## Ensembl versions with substantial changes to the
-  ## variant API result in a new subclass of VEPParam.
-  ## These versions are found with the supportedVEP helper.
+  ## The 'supportedVEP' helper returns a list of VEPParam classes and the 
+  ## corresponding API versions they support. 
   supportedVEP()
 
-  ## Create a version '67' VEPParam.
-  VEPParam(67) 
+  ## -----------------------------------------------------------------------
+  ## Archived API versions
+  ## -----------------------------------------------------------------------
+  ## Create a VEPParam for an archived version by supplying the 
+  ## version to the constructor.
+  param67 <- VEPParam(67)
+  param67
+
+  ## Archive versions can query the cache or the European mirror. The
+  ## default 'host' for live queries is set to 'ensembldb.ensembl.org'.
+  database(param67)$host
+
+  ## By default the VEP script used is the one found in the PATH.
+  ## To specify a script in a non-standard location use the 'scriptPath' 
+  ## setter. Include the full path and the name of the script with the
+  ## .pl extension.
+  \dontrun{ 
+  scriptPath(param) <- "fullPathToScript/variant_effect_predictor.pl"
+  }
+
+  ## -----------------------------------------------------------------------
+  ## Manipulation
+  ## -----------------------------------------------------------------------
 
   ## View the values in 'basic' and 'input'.
   basic(param)

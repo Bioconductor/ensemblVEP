@@ -173,10 +173,11 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
 {
     s <- supportedVEP()
     v <- unname(unlist(s[names(s) == class(x)]))
-    if (version(x) != v)
-        paste0("for class ", class(x), " version(x) must be one of ", v)
-    else
+    if (any(version(x) %in% v))
         NULL 
+    else
+        paste0("for class ", class(x), " version(x) must be one of ", 
+               paste(v, collapse=","))
 }
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
