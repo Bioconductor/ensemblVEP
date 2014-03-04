@@ -6,12 +6,13 @@ Maintainer: Valerie Obenchain <vobencha@fhcrc.org>
 Depends: methods, BiocGenerics, GenomicRanges, VariantAnnotation
 Imports: Biostrings
 Suggests: RUnit
-biocViews: Annotation, Bioinformatics 
-Description: Query the Ensembl Variant Effect Predictor via the perl API 
-SystemRequirements: Ensembl VEP (API version 67, 73-75) and the Perl package 
-                    DBD::mysql must be installed. See the package README 
-                    and Ensembl web site,
-                    http://www.ensembl.org/info/docs/variation/vep/index.html 
-                    for installation instructions.
+Description: Query the Ensembl Variant Effect Predictor via the perl
+        API
+SystemRequirements: Ensembl VEP (API version 73) and the Perl package
+        DBD::mysql must be installed. See the package README and
+        Ensembl web site,
+        http://www.ensembl.org/info/docs/variation/vep/index.html for
+        installation instructions.
 License: Artistic-2.0
 LazyLoad: yes
+biocViews: Annotation
