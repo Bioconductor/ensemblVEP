@@ -6,8 +6,8 @@ test_ensemblVEP <- function()
     gr <- ensemblVEP(file, param=VEPParam(input=c(format="vcf")))
     checkIdentical(unique(nzchar(as.matrix(mcols(gr)))), TRUE)
     target <- c("Allele", "Gene", "Feature", "Feature_type",
-                "Consequence", "cDNA_position", 
-                "CDS_position", "Protein_position", "Amino_acids",
-                "Codons", "Existing_variation", "DISTANCE")
+                "Consequence", "cDNA_position", "CDS_position", 
+                "Protein_position", "Amino_acids", "Codons", 
+                "Existing_variation", "DISTANCE", "STRAND")
     checkTrue(all(names(mcols(gr)) %in% target))
 }

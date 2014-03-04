@@ -9,7 +9,7 @@
              paste(unname(unlist(supportedVEP())), collapse=",")))
 }
 
-### basicOpts, advancedOpts are the same for versions 67, 73
+### basicOpts, advancedOpts are the same for all versions
 basicOpts <- function(version, ..., verbose=logical(1), quiet=logical(1), 
                       no_progress=logical(1), config=character(), 
                       everything=logical(1), fork=numeric())
@@ -29,7 +29,7 @@ advancedOpts <- function(version, ..., no_whole_genome=logical(1),
 }
 
 ### inputOpts, cacheOpts, outputOpts, databaseOpts and filterqcOpts are
-### different for versions 67, 73
+### different for versions 67, 73, 75
 inputOpts <- function(version, ..., species="homo_sapiens", format=character(), 
                       output_file=character(), force_overwrite=logical(1),
                       stats_file=character(), no_stats=logical(1),
@@ -48,13 +48,17 @@ inputOpts <- function(version, ..., species="homo_sapiens", format=character(),
 
 cacheOpts <- function(version, ..., cache=logical(1), dir="$HOME/.vep", 
                       dir_cache="$HOME/.vep",dir_plugins="$HOME/.vep", 
-                      offline=logical(1), fasta=character())
+                      offline=logical(1), fasta=character(), 
+                      cache_version=numeric())
 {
     if (any(version == 67)) {
         list(cache=cache, dir=dir, offline=offline, fasta=fasta)
-    } else {
+    } else if (all(version > 67 & version < 75)) {
         list(cache=cache, dir=dir, dir_cache=dir_cache, dir_plugins=dir_plugins,
              offline=offline, fasta=fasta)
+    } else {
+        list(cache=cache, dir=dir, dir_cache=dir_cache, dir_plugins=dir_plugins,
+             offline=offline, fasta=fasta, cache_version=cache_version)
     }
 }
 
@@ -99,9 +103,9 @@ databaseOpts <- function(version, ..., database=TRUE,
     opts <-  list(host=host, user=user, password=password, 
              port=port, genomes=genomes, refseq=refseq,
              db_version=db_version, registry=registry)
-    if (any(version == 67))
+    if (any(version < 75))
         opts$host <- "ensembldb.ensembl.org"
-    else
+    if (any(version > 67))
         opts$database <- database
     opts 
 }

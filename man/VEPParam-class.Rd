@@ -8,6 +8,8 @@
 \alias{VEPParam67-class}
 \alias{class:VEPParam73}
 \alias{VEPParam73-class}
+\alias{class:VEPParam75}
+\alias{VEPParam75-class}
 
 % Constructors:
 \alias{VEPParam}
@@ -62,14 +64,20 @@
 \alias{identifier<-}
 \alias{identifier,VEPParam73-method}
 \alias{identifier<-,VEPParam73-method}
+\alias{identifier,VEPParam75-method}
+\alias{identifier<-,VEPParam75-method}
 \alias{dataformat}
 \alias{dataformat<-}
 \alias{dataformat,VEPParam73-method}
 \alias{dataformat<-,VEPParam73-method}
+\alias{dataformat,VEPParam75-method}
+\alias{dataformat<-,VEPParam75-method}
 \alias{colocatedVariants}
 \alias{colocatedVariants<-}
 \alias{colocatedVariants,VEPParam73-method}
 \alias{colocatedVariants<-,VEPParam73-method}
+\alias{colocatedVariants,VEPParam75-method}
+\alias{colocatedVariants<-,VEPParam75-method}
 
 % helpers:
 \alias{currentVEP}

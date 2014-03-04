@@ -45,7 +45,7 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
     advanced_opts <- advancedOpts(version)
     advanced_opts[names(advanced)] <- .formatList(advanced)
 
-    if (any(version %in% unlist(currentVEP()))) {
+    if (version > 67) {
         identifier_opts <- identifierOpts(version)
         identifier_opts[names(identifier)] <- .formatList(identifier)
 
@@ -56,7 +56,12 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
         dataformat_opts <- dataformatOpts(version)
         dataformat_opts[names(dataformat)] <- .formatList(dataformat)
 
-        new("VEPParam73", ..., basic=basic_opts, 
+        if (version >= 75)
+            VEP_class <- "VEPParam75"
+        else
+            VEP_class <- "VEPParam73"
+
+        new(VEP_class, ..., basic=basic_opts, 
             database=database_opts, advanced=advanced_opts,
             input=input_opts, cache=cache_opts, 
             output=output_opts, filterqc=filterqc_opts, 
@@ -180,6 +185,31 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
                paste(v, collapse=","))
 }
 
+.valid.VEPParam.identifier <- function(x)
+{
+    current <- identifier(x)
+    target <- identifierOpts(version(x))
+    c(.checkNames(current, target), .checkLogicals(current, target))
+}
+
+.valid.VEPParam.colocated <- function(x)
+{
+    current <- colocatedVariants(x)
+    target <- colocatedVariantsOpts(version(x))
+    c(.checkNames(current, target), .checkLogicals(current, target))
+}
+
+.valid.VEPParam.dataformat <- function(x)
+{
+    current <- dataformat(x)
+    if (!is.character(current$convert))
+        return(paste0("'convert' must be character() or 'ensembl', ",
+               "'vcf' or 'pileup'"))
+
+    target <- dataformatOpts(version(x))
+    c(.checkNames(current, target), .checkLogicals(current, target))
+}
+
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Getters and Setters
 ###
@@ -297,7 +327,8 @@ scriptPath <- function(x)
 ### helpers / utils 
 ###
 
-supportedVEP <- function() list("VEPParam67"=67, "VEPParam73"=c(73, 74))
+supportedVEP <- function() list("VEPParam67"=67, "VEPParam73"=c(73, 74), 
+                                "VEPParam75"=75)
 currentVEP <- function() tail(supportedVEP(), 1) 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -1,11 +1,12 @@
 test_VEPParam_construction <- function()
 {
-    p73 <- VEPParam()
-    checkIdentical(VEPParam(73), p73) 
+    p75 <- VEPParam()
+    checkIdentical(VEPParam(75), p75) 
+    p73 <- VEPParam(73)
     p67 <- VEPParam(67)
     checkTrue(all(slotNames(p67) %in% slotNames(p73)))
-    new73 <- c("identifier", "colocatedVariants", "dataformat")
-    checkTrue(all(new73 %in% slotNames(p73)))
+    checkTrue(all(slotNames(p67) %in% slotNames(p75)))
+    checkTrue(all(slotNames(p73) %in% slotNames(p75)))
 
     p <- VEPParam()
     p <- VEPParam(basic=list())
@@ -15,12 +16,25 @@ test_VEPParam_construction <- function()
     checkException(VEPParam(basic=c(verbose="foo")), silent=TRUE)
 }
 
-test_VEPParam73_defaults <- function()
+test_VEPParam75_defaults <- function()
 {
     p <- VEPParam()
     checkIdentical(input(p)$species, "homo_sapiens")
     checkIdentical(input(p)$force_overwrite, FALSE)
     checkIdentical(database(p)$host, "useastdb.ensembl.org")
+    checkIdentical(database(p)$database, TRUE)
+    checkIdentical(cache(p)$dir, "$HOME/.vep")
+    checkIdentical(output(p)$terms, "so")
+    checkIdentical(advanced(p)$buffer_size, 5000)
+    checkIdentical(version(p), 75)
+}
+
+test_VEPParam73_defaults <- function()
+{
+    p <- VEPParam(73)
+    checkIdentical(input(p)$species, "homo_sapiens")
+    checkIdentical(input(p)$force_overwrite, FALSE)
+    checkIdentical(database(p)$host, "ensembldb.ensembl.org")
     checkIdentical(database(p)$database, TRUE)
     checkIdentical(cache(p)$dir, "$HOME/.vep")
     checkIdentical(output(p)$terms, "so")
