@@ -1,0 +1,22 @@
+CHANGES IN VERSION 1.4.0
+------------------------
+
+NEW FEATURES
+
+    o VEPParam is now VIRTUAL with subclasses VECParam67 and
+      VEPParam73
+
+    o Add helpers currentVEP() and supportedVEP()
+
+    o Add VEPParam75 class
+
+
+MODIFICATIONS
+
+    o Modify VEPParam to support API versions 67 and 73
+
+    o Add slots 'scriptPath' and 'version' to VEPParam
+
+    o New man page for runtime options
+
+    o Update biocViews terms
