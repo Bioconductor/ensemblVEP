@@ -18,7 +18,7 @@ setMethod("ensemblVEP", "character",
     {
         if (!length(path <- scriptPath(param)))
             path <- .getVepPath()
-        call <- paste0(path, " -i ", file, .runtimeOpts(param)) 
+        call <- paste0(path, " -i ", dQuote(file), .runtimeOpts(param)) 
         if (identical(character(), input(param)$output_file)) {
         ## return R object
             dest <- file.path(tempfile())
@@ -28,10 +28,10 @@ setMethod("ensemblVEP", "character",
                 vcfout <- dataformat(param)$vcf
             if (vcfout) {
                 fun <- readVcf 
-                call <- paste0(call, " --output_file ", dest)
+                call <- paste0(call, " --output_file ", dQuote(dest))
             } else {
                 fun <- parseCSQToGRanges 
-                call <- paste0(call, " --vcf --output_file ", dest)
+                call <- paste0(call, " --vcf --output_file ", dQuote(dest))
             }
             system2("perl", call)
             fun(dest, genome="")
