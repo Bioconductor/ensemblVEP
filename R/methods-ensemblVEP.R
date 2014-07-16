@@ -18,6 +18,9 @@ setMethod("ensemblVEP", "character",
     {
         if (!length(path <- scriptPath(param)))
             path <- .getVepPath()
+        old.quotes <- getOption("useFancyQuotes")
+        on.exit(options(useFancyQuotes=old.quotes))
+        options(useFancyQuotes=FALSE)
         call <- paste0(path, " -i ", dQuote(file), .runtimeOpts(param)) 
         if (identical(character(), input(param)$output_file)) {
         ## return R object
