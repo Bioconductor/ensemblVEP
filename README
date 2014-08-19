@@ -19,7 +19,8 @@ All of this is documented on the Ensembl VEP web page.
 Confirm installation
 ----------------------------------
 Check that variant_effect_predictor.pl is executable and in
-your path.
+your path. This may involve modifying .bashrc and / or .profile
+files.
 
 On Unix and Mac:
   variant_effect_predictor.pl
