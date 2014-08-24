@@ -46,12 +46,10 @@ package the Ensembl VEP perl script must be installed in your path.
 See the package README for details.
 
 \noindent Downloads:
-
-\url{http://uswest.ensembl.org/info/docs/variation/vep/index.html}
+\url{http://uswest.ensembl.org/info/docs/tools/vep/index.html}
 \\
 \noindent Complete documentation for runtime options:
-
-\url{http://uswest.ensembl.org/info/docs/variation/vep/vep_script.html}
+\url{http://uswest.ensembl.org/info/docs/tools/vep/script/vep_options.html}
 \\
 \noindent To test that Ensembl VEP is properly installed, enter the
 name of the script from the command line:
@@ -203,7 +201,7 @@ myparam <- VEPParam(input=c(output_file="/path/myfile.txt"))
 
 The Ensembl VEP web page has complete descriptions of all runtime
 options.
-\url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
+\url{http://uswest.ensembl.org/info/docs/tools/vep/script/vep_options.html}
 Below are examples of how to configure the runtime options
 in the \Rclass{VEPParam} for specific situations. Investigate the 
 differences in results using a sample file from \Rpackage{VariantAnnotation}.
