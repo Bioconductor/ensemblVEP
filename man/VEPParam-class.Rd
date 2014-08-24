@@ -101,7 +101,7 @@
       the Ensembl Variant Effect Predictor (VEP). Brief descriptions of the 
       options are provided below. For complete details, see the Ensembl VEP web page.
 
-      \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
+      \url{http://uswest.ensembl.org/info/docs/tools/vep/script/vep_options.html}
     }
     \item{VEPParam subclasses}:{
       As of \code{ensemblVEP} version >= 1.3.3 a new subclass of 
@@ -124,10 +124,6 @@
       against the European mirror. (The US mirror, useastdb, hosts 
       the current release only.) The appropriate version of cached data 
       can be downloaded from the same page as the archived script. 
-
-      For example, API version 67 script and data are found here:
-
-      \url{http://may2012.archive.ensembl.org/info/docs/variation/vep/vep_script.html}
     }
     \item{Multiple versions}:{
       By default, the variant_effect_predictor.pl script found in the 
@@ -156,12 +152,10 @@
   For a description of runtime options for the most current version of
   the API see the ?\code{runtimeOptions} man page or the Ensembl web site:
 
-  \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
+  \url{http://www.ensembl.org/info/docs/tools/vep/script/vep_options.html}
 
   Runtime options for archived versions can be found on the corresponding
   archive page.
-
-  \url{http://uswest.ensembl.org/info/website/archives/index.html}
 }
 
 \section{Constructor}{

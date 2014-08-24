@@ -21,7 +21,7 @@
     file, including the file name.
 
     Valid input file types are described on the Ensembl VEP web page.
-    \url{http://www.ensembl.org/info/docs/variation/vep/vep_formats.html} 
+    \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
   }
   \item{param}{An instance of \code{VEPParam} specifying runtime options.
   }
@@ -32,15 +32,13 @@
 \details{
   \describe{
     \item{}{
-      The Ensembl VEP tool is described in detail on the home page.
-      \url{http://www.ensembl.org/info/docs/variation/vep/index.html}
-
-      The \code{ensemblVEP} function wraps the perl API and requires a 
-      local install of the Ensembl VEP available in the user's path. The 
-      \code{VEPParam} class provides a way to specify runtime options. 
-      Results are returned from Ensembl VEP as \code{GRanges} (default)
-      or \code{VCF} objects. Alternatively, results can be written
-      directly to a file.
+      The Ensembl VEP tool is described in detail on the home page
+      (link in `see also` section). The \code{ensemblVEP} function 
+      wraps the perl API and requires a local install of the Ensembl 
+      VEP available in the user's path. The \code{VEPParam} class 
+      provides a way to specify runtime options. Results are returned 
+      from Ensembl VEP as \code{GRanges} (default) or \code{VCF} objects. 
+      Alternatively, results can be written directly to a file.
     }
   }
 }
@@ -60,7 +58,7 @@
 
 \references{
   Ensembl VEP Home:
-  \url{http://www.ensembl.org/info/docs/variation/vep/index.html}
+  \url{http://www.ensembl.org/info/docs/tools/vep/index.html}
 
   Human Genome Variation Society (hgvs):
   \url{http://www.hgvs.org/mutnomen/}

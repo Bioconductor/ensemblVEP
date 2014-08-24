@@ -15,16 +15,12 @@
   runtime options and is a condensed version of what is listed on the
   Ensembl web site:
 
-  \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
+  \url{http://uswest.ensembl.org/info/docs/tools/vep/script/vep_options.html}
 
-  Runtime options for archived versions can be found on the corresponding 
+  Runtime options for archived versions can be found on the corresponding
   archive page.
 
-  \url{http://uswest.ensembl.org/info/website/archives/index.html}
-
-  For example, version 67 of the VEP script and data are found here:
-
-  \url{http://may2012.archive.ensembl.org/info/docs/variation/vep/vep_script.html}
+  \url{http://useast.ensembl.org/info/website/archives/index.html}
 }
 
 \section{Runtime options: }{

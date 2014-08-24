@@ -69,7 +69,7 @@
 
 \references{
   Ensembl VEP Home:
-  \url{http://www.ensembl.org/info/docs/variation/vep/index.html}
+  \url{http://uswest.ensembl.org/info/docs/tools/vep/index.html}
 }
 
 \examples{
