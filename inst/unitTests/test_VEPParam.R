@@ -1,12 +1,14 @@
 test_VEPParam_construction <- function()
 {
-    p75 <- VEPParam()
-    checkIdentical(VEPParam(75), p75) 
+    p77 <- VEPParam()
+    checkIdentical(VEPParam(77), p77) 
+    p75 <- VEPParam(75)
     p73 <- VEPParam(73)
     p67 <- VEPParam(67)
     checkTrue(all(slotNames(p67) %in% slotNames(p73)))
     checkTrue(all(slotNames(p67) %in% slotNames(p75)))
     checkTrue(all(slotNames(p73) %in% slotNames(p75)))
+    checkTrue(all(slotNames(p75) %in% slotNames(p77)))
 
     p <- VEPParam()
     p <- VEPParam(basic=list())
@@ -18,7 +20,7 @@ test_VEPParam_construction <- function()
 
 test_VEPParam75_defaults <- function()
 {
-    p <- VEPParam()
+    p <- VEPParam(75)
     checkIdentical(input(p)$species, "homo_sapiens")
     checkIdentical(input(p)$force_overwrite, FALSE)
     checkIdentical(database(p)$host, "useastdb.ensembl.org")

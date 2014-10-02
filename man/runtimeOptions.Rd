@@ -28,10 +28,10 @@
   \sQuote{basic}, \sQuote{input}, \sQuote{cache}, \sQuote{output}, 
   \sQuote{identifier}, \sQuote{colocatedVariants}, \sQuote{dataformat},
   \sQuote{filterqc}, \sQuote{database} and \sQuote{advanced}. Each category
-  is a \code{list} of runtime options. \code{logical} options are turned on/off 
-  with TRUE and FALSE. \code{character} and \code{numeric} are \sQuote{on} when 
-  a character string is provided and \sQuote{off} when they contain an empty value 
-  (i.e., \code{character()} or \code{numeric()}.
+  is a \code{list} of runtime options. \code{logical} options are turned 
+  on/off with TRUE/FALSE. \code{character} and \code{numeric} are 
+  \sQuote{on} when a character string is provided and \sQuote{off} when 
+  they contain an empty value (i.e., \code{character()} or \code{numeric()}.
 
   \sQuote{identifier}, \sQuote{colocatedVariants}, \sQuote{dataformat}
   are supported for VEPParam73 and later.
@@ -54,6 +54,8 @@
       \itemize{
         \item{species:} \code{character}, default 'homo_sapiens'; 
           species for the data
+        \item{assembly:} \code{character}, default \code{character()}; 
+          select assembly version if more than one available
         \item{format:} \code{character}, default \code{character()}; 
           one of the following input file formats, 'ensembl', 'vcf', 
           'pileup', 'hgvs', 'id' or 'vep'. By default the script
@@ -95,6 +97,8 @@
         \item{polyphen:} \code{character}, default \code{character()}; 
           output prediction, 
           score or both, valid strings are 'p', 's' or 'b'
+        \item{humdiv:} \code{logical}, default FALSE; 
+          retrieve the humDiv PolyPhen prediction instead of humVar
         \item{regulatory:} \code{logical}, default FALSE; identify overlaps 
           with regulatory regions
         \item{cell_type:} \code{character}, default \code{character()}; 
@@ -131,9 +135,13 @@
         \item{symbol:} \code{logical}, default FALSE; add gene symbol
           (e.g. HGNC) (where available) to the output
         \item{ccds:} \code{logical}, default FALSE; add CCDS transcript ID's
-        \item{canonical:} \code{logical}, default FALSE; indicate if transcript 
-          is cononical transcript for the gene
-        \item{biotype:} \code{logical}, default FALSE; add biotype of transcript
+        \item{canonical:} \code{logical}, default FALSE; 
+          indicate if transcript is cononical transcript for the gene
+        \item{uniprot:} \code{logical}, default FALSE; 
+          adds identifiers for translated protein products from three
+          UniProt-related databases  
+        \item{biotype:} \code{logical}, default FALSE; add biotype of 
+          transcript
         \item{xref_seq:} \code{logical}, default FALSE; output aligned refseq 
           mRNA ID
       }
@@ -154,6 +162,9 @@
           must be use with --cache 
         \item{maf_esp:} \code{logical}, default FALSE; add MAF from 
           NHLBI-ESP populations; must be used with --cache 
+        \item{old_maf:} \code{logical}, default FALSE; 
+          for maf_1kg and maf_esp report only the frequency (no allele) and
+          convert so it is always a minor frequency, i.e. < 0.5 
         \item{pubmed:} \code{logical}, default FALSE; 
            report Pubmed IDs for publications that cite existing variant;
            must be used with --cache
@@ -165,6 +176,7 @@
     \item{\code{dataformat}}{\code{list} of the following options:
       \itemize{
         \item{vcf:} \code{logical}, default FALSE; write output in vcf format
+        \item{json:} \code{logical}, default FALSE; write output in json format
         \item{gvf:} \code{logical}, default FALSE; write output in gcf format
         \item{original:} \code{logical}, default FALSE; writes output as 
           filtered set of input. Must be used with --filter.
@@ -189,6 +201,10 @@
           a subset of chromosomes to be analyzed
         \item{no_intergenic:} \code{logical}, default FALSE; do not 
           include intergenic consequences
+        \item{pick:} \code{logical}, default FALSE; 
+          pick once line of consequence data per variant 
+        \item{pick_allele:} \code{logical}, default FALSE;
+          pick once line of consequence data per variant allele 
         \item{most_severe:} \code{logical}, default FALSE; output only most 
           severe consequence per variation
         \item{summary:} \code{logical}, default FALSE; output a comma-separated
@@ -237,8 +253,16 @@
         \item{genomes:} \code{logical}, default FALSE; override default 
           connection settings with those for the Ensembl Genomces public 
           MySQL server
+        \item{gencode_basic:} \code{logical}, default FALSE;
+          limit analysis to transcripts in GENCODE basic set
         \item{refseq:} \code{logical}, default FALSE; use otherfeatures 
           database to retrieve transcripts
+        \item{merged:} \code{logical}, default FALSE;
+          use the merged Ensembl and RefSeq cache
+        \item{all_refseq:} \code{logical}, default FALSE;
+          include e.g. CCDS and Ensembl EST transcripts 
+        \item{lrg:} \code{logical}, default FALSE;
+          map input variants to LRG coordinates
         \item{db_version:} \code{numeric}, default \code{character()}; 
           force connection to specific version
         \item{registry:} \code{character}, default \code{character()}; 

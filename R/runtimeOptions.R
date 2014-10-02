@@ -30,20 +30,26 @@ advancedOpts <- function(version, ..., no_whole_genome=logical(1),
 
 ### inputOpts, cacheOpts, outputOpts, databaseOpts and filterqcOpts are
 ### different for versions 67, 73, 75
-inputOpts <- function(version, ..., species="homo_sapiens", format=character(), 
-                      output_file=character(), force_overwrite=logical(1),
-                      stats_file=character(), no_stats=logical(1),
-                      stats_text=logical(1), html=logical(1))
+inputOpts <- function(version, ..., species="homo_sapiens", 
+                      assembly=character(),
+                      format=character(), output_file=character(), 
+                      force_overwrite=logical(1), stats_file=character(), 
+                      no_stats=logical(1), stats_text=logical(1), 
+                      html=logical(1))
 {
     if (any(version == 67)) {
-        list(species=species, format=format, output_file=output_file,
-             force_overwrite=force_overwrite, stats_file=stats_file,
-             no_stats=no_stats, html=html)
+        opts <- list(species=species, format=format, output_file=output_file,
+                     force_overwrite=force_overwrite, stats_file=stats_file,
+                     no_stats=no_stats, html=html)
     } else {
-        list(species=species, format=format, output_file=output_file, 
-             force_overwrite=force_overwrite, stats_file=stats_file,
-             no_stats=no_stats, stats_text=stats_text, html=html)
+        opts <- list(species=species, format=format, output_file=output_file, 
+                     force_overwrite=force_overwrite, stats_file=stats_file,
+                     no_stats=no_stats, stats_text=stats_text, html=html)
     }
+    if (any(version == 77))
+        opts$assembly <- assembly
+
+    opts
 } 
 
 cacheOpts <- function(version, ..., cache=logical(1), dir="$HOME/.vep", 
@@ -54,17 +60,19 @@ cacheOpts <- function(version, ..., cache=logical(1), dir="$HOME/.vep",
     if (any(version == 67)) {
         list(cache=cache, dir=dir, offline=offline, fasta=fasta)
     } else if (all(version > 67 & version < 75)) {
-        list(cache=cache, dir=dir, dir_cache=dir_cache, dir_plugins=dir_plugins,
-             offline=offline, fasta=fasta)
+        list(cache=cache, dir=dir, dir_cache=dir_cache, 
+             dir_plugins=dir_plugins, offline=offline, fasta=fasta)
     } else {
-        list(cache=cache, dir=dir, dir_cache=dir_cache, dir_plugins=dir_plugins,
-             offline=offline, fasta=fasta, cache_version=cache_version)
+        list(cache=cache, dir=dir, dir_cache=dir_cache, 
+             dir_plugins=dir_plugins, offline=offline, fasta=fasta, 
+             cache_version=cache_version)
     }
 }
 
 outputOpts <- function(version, ..., sift=character(), polyphen=character(), 
-                       regulatory=logical(1), cell_type=character(), 
-                       custom=character(), plugin=character(),
+                       humdiv=logical(1), regulatory=logical(1), 
+                       cell_type=character(), custom=character(), 
+                       plugin=character(),
                        individual=character(), phased=logical(1),
                        allele_number=integer(), total_length=character(),
                        numbers=character(), domains=character(),
@@ -80,10 +88,18 @@ outputOpts <- function(version, ..., sift=character(), polyphen=character(),
     if (any(version == 67)) {
         list(terms=terms, sift=sift, polyphen=polyphen, regulatory=regulatory,
              cell_type=cell_type, hgvs=hgvs, gene=gene, protein=protein,
-             hgnc=hgnc, ccds=ccds, canonical=canonical, xref_refseq=xref_refseq,
+             hgnc=hgnc, ccds=ccds, canonical=canonical, 
+             xref_refseq=xref_refseq,
              numbers=numbers, domains=domains, most_severe=most_severe,
              summary=summary, per_gene=per_gene, convert=convert, fields=fields,
              vcf=vcf, gvf=gvf, original=original, custom=custom, plugin=plugin)
+    } else if (any(version == 77)) {
+        list(sift=sift, polyphen=polyphen, humdiv=humdiv, 
+             regulatory=regulatory,
+             cell_type=cell_type, custom=custom, plugin=plugin,
+             individual=individual, phased=phased, allele_number=allele_number,
+             total_length=total_length, numbers=numbers, domains=domains,
+             no_escape=no_escape, terms=terms)
     } else {
         list(sift=sift, polyphen=polyphen, regulatory=regulatory,
              cell_type=cell_type, custom=custom, plugin=plugin,
@@ -97,7 +113,9 @@ databaseOpts <- function(version, ..., database=TRUE,
                          host="useastdb.ensembl.org", 
                          user=character(), password=character(), 
                          port=numeric(), genomes=logical(1), 
-                         refseq=logical(1), db_version=numeric(), 
+                         gencode_basic=logical(1), refseq=logical(1), 
+                         merged=logical(1), all_refseq=logical(1),
+                         lrg=logical(1), db_version=numeric(), 
                          registry=character())
 {
     opts <-  list(host=host, user=user, password=password, 
@@ -107,13 +125,17 @@ databaseOpts <- function(version, ..., database=TRUE,
         opts$host <- "ensembldb.ensembl.org"
     if (any(version > 67))
         opts$database <- database
+    if (any(version == 77))
+        opts <- as.list(c(gencode_basic=gencode_basic, merged=merged,
+            all_refseq=all_refseq, lrg=lrg, opts))
     opts 
 }
 
 filterqcOpts <- function(version, ..., check_ref=logical(1), 
                          coding_only=logical(1),
                          chr=character(), no_intergenic=logical(1),
-                         most_severe=logical(1), summary=logical(1),
+                         pick=logical(1), most_severe=logical(1), 
+                         summary=logical(1), pick_allele=logical(1),
                          per_gene=logical(1), filter_common=logical(1),
                          check_frequency=logical(1), freq_pop=character(),
                          freq_freq=logical(1), freq_gt_lt=character(),
@@ -125,63 +147,87 @@ filterqcOpts <- function(version, ..., check_ref=logical(1),
                          phased=logical(1), failed=logical(1))
 {
     if (any(version == 67)) {
-        list(check_ref=check_ref, coding_only=coding_only,
-             check_existing=check_existing, check_alleles=check_alleles,
-             check_svs=check_svs, gmaf=gmaf, maf_1kg=maf_1kg,
-             individual=individual, phased=phased, chr=chr,
-             no_intergenic=no_intergenic, filter_common=filter_common,
-             check_frequency=check_frequency, freq_pop=freq_pop,
-             freq_freq=freq_freq, freq_gt_lt=freq_gt_lt,
-             freq_filter=freq_filter, filter=filter, failed=failed,
-             allow_non_variant=allow_non_variant)
+        opts <- list(check_ref=check_ref, coding_only=coding_only,
+                     check_existing=check_existing, check_alleles=check_alleles,
+                     check_svs=check_svs, gmaf=gmaf, maf_1kg=maf_1kg,
+                     individual=individual, phased=phased, chr=chr,
+                     no_intergenic=no_intergenic, filter_common=filter_common,
+                     check_frequency=check_frequency, freq_pop=freq_pop,
+                     freq_freq=freq_freq, freq_gt_lt=freq_gt_lt,
+                     freq_filter=freq_filter, filter=filter, failed=failed,
+                     allow_non_variant=allow_non_variant)
     } else {
-        list(check_ref=check_ref, coding_only=coding_only, chr=chr,
-             no_intergenic=no_intergenic, most_severe=most_severe,
-             summary=summary, per_gene=per_gene, filter_common=filter_common,
-             check_frequency=check_frequency, freq_pop=freq_pop,
-             freq_freq=freq_freq, freq_gt_lt=freq_gt_lt, 
-             freq_filter=freq_filter, filter=filter, 
-             allow_non_variant=allow_non_variant) 
+        opts <- list(check_ref=check_ref, coding_only=coding_only, chr=chr,
+                     no_intergenic=no_intergenic, most_severe=most_severe,
+                     summary=summary, per_gene=per_gene, 
+                     filter_common=filter_common,
+                     check_frequency=check_frequency, freq_pop=freq_pop,
+                     freq_freq=freq_freq, freq_gt_lt=freq_gt_lt, 
+                     freq_filter=freq_filter, filter=filter, 
+                     allow_non_variant=allow_non_variant) 
     }
+    if (any(version == 77)) { 
+        opts$pick <- pick
+        opts$pick_allele <- pick_allele
+    }
+
+    opts
 }
 
-### identifierOpts, colocatedVariantsOpts, and dataformatOpts are
-### supported for version 73 only
+### identifierOpts, colocatedVariantsOpts, and dataformatOpts not 
+### supported for version 67
 identifierOpts <- function(version, ..., hgvs=logical(1), 
                            protein=logical(1), symbol=logical(1), 
-                           ccds=logical(1), canonical=logical(1), 
+                           ccds=logical(1), uniprot=logical(1),
+                           canonical=logical(1), 
                            biotype=logical(1), xref_refseq=logical(1)) 
 {
     if (any(version == 67))
-        stop(paste0("'identifierOpts' supported for VEP versions >= ",
-             unname(unlist(currentVEP()))))
+        stop("'identifierOpts' not supported for VEP 67")
     else
-        list(hgvs=hgvs, protein=protein, symbol=symbol, ccds=ccds, 
-             canonical=canonical, biotype=biotype, xref_refseq=xref_refseq)
+        opts <- list(hgvs=hgvs, protein=protein, symbol=symbol, ccds=ccds, 
+                     canonical=canonical, biotype=biotype, 
+                     xref_refseq=xref_refseq)
+
+    if (any(version == 77))
+        opts$uniprot <- uniprot
+
+    opts
 }
 
 colocatedVariantsOpts <- function(version, ..., check_existing=logical(1), 
                                   check_alleles=logical(1), 
                                   check_svs=logical(1), gmaf=logical(1),
                                   maf_1kg=logical(1), maf_esp=logical(1), 
-                                  pubmed=logical(1), failed=logical(1)) 
+                                  old_maf=logical(1), pubmed=logical(1), 
+                                  failed=logical(1)) 
 {
     if (any(version == 67))
-        stop(paste0("'colocatedVariantsOpts' supported for VEP versions >= ",
-             unname(unlist(currentVEP()))))
+        stop("'identifierOpts' not supported for VEP 67")
     else
-        list(check_existing=check_existing, check_alleles=check_alleles,
-             check_svs=check_svs, gmaf=gmaf, maf_1kg=maf_1kg, maf_esp=maf_esp, 
-             pubmed=pubmed, failed=failed)
+        opts <- list(check_existing=check_existing, 
+                     check_alleles=check_alleles,
+                     check_svs=check_svs, gmaf=gmaf, maf_1kg=maf_1kg, 
+                     maf_esp=maf_esp, pubmed=pubmed, failed=failed)
+
+    if (any(version == 77))
+        opts$old_maf <- old_maf 
+
+    opts
 }
 
-dataformatOpts <- function(version, ..., vcf=logical(1), gvf=logical(1), 
-                           original=logical(1), fields=character(), 
-                           convert=character())
+dataformatOpts <- function(version, ..., vcf=logical(1), json=logical(1),
+                           gvf=logical(1), original=logical(1), 
+                           fields=character(), convert=character())
 {
     if (any(version == 67))
-        stop(paste0("'dataformatOpts' supported for VEP versions >= ",
-             unname(unlist(currentVEP()))))
+        stop("'identifierOpts' not supported for VEP 67")
     else
-        list(vcf=vcf, gvf=gvf, original=original, fields=fields, convert=convert)
+        opts <- list(vcf=vcf, gvf=gvf, original=original, fields=fields, 
+                     convert=convert)
+
+    if (any(version == 77))
+        opts$json <- json 
+
+    opts
 }

@@ -56,10 +56,12 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
         dataformat_opts <- dataformatOpts(version)
         dataformat_opts[names(dataformat)] <- .formatList(dataformat)
 
-        if (version >= 75)
+        if (version == 73 || version == 74)
+            VEP_class <- "VEPParam73"
+        else if (version == 75)
             VEP_class <- "VEPParam75"
         else
-            VEP_class <- "VEPParam73"
+            VEP_class <- "VEPParam77"
 
         new(VEP_class, ..., basic=basic_opts, 
             database=database_opts, advanced=advanced_opts,
@@ -328,7 +330,7 @@ scriptPath <- function(x)
 ###
 
 supportedVEP <- function() list("VEPParam67"=67, "VEPParam73"=c(73, 74), 
-                                "VEPParam75"=75)
+                                "VEPParam75"=75, "VEPParam77"=77)
 currentVEP <- function() tail(supportedVEP(), 1) 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -355,6 +357,6 @@ setMethod(show, "VEPParam",
             nms <- character()
         scat(paste0(i, "(%d): %s\n"), nms)
     }
-    scat(paste0("version", "(%d): %s\n"), version(object))
-    scat(paste0("scriptPath", "(%d): %s\n"), scriptPath(object))
+    cat(paste0("version: ", paste(version(object), collapse=","), "\n"))
+    cat(paste0("scriptPath: ", scriptPath(object)), "\n")
 })

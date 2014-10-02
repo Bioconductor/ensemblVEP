@@ -22,7 +22,7 @@ setClass("VEPParam",
     validity=.validity)
 
 ### ------------------------------------------------------------------------- 
-### VEPParam67, VEPParam73, VEPParam75
+### VEPParam67, VEPParam73, VEPParam75, VEPParam77
 ###
 
 setClass("VEPParam67", contains="VEPParam",
@@ -47,4 +47,13 @@ setClass("VEPParam75", contains="VEPParam",
         dataformat="list"),
     prototype(
         version=75),
+    validity=.validity)
+
+setClass("VEPParam77", contains="VEPParam",
+    representation(
+        identifier="list",
+        colocatedVariants="list",
+        dataformat="list"),
+    prototype(
+        version=77),
     validity=.validity)
