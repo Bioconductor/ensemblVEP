@@ -46,7 +46,7 @@ inputOpts <- function(version, ..., species="homo_sapiens",
                      force_overwrite=force_overwrite, stats_file=stats_file,
                      no_stats=no_stats, stats_text=stats_text, html=html)
     }
-    if (any(version == 77))
+    if (any(version >= 77))
         opts$assembly <- assembly
 
     opts
@@ -93,7 +93,7 @@ outputOpts <- function(version, ..., sift=character(), polyphen=character(),
              numbers=numbers, domains=domains, most_severe=most_severe,
              summary=summary, per_gene=per_gene, convert=convert, fields=fields,
              vcf=vcf, gvf=gvf, original=original, custom=custom, plugin=plugin)
-    } else if (any(version == 77)) {
+    } else if (any(version >= 77)) {
         list(sift=sift, polyphen=polyphen, humdiv=humdiv, 
              regulatory=regulatory,
              cell_type=cell_type, custom=custom, plugin=plugin,
@@ -125,7 +125,7 @@ databaseOpts <- function(version, ..., database=TRUE,
         opts$host <- "ensembldb.ensembl.org"
     if (any(version > 67))
         opts$database <- database
-    if (any(version == 77))
+    if (any(version >= 77))
         opts <- as.list(c(gencode_basic=gencode_basic, merged=merged,
             all_refseq=all_refseq, lrg=lrg, opts))
     opts 
@@ -134,9 +134,11 @@ databaseOpts <- function(version, ..., database=TRUE,
 filterqcOpts <- function(version, ..., check_ref=logical(1), 
                          coding_only=logical(1),
                          chr=character(), no_intergenic=logical(1),
-                         pick=logical(1), most_severe=logical(1), 
-                         summary=logical(1), pick_allele=logical(1),
-                         per_gene=logical(1), filter_common=logical(1),
+                         pick=logical(1), pick_allele=logical(1), 
+                         flag_pick=logical(1), flag_pick_allele=logical(1),
+                         per_gene=logical(1), pick_order=numeric(),
+                         most_severe=logical(1), summary=logical(1), 
+                         filter_common=logical(1),
                          check_frequency=logical(1), freq_pop=character(),
                          freq_freq=logical(1), freq_gt_lt=character(),
                          freq_filter=character(), filter=character(),
@@ -166,9 +168,14 @@ filterqcOpts <- function(version, ..., check_ref=logical(1),
                      freq_filter=freq_filter, filter=filter, 
                      allow_non_variant=allow_non_variant) 
     }
-    if (any(version == 77)) { 
+    if (any(version >= 77)) { 
         opts$pick <- pick
         opts$pick_allele <- pick_allele
+    }
+    if (any(version == 78)) { 
+        opts$flag_pick <- flag_pick
+        opts$flag_pick_allele <- flag_pick_allele
+        opts$pick_order <- pick_order
     }
 
     opts
@@ -179,7 +186,7 @@ filterqcOpts <- function(version, ..., check_ref=logical(1),
 identifierOpts <- function(version, ..., hgvs=logical(1), 
                            protein=logical(1), symbol=logical(1), 
                            ccds=logical(1), uniprot=logical(1),
-                           canonical=logical(1), 
+                           tsl=logical(1), canonical=logical(1), 
                            biotype=logical(1), xref_refseq=logical(1)) 
 {
     if (any(version == 67))
@@ -189,8 +196,10 @@ identifierOpts <- function(version, ..., hgvs=logical(1),
                      canonical=canonical, biotype=biotype, 
                      xref_refseq=xref_refseq)
 
-    if (any(version == 77))
+    if (any(version >= 77))
         opts$uniprot <- uniprot
+    if (any(version == 78))
+        opts$tsl <- tsl 
 
     opts
 }
@@ -210,7 +219,7 @@ colocatedVariantsOpts <- function(version, ..., check_existing=logical(1),
                      check_svs=check_svs, gmaf=gmaf, maf_1kg=maf_1kg, 
                      maf_esp=maf_esp, pubmed=pubmed, failed=failed)
 
-    if (any(version == 77))
+    if (any(version >= 77))
         opts$old_maf <- old_maf 
 
     opts
@@ -226,7 +235,7 @@ dataformatOpts <- function(version, ..., vcf=logical(1), json=logical(1),
         opts <- list(vcf=vcf, gvf=gvf, original=original, fields=fields, 
                      convert=convert)
 
-    if (any(version == 77))
+    if (any(version >= 77))
         opts$json <- json 
 
     opts

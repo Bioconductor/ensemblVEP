@@ -140,6 +140,8 @@
         \item{uniprot:} \code{logical}, default FALSE; 
           adds identifiers for translated protein products from three
           UniProt-related databases  
+        \item{tsl:} \code{logical}, default FALSE; 
+          adds the transcript support level for this transcript
         \item{biotype:} \code{logical}, default FALSE; add biotype of 
           transcript
         \item{xref_seq:} \code{logical}, default FALSE; output aligned refseq 
@@ -205,13 +207,22 @@
           pick once line of consequence data per variant 
         \item{pick_allele:} \code{logical}, default FALSE;
           pick once line of consequence data per variant allele 
+        \item{flag_pick:} \code{logical}, default FALSE;
+          as per --pick, but adds the PICK flag to the chosen block of 
+          consequence data and retains others. 
+        \item{flag_pick_allele:} \code{logical}, default FALSE;
+          as per --pick_allele, but adds the PICK flag to the chosen block 
+          of consequence data and retains others. 
+        \item{per_gene:} \code{logical}, default FALSE; 
+          output only the most severe consequence per gene
+        \item{pick_order:} \code{integer}, default \code{integer()};
+          customise the order of criteria applied when choosing a block of 
+          annotation data with e.g. --pick.
         \item{most_severe:} \code{logical}, default FALSE; output only most 
           severe consequence per variation
         \item{summary:} \code{logical}, default FALSE; output a comma-separated
           list of all observed consequences per variation, transcript-specific
           columns will be left blank
-        \item{per_gene:} \code{logical}, default FALSE; output only the most
-          severe consequence per gene
         \item{filter_common:} \code{logical}, default FALSE; shortcut flag
           to turn on filters, See web page for details. 
         \item{check_frequency:} \code{logical}, default FALSE; turn on 

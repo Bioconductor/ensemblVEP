@@ -56,12 +56,16 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
         dataformat_opts <- dataformatOpts(version)
         dataformat_opts[names(dataformat)] <- .formatList(dataformat)
 
-        if (version == 73 || version == 74)
+        if (version %in% c(73, 74))
             VEP_class <- "VEPParam73"
         else if (version == 75)
             VEP_class <- "VEPParam75"
-        else
+        else if (version == 77)
             VEP_class <- "VEPParam77"
+        else if (version == 78)
+            VEP_class <- "VEPParam7"
+        else
+            stop("undefined VEP version")
 
         new(VEP_class, ..., basic=basic_opts, 
             database=database_opts, advanced=advanced_opts,

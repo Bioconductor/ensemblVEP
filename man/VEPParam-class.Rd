@@ -12,6 +12,8 @@
 \alias{VEPParam75-class}
 \alias{class:VEPParam77}
 \alias{VEPParam77-class}
+\alias{class:VEPParam78}
+\alias{VEPParam78-class}
 
 % Constructors:
 \alias{VEPParam}
@@ -70,6 +72,8 @@
 \alias{identifier<-,VEPParam75-method}
 \alias{identifier,VEPParam77-method}
 \alias{identifier<-,VEPParam77-method}
+\alias{identifier,VEPParam78-method}
+\alias{identifier<-,VEPParam78-method}
 \alias{dataformat}
 \alias{dataformat<-}
 \alias{dataformat,VEPParam73-method}
@@ -78,6 +82,8 @@
 \alias{dataformat<-,VEPParam75-method}
 \alias{dataformat,VEPParam77-method}
 \alias{dataformat<-,VEPParam77-method}
+\alias{dataformat,VEPParam78-method}
+\alias{dataformat<-,VEPParam78-method}
 \alias{colocatedVariants}
 \alias{colocatedVariants<-}
 \alias{colocatedVariants,VEPParam73-method}
@@ -86,6 +92,8 @@
 \alias{colocatedVariants<-,VEPParam75-method}
 \alias{colocatedVariants,VEPParam77-method}
 \alias{colocatedVariants<-,VEPParam77-method}
+\alias{colocatedVariants,VEPParam78-method}
+\alias{colocatedVariants<-,VEPParam78-method}
 
 % helpers:
 \alias{currentVEP}
@@ -98,7 +106,8 @@
 
 \description{
   \code{VEPParam} is a VIRTUAL class with concrete subclasses 
-  \code{VEPParam67} and \code{VEPParam73}. These objects store 
+  \code{VEPParam67}, \code{VEPParam73}, \code{VEPParam75},
+  \code{VEPParam77} and \code{VEPParam78}. These objects store 
   runtime options for the Ensembl Variant Effect Predictor.
 }
 
@@ -107,7 +116,8 @@
     \item{}{
       The \code{VEPParam} family of objects stores runtime options for querying 
       the Ensembl Variant Effect Predictor (VEP). Brief descriptions of the 
-      options are provided below. For complete details, see the Ensembl VEP web page.
+      options are provided below. For complete details, see the Ensembl VEP 
+      web page.
 
       \url{http://uswest.ensembl.org/info/docs/tools/vep/script/vep_options.html}
     }
