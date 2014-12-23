@@ -1,7 +1,8 @@
 test_VEPParam_construction <- function()
 {
-    p77 <- VEPParam()
-    checkIdentical(VEPParam(77), p77) 
+    p78 <- VEPParam()
+    checkIdentical(VEPParam(78), p78) 
+    p77 <- VEPParam(77)
     p75 <- VEPParam(75)
     p73 <- VEPParam(73)
     p67 <- VEPParam(67)
@@ -9,6 +10,7 @@ test_VEPParam_construction <- function()
     checkTrue(all(slotNames(p67) %in% slotNames(p75)))
     checkTrue(all(slotNames(p73) %in% slotNames(p75)))
     checkTrue(all(slotNames(p75) %in% slotNames(p77)))
+    checkTrue(all(slotNames(p77) %in% slotNames(p78)))
 
     p <- VEPParam()
     p <- VEPParam(basic=list())
@@ -16,6 +18,22 @@ test_VEPParam_construction <- function()
     checkException(VEPParam(basic=list(foo="")), silent=TRUE)
     checkException(VEPParam(basic=list(quiet="yes")), silent=TRUE)
     checkException(VEPParam(basic=c(verbose="foo")), silent=TRUE)
+}
+
+test_VEPParam78_new_flags <- function()
+{
+    p <- VEPParam(78)
+    checkIdentical(filterqc(p)$flag_pick, logical(1))
+    checkIdentical(filterqc(p)$flag_pick_allele, logical(1))
+    checkIdentical(filterqc(p)$pick_order, numeric())
+    checkIdentical(identifier(p)$tsl, logical(1))
+}
+
+test_VEPParam77_new_flags <- function()
+{
+    p <- VEPParam(77)
+    checkIdentical(filterqc(p)$pick, logical(1))
+    checkIdentical(filterqc(p)$pick_allele, logical(1))
 }
 
 test_VEPParam75_defaults <- function()

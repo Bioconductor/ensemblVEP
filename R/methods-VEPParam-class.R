@@ -63,7 +63,7 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
         else if (version == 77)
             VEP_class <- "VEPParam77"
         else if (version == 78)
-            VEP_class <- "VEPParam7"
+            VEP_class <- "VEPParam78"
         else
             stop("undefined VEP version")
 
@@ -334,7 +334,8 @@ scriptPath <- function(x)
 ###
 
 supportedVEP <- function() list("VEPParam67"=67, "VEPParam73"=c(73, 74), 
-                                "VEPParam75"=75, "VEPParam77"=77)
+                                "VEPParam75"=75, "VEPParam77"=77, 
+                                "VEPParam78"=78)
 currentVEP <- function() tail(supportedVEP(), 1) 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
