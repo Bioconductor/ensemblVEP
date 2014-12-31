@@ -1,5 +1,5 @@
 Package: ensemblVEP
-Version: 1.7.2
+Version: 1.7.3
 Title: R Interface to Ensembl Variant Effect Predictor 
 Author: Valerie Obenchain <vobencha@fhcrc.org>,
 Maintainer: Valerie Obenchain <vobencha@fhcrc.org>
@@ -15,4 +15,4 @@ SystemRequirements: Ensembl VEP (API version 78) and the Perl package
         installation instructions.
 License: Artistic-2.0
 LazyLoad: yes
-biocViews: Annotation
+biocViews: Annotation, VariantAnnotation, SNP
