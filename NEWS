@@ -1,3 +1,17 @@
+CHANGES IN VERSION 1.8.0
+------------------------
+
+NEW FEATURES
+
+    o Add VEPParam78 class to support Ensembl 78
+
+    o Add 'flag_pick', 'flag_pick_allele', 'pick_order' and 'tsl' flags
+
+MODIFICATIONS
+
+    o Add new biocViews terms
+
+
 CHANGES IN VERSION 1.6.0
 ------------------------
 
