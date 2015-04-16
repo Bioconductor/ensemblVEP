@@ -1,5 +1,5 @@
 Package: ensemblVEP
-Version: 1.8.0
+Version: 1.9.0
 Title: R Interface to Ensembl Variant Effect Predictor 
 Author: Valerie Obenchain <vobencha@fhcrc.org>,
 Maintainer: Valerie Obenchain <vobencha@fhcrc.org>
