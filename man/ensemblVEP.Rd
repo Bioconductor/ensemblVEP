@@ -92,13 +92,13 @@
   ## When comparing ensemblVEP() results to the data in the
   ## input vcf we see that variant 20:1230237 was not returned.
   vcf_input <- readVcf(file, "hg19")
-  rowData(vcf_input)
-  rowData(vcf)
+  rowRanges(vcf_input)
+  rowRanges(vcf)
  
   ## This variant has no alternate allele and is called a
   ## monomorphic reference. The Ensembl VEP automatically
   ## drops these variants. 
-  rowData(vcf)[,c("REF", "ALT")]
+  rowRanges(vcf)[,c("REF", "ALT")]
  
   ## -----------------------------------------------------------------------
   ## Results written to disk

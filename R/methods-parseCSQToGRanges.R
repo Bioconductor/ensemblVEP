@@ -16,7 +16,7 @@ setMethod("parseCSQToGRanges", "VCF",
     {
         ulst <- unlist(info(x)$CSQ, use.names=FALSE)
         if (all(is.na(ulst)))
-            return(rowData(x))
+            return(rowRanges(x))
 
         elt <- elementLengths(info(x)$CSQ)
         hdr <- info(header(x))["CSQ", "Description"]
@@ -28,7 +28,7 @@ setMethod("parseCSQToGRanges", "VCF",
         csq[!nzchar(csq)] <- NA
         colnames(csq) <- nms
  
-        rd <- rowData(x)
+        rd <- rowRanges(x)
         gr <- rd[rep(seq_along(rd), elt)]
         if (length(VCFRowID)) {
             if (any(no_match <- !VCFRowID %in% rownames(x)))
