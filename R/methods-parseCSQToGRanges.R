@@ -3,23 +3,23 @@
 ### =========================================================================
 
 setMethod("parseCSQToGRanges", "character", 
-    function(x, VCFRowID=character(), ...)
+    function(x, VCFRowID=character(), ..., info.key="CSQ")
     {
-        param=ScanVcfParam(info="CSQ", geno=NA_character_)
+        param=ScanVcfParam(info=info.key, geno=NA_character_)
         vcf <- readVcf(x, "", param=param) 
         callGeneric(vcf, VCFRowID, ...)
     }
 )
 
 setMethod("parseCSQToGRanges", "VCF", 
-    function(x, VCFRowID=character(), ...)
+    function(x, VCFRowID=character(), ..., info.key="CSQ")
     {
-        ulst <- unlist(info(x)$CSQ, use.names=FALSE)
+        ulst <- unlist(info(x)[[info.key]], use.names=FALSE)
         if (all(is.na(ulst)))
             return(rowRanges(x))
 
-        elt <- elementLengths(info(x)$CSQ)
-        hdr <- info(header(x))["CSQ", "Description"]
+        elt <- elementLengths(info(x)[[info.key]])
+        hdr <- info(header(x))[info.key, "Description"]
         nms <- unlist(strsplit(strsplit(hdr, "Format: ")[[1]][2], "\\|"))
         raw <- strsplit(ulst, "\\|")
         csq <- matrix(nrow=length(ulst), ncol=length(nms))

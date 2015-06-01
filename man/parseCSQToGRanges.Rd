@@ -14,8 +14,10 @@
 }
 
 \usage{
-\S4method{parseCSQToGRanges}{character}(x, VCFRowID=character(), ...)
-\S4method{parseCSQToGRanges}{VCF}(x, VCFRowID=character(), ...)
+\S4method{parseCSQToGRanges}{character}(x, VCFRowID=character(), 
+    ..., info.key = "CSQ")
+\S4method{parseCSQToGRanges}{VCF}(x, VCFRowID=character(), 
+    ..., info.key = "CSQ")
 }
 
 \arguments{
@@ -30,6 +32,11 @@
 
     When \code{VCFRowID} is not provided no \sQuote{VCFRowID}
     column is included. 
+  }
+  \item{info.key}{
+    The name of the INFO key that VEP writes the consequences to in the output
+    (default is \code{CSQ}). This should only be used if something other that
+    \code{CSQ} was passed in the --vcf_info_field flag in the output options.
   }
   \item{\dots}{
     Arguments passed to other methods. Currently not used.
