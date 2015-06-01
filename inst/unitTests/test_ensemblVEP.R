@@ -9,5 +9,5 @@ test_ensemblVEP <- function()
                 "Consequence", "cDNA_position", "CDS_position", 
                 "Protein_position", "Amino_acids", "Codons", 
                 "Existing_variation", "DISTANCE", "STRAND")
-    checkTrue(all(names(mcols(gr)) %in% target))
+    checkTrue(all(target %in% names(mcols(gr))))
 }
