@@ -87,10 +87,16 @@
           no database connections will be made 
         \item{fasta:} \code{character}, default \code{character()}; FASTA
           filename or directory to files to use for reference sequences 
+        \item{cache_version:} \code{character}, default \code{character()};
+          use a different cache version than the assumed default 
+        \item{show_cache_version:} \code{logical}, default FALSE;
+          show source version information for selected cache and quit
       }
     }
     \item{\code{output}}{\code{list} of the following options:
       \itemize{
+        \item{variant_class:} \code{logical}, default FALSE;
+          output the sequence ontology variant class
         \item{sift:} \code{character}, default \code{character()}; 
           output prediction, score
           or both, valid strings are 'p', 's' or 'b'
@@ -124,6 +130,11 @@
           overlapping protein domains
         \item{no_escape:} \code{logical}, default FALSE; 
           don't URI escape HGVS string
+        \item{keep_csq:} \code{logical}, default FALSE; 
+          don't overwrite existing CSQ entry in VCF INFO field
+        \item{vcf_info_field:} \code{character}, default CSQ; 
+          change the name of the INFO key that VEP writes the consequences to 
+          in the VCF output.
         \item{terms:} \code{character}, default 'so'; type 
           of consequence terms to output, valid strings are 'ensembl' or 'so'
       }
@@ -131,17 +142,19 @@
     \item{\code{identifiers}}{\code{list} of the following options:
       \itemize{
         \item{hgvs:} \code{logical}, default FALSE; add hgvs ID's
+        \item{shift_hgvs:} \code{[0/1]}, default 1 (shift); 
+          enable or disable 3' shifting of HGVS notations
         \item{protein:} \code{logical}, default FALSE; add Ensembl protein ID's
         \item{symbol:} \code{logical}, default FALSE; add gene symbol
           (e.g. HGNC) (where available) to the output
         \item{ccds:} \code{logical}, default FALSE; add CCDS transcript ID's
-        \item{canonical:} \code{logical}, default FALSE; 
-          indicate if transcript is cononical transcript for the gene
         \item{uniprot:} \code{logical}, default FALSE; 
           adds identifiers for translated protein products from three
           UniProt-related databases  
         \item{tsl:} \code{logical}, default FALSE; 
           adds the transcript support level for this transcript
+        \item{canonical:} \code{logical}, default FALSE; 
+          indicate if transcript is cononical transcript for the gene
         \item{biotype:} \code{logical}, default FALSE; add biotype of 
           transcript
         \item{xref_seq:} \code{logical}, default FALSE; output aligned refseq 
@@ -180,8 +193,6 @@
         \item{vcf:} \code{logical}, default FALSE; write output in vcf format
         \item{json:} \code{logical}, default FALSE; write output in json format
         \item{gvf:} \code{logical}, default FALSE; write output in gcf format
-        \item{original:} \code{logical}, default FALSE; writes output as 
-          filtered set of input. Must be used with --filter.
         \item{fields:} \code{character}, default fields are
           'Uploaded_variation', 'Location', 'Allele', 'Gene', 'Feature', 
           'Feature_type', 'Consequence', 'cDNA_position', 'CDS_position', 
@@ -190,6 +201,8 @@
           for details. 
         \item{convert:} \code{character}, default \code{character()}; 
           converts input file to one of 'ensembl', 'vcf', or 'pileup'
+        \item{minimal:} \code{logical}, default FALSE; convert alleles to 
+          their most minimal representation before consequence calculation
       }
     }
     \item{\code{filterqc}}{\code{list} of the following options:
@@ -215,9 +228,9 @@
           of consequence data and retains others. 
         \item{per_gene:} \code{logical}, default FALSE; 
           output only the most severe consequence per gene
-        \item{pick_order:} \code{integer}, default \code{integer()};
-          customise the order of criteria applied when choosing a block of 
-          annotation data with e.g. --pick.
+        \item{pick_order:} \code{character}, See ensembl web page for 
+          default order; customise the order of criteria applied when 
+          choosing a block of annotation data with e.g. --pick.
         \item{most_severe:} \code{logical}, default FALSE; output only most 
           severe consequence per variation
         \item{summary:} \code{logical}, default FALSE; output a comma-separated
@@ -240,8 +253,6 @@
         \item{freq_filter:} \code{character}, default \code{character()};
           specify whether to exclude or include variants that pass 
           the frequency filter. Values are 'exclude' or 'include'. 
-        \item{filter:} \code{character}, default \code{character()}; 
-          filter the output on consequence type. See web page for details.
         \item{allow_non_variant:} \code{logical}, default FALSE; when using 
           VCF format as input and output, by default VEP will skip all 
           non-variant lines of input (i.e., where the ALT is NULL). When 
@@ -314,7 +325,7 @@
 }
 
 \examples{
-  ## See ?VEPParam for examples of contructing instances of a
+  ## See ?VEPParam for examples of constructing instances of a
   ## VEPParam object with different runtime options.
 }
 

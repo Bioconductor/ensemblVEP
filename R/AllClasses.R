@@ -64,5 +64,5 @@ setClass("VEPParam78", contains="VEPParam",
         colocatedVariants="list",
         dataformat="list"),
     prototype(
-        version=78),
+        version=c(78, 80)),
     validity=.validity)

@@ -172,7 +172,7 @@ filterqcOpts <- function(version, ..., check_ref=logical(1),
         opts$pick <- pick
         opts$pick_allele <- pick_allele
     }
-    if (any(version == 78)) { 
+    if (any(version >= 78)) { 
         opts$flag_pick <- flag_pick
         opts$flag_pick_allele <- flag_pick_allele
         opts$pick_order <- pick_order
@@ -198,7 +198,7 @@ identifierOpts <- function(version, ..., hgvs=logical(1),
 
     if (any(version >= 77))
         opts$uniprot <- uniprot
-    if (any(version == 78))
+    if (any(version >= 78))
         opts$tsl <- tsl 
 
     opts

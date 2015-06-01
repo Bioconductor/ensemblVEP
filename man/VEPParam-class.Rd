@@ -250,12 +250,12 @@
       \code{currentVEP()}:
       Invoked with no arguments.
       Returns the most current \code{VEPParam} class and supported
-      Ensembl API versions.
+      Ensembl API versions. A single class may support more than one version.
     }
     \item{}{
       \code{supportedVEP()}:
       Invoked with no arguments.
-      Returns a list of \code{VEPParam} subclasses and the the Ensembl 
+      Returns a list of \code{VEPParam} subclasses and the Ensembl 
       API versions they support.
     }
   }
