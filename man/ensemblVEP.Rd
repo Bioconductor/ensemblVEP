@@ -71,9 +71,10 @@
   ## The default behavior returns a GRanges with the consequence
   ## data as metadata columns.
   file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation") 
+  \dontrun{
   gr <- ensemblVEP(file)
   gr[1:3]
- 
+  }
   ## When the 'vcf' option is TRUE, a VCF object is returned.
   myparam <- VEPParam(dataformat=c(vcf=TRUE))
   vcf <- ensemblVEP(file, param=myparam)
@@ -90,7 +91,7 @@
   ## By default all fields are returned. See ?VEPParam for details.
  
   ## When comparing ensemblVEP() results to the data in the
-  ## input vcf we see that variant 20:1230237 was not returned.
+  ## input vcf we see variant 20:1230237 was not returned.
   vcf_input <- readVcf(file, "hg19")
   rowRanges(vcf_input)
   rowRanges(vcf)
