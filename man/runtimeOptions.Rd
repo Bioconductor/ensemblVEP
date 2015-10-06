@@ -315,7 +315,7 @@
   }
 }
 
-\author{Valerie Obenchain <vobencha@fhcrc.org>}
+\author{Valerie Obenchain}
 
 \seealso{
   \itemize{
