@@ -82,10 +82,10 @@
 \examples{
   file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation") 
   vep <- ensemblVEP(file, param=VEPParam(dataformat=c(vcf=TRUE)))
-  
+ 
   ## The returned 'CSQ' data are unparsed.
   info(vep)$CSQ
-  
+ 
   ## Parse into a GRanges and include the 'VCFRowID' column.
   vcf <- readVcf(file, "hg19")
   csq <- parseCSQToGRanges(vep, VCFRowID=rownames(vcf))

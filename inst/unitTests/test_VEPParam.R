@@ -1,16 +1,19 @@
 test_VEPParam_construction <- function()
 {
-    p78 <- VEPParam()
-    checkIdentical(VEPParam(78), p78) 
+    p82 <- VEPParam()
+    checkIdentical(VEPParam(82), p82) 
+    p78 <- VEPParam(78)
     p77 <- VEPParam(77)
     p75 <- VEPParam(75)
     p73 <- VEPParam(73)
     p67 <- VEPParam(67)
+    p82 <- VEPParam(82)
     checkTrue(all(slotNames(p67) %in% slotNames(p73)))
     checkTrue(all(slotNames(p67) %in% slotNames(p75)))
     checkTrue(all(slotNames(p73) %in% slotNames(p75)))
     checkTrue(all(slotNames(p75) %in% slotNames(p77)))
     checkTrue(all(slotNames(p77) %in% slotNames(p78)))
+    checkTrue(all(slotNames(p78) %in% slotNames(p82)))
 
     p <- VEPParam()
     p <- VEPParam(basic=list())
@@ -18,6 +21,12 @@ test_VEPParam_construction <- function()
     checkException(VEPParam(basic=list(foo="")), silent=TRUE)
     checkException(VEPParam(basic=list(quiet="yes")), silent=TRUE)
     checkException(VEPParam(basic=c(verbose="foo")), silent=TRUE)
+}
+
+test_VEPParam82_new_flags <- function()
+{
+    p <- VEPParam(82)
+    checkIdentical(output(p)$gene_phenotype, logical(1))
 }
 
 test_VEPParam78_new_flags <- function()

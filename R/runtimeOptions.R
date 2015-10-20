@@ -55,7 +55,7 @@ inputOpts <- function(version, ..., species="homo_sapiens",
 cacheOpts <- function(version, ..., cache=logical(1), dir="$HOME/.vep", 
                       dir_cache="$HOME/.vep",dir_plugins="$HOME/.vep", 
                       offline=logical(1), fasta=character(), 
-                      cache_version=numeric())
+                      cache_version=numeric(), show_cache_info=logical(1))
 {
     if (any(version == 67)) {
         list(cache=cache, dir=dir, offline=offline, fasta=fasta)
@@ -65,12 +65,14 @@ cacheOpts <- function(version, ..., cache=logical(1), dir="$HOME/.vep",
     } else {
         list(cache=cache, dir=dir, dir_cache=dir_cache, 
              dir_plugins=dir_plugins, offline=offline, fasta=fasta, 
-             cache_version=cache_version)
+             cache_version=cache_version, show_cache_info=show_cache_info)
     }
 }
 
-outputOpts <- function(version, ..., sift=character(), polyphen=character(), 
-                       humdiv=logical(1), regulatory=logical(1), 
+outputOpts <- function(version, ..., variant_class=logical(1),
+                       sift=character(), polyphen=character(), 
+                       humdiv=logical(1), gene_phenotype=logical(1),
+                       regulatory=logical(1), 
                        cell_type=character(), custom=character(), 
                        plugin=character(),
                        individual=character(), phased=logical(1),
@@ -94,12 +96,15 @@ outputOpts <- function(version, ..., sift=character(), polyphen=character(),
              summary=summary, per_gene=per_gene, convert=convert, fields=fields,
              vcf=vcf, gvf=gvf, original=original, custom=custom, plugin=plugin)
     } else if (any(version >= 77)) {
-        list(sift=sift, polyphen=polyphen, humdiv=humdiv, 
-             regulatory=regulatory,
+        opts <- list(variant_class=variant_class, sift=sift, polyphen=polyphen, 
+             humdiv=humdiv, regulatory=regulatory,
              cell_type=cell_type, custom=custom, plugin=plugin,
              individual=individual, phased=phased, allele_number=allele_number,
              total_length=total_length, numbers=numbers, domains=domains,
              no_escape=no_escape, terms=terms)
+        if (version > 81)
+            opts$gene_phenotype <- gene_phenotype
+        opts
     } else {
         list(sift=sift, polyphen=polyphen, regulatory=regulatory,
              cell_type=cell_type, custom=custom, plugin=plugin,
@@ -227,16 +232,17 @@ colocatedVariantsOpts <- function(version, ..., check_existing=logical(1),
 
 dataformatOpts <- function(version, ..., vcf=logical(1), json=logical(1),
                            gvf=logical(1), original=logical(1), 
-                           fields=character(), convert=character())
+                           fields=character(), convert=character(),
+                           minimal=logical(1))
 {
     if (any(version == 67))
         stop("'identifierOpts' not supported for VEP 67")
-    else
+    else if (any(version > 67 & version < 77))
         opts <- list(vcf=vcf, gvf=gvf, original=original, fields=fields, 
                      convert=convert)
-
-    if (any(version >= 77))
-        opts$json <- json 
+    else if (any(version >= 77))
+        opts <- list(vcf=vcf, json=json, gvf=gvf, fields=fields, 
+                     convert=convert, minimal=minimal)
 
     opts
 }

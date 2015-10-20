@@ -89,7 +89,7 @@
           filename or directory to files to use for reference sequences 
         \item{cache_version:} \code{character}, default \code{character()};
           use a different cache version than the assumed default 
-        \item{show_cache_version:} \code{logical}, default FALSE;
+        \item{show_cache_info:} \code{logical}, default FALSE;
           show source version information for selected cache and quit
       }
     }
@@ -105,6 +105,9 @@
           score or both, valid strings are 'p', 's' or 'b'
         \item{humdiv:} \code{logical}, default FALSE; 
           retrieve the humDiv PolyPhen prediction instead of humVar
+        \item{gene_phenotype:} \code{logical}, default FALSE; 
+          indicates if overlapped gene is associated with a phenotype, disease
+          or trait
         \item{regulatory:} \code{logical}, default FALSE; identify overlaps 
           with regulatory regions
         \item{cell_type:} \code{character}, default \code{character()}; 

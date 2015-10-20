@@ -14,6 +14,8 @@
 \alias{VEPParam77-class}
 \alias{class:VEPParam78}
 \alias{VEPParam78-class}
+\alias{class:VEPParam82}
+\alias{VEPParam82-class}
 
 % Constructors:
 \alias{VEPParam}
@@ -74,6 +76,8 @@
 \alias{identifier<-,VEPParam77-method}
 \alias{identifier,VEPParam78-method}
 \alias{identifier<-,VEPParam78-method}
+\alias{identifier,VEPParam82-method}
+\alias{identifier<-,VEPParam82-method}
 \alias{dataformat}
 \alias{dataformat<-}
 \alias{dataformat,VEPParam73-method}
@@ -84,6 +88,8 @@
 \alias{dataformat<-,VEPParam77-method}
 \alias{dataformat,VEPParam78-method}
 \alias{dataformat<-,VEPParam78-method}
+\alias{dataformat,VEPParam82-method}
+\alias{dataformat<-,VEPParam82-method}
 \alias{colocatedVariants}
 \alias{colocatedVariants<-}
 \alias{colocatedVariants,VEPParam73-method}
@@ -94,6 +100,8 @@
 \alias{colocatedVariants<-,VEPParam77-method}
 \alias{colocatedVariants,VEPParam78-method}
 \alias{colocatedVariants<-,VEPParam78-method}
+\alias{colocatedVariants,VEPParam82-method}
+\alias{colocatedVariants<-,VEPParam82-method}
 
 % helpers:
 \alias{currentVEP}
@@ -106,9 +114,7 @@
 
 \description{
   \code{VEPParam} is a VIRTUAL class with concrete subclasses 
-  \code{VEPParam67}, \code{VEPParam73}, \code{VEPParam75},
-  \code{VEPParam77} and \code{VEPParam78}. These objects store 
-  runtime options for the Ensembl Variant Effect Predictor.
+  that store runtime options for the Ensembl Variant Effect Predictor.
 }
 
 \details{
@@ -123,14 +129,15 @@
     }
     \item{VEPParam subclasses}:{
       As of \code{ensemblVEP} version >= 1.3.3 a new subclass of 
-      \code{VEPParam} will be created when there is a substantial change 
+      \code{VEPParam} is created when there is a substantial change 
       in the Ensembl variant database API. The subclass will support all 
       versions up until the next 'substantial' version change. The 
       \code{version} accessor on a \code{VEPParam} object lists all versions 
       that particular \code{VEPParam} class supports. By default the
       \code{VEPParam} constructor creates a subclass that supports the
       current version. To create a \code{VEPParam} for a specific version,
-      supply the version as an argument.
+      supply the version as an argument. Use \code{supportedVEP()} to see
+      all supported versions.
     }
     \item{Archived versions}:{
       Past versions of the VEP script and corresponding data are available
