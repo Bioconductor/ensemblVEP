@@ -18,7 +18,7 @@ setMethod("parseCSQToGRanges", "VCF",
         if (all(is.na(ulst)))
             return(rowRanges(x))
 
-        elt <- elementLengths(info(x)[[info.key]])
+        elt <- elementNROWS(info(x)[[info.key]])
         hdr <- info(header(x))[info.key, "Description"]
         nms <- unlist(strsplit(strsplit(hdr, "Format: ")[[1]][2], "\\|"))
         raw <- strsplit(ulst, "\\|")

@@ -1,5 +1,6 @@
 import(methods)
 import(BiocGenerics)
+import(S4Vectors)
 import(GenomicRanges)
 import(VariantAnnotation)
 importClassesFrom(Biostrings, DNAStringSet)

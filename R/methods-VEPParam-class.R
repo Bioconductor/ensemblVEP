@@ -359,7 +359,7 @@ setMethod(show, "VEPParam",
     nms <- slotNames(class(object))
     for (i in nms[!nms %in% c("version", "scriptPath")]) {
         elt <- slot(object, i)
-        drop <- elt == FALSE | elementLengths(elt) == 0L
+        drop <- elt == FALSE | elementNROWS(elt) == 0L
         drop[is.na(drop)] <- FALSE
         if (is.null(nms <- names(elt)[!drop]))
             nms <- character()
