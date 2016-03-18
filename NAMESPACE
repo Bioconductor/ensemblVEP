@@ -4,6 +4,7 @@ import(S4Vectors)
 import(GenomicRanges)
 import(VariantAnnotation)
 importClassesFrom(Biostrings, DNAStringSet)
+importMethodsFrom(SummarizedExperiment, rowRanges)
 
 exportPattern("^[^\\.]")
 exportClassPattern("^.*$")

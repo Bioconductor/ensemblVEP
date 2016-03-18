@@ -89,7 +89,7 @@ basic(param)
 
 Using a vcf file from \Rpackage{VariantAnnotation} as input, we query 
 Ensembl VEP with the default runtime parameters.
-<<rtn_GRanges>>=
+<<rtn_GRanges, eval=FALSE>>=
 fl <- system.file("extdata", "gl_chr1.vcf", package="VariantAnnotation")
 gr <- ensemblVEP(fl)
 @
@@ -97,9 +97,43 @@ gr <- ensemblVEP(fl)
 Consequence data are parsed into the metadata columns of
 the \Robject{GRanges}. To control the type and amount of data 
 returned see the options in \Rcode{output(VEPParam())}.
-<<show_GRanges>>=
-head(gr, 3)
-@
+
+\begin{verbatim}
+> head(gr, 3)
+GRanges object with 3 ranges and 23 metadata columns:
+               seqnames             ranges strand |   Allele
+                  <Rle>          <IRanges>  <Rle> | <factor>
+     rs6054257       20 [  14370,   14370]      * |        A
+  20:17330_T/A       20 [  17330,   17330]      * |        A
+     rs6040355       20 [1110696, 1110696]      * |        G
+                         Consequence   IMPACT   SYMBOL            Gene
+                            <factor> <factor> <factor>        <factor>
+     rs6054257    intergenic_variant MODIFIER     <NA>            <NA>
+  20:17330_T/A    intergenic_variant MODIFIER     <NA>            <NA>
+     rs6040355 upstream_gene_variant MODIFIER    PSMF1 ENSG00000125818
+               Feature_type         Feature              BIOTYPE     EXON
+                   <factor>        <factor>             <factor> <factor>
+     rs6054257         <NA>            <NA>                 <NA>     <NA>
+  20:17330_T/A         <NA>            <NA>                 <NA>     <NA>
+     rs6040355   Transcript ENST00000479715 processed_transcript     <NA>
+                 INTRON    HGVSc    HGVSp cDNA_position CDS_position
+               <factor> <factor> <factor>      <factor>     <factor>
+     rs6054257     <NA>     <NA>     <NA>          <NA>         <NA>
+  20:17330_T/A     <NA>     <NA>     <NA>          <NA>         <NA>
+     rs6040355     <NA>     <NA>     <NA>          <NA>         <NA>
+               Protein_position Amino_acids   Codons Existing_variation
+                       <factor>    <factor> <factor>           <factor>
+     rs6054257             <NA>        <NA>     <NA>               <NA>
+  20:17330_T/A             <NA>        <NA>     <NA>               <NA>
+     rs6040355             <NA>        <NA>     <NA>               <NA>
+               DISTANCE   STRAND    FLAGS SYMBOL_SOURCE   HGNC_ID
+               <factor> <factor> <factor>      <factor>  <factor>
+     rs6054257     <NA>     <NA>     <NA>          <NA>      <NA>
+  20:17330_T/A     <NA>     <NA>     <NA>          <NA>      <NA>
+     rs6040355     2610        1     <NA>          HGNC HGNC:9571
+  -------
+  seqinfo: 1 sequence from  genome
+\end{verbatim}
 
 Next we use a vcf of structural variants as input
 <<structural_vcf>>=
