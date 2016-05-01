@@ -1,10 +1,26 @@
+CHANGES IN VERSION 1.12.0
+------------------------
+
+NEW FEATURES
+
+    o add support for Ensembl release 82
+
+    o add support for Ensembl relase 84
+
+
+MODIFICATIONS
+
+    o elementLengths was renamed -> elementNROWS in S4Vectors
+
+    o mark as unsupported on windows; Ensembl release 84 requires tabix
+
+
 CHANGES IN VERSION 1.10.0
 ------------------------
 
 NEW FEATURES
 
     o VEPParam78 class supports Ensembl 80 
-
 
 
 CHANGES IN VERSION 1.8.0
