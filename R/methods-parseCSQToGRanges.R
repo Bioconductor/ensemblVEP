@@ -27,6 +27,7 @@ setMethod("parseCSQToGRanges", "VCF",
             csq[i, 1:length(raw[[i]])] <- raw[[i]]
         csq[!nzchar(csq)] <- NA
         colnames(csq) <- nms
+        csq <- data.frame(csq, stringsAsFactors=FALSE)
  
         rd <- rowRanges(x)
         gr <- rd[rep(seq_along(rd), elt)]
