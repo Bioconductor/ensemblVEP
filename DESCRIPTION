@@ -4,7 +4,7 @@ Title: R Interface to Ensembl Variant Effect Predictor
 Author: Valerie Obenchain
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
 Depends: methods, BiocGenerics, GenomicRanges, VariantAnnotation
-Imports: S4Vectors (>= 0.9.25), Biostrings, SummarizedExperiment
+Imports: S4Vectors (>= 0.9.25), Biostrings, SummarizedExperiment, GenomeInfoDb
 Suggests: RUnit
 Description: Query the Ensembl Variant Effect Predictor via the perl API
 SystemRequirements: Ensembl VEP (API version 84) and the Perl package

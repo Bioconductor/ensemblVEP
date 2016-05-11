@@ -5,6 +5,7 @@ import(GenomicRanges)
 import(VariantAnnotation)
 importClassesFrom(Biostrings, DNAStringSet)
 importMethodsFrom(SummarizedExperiment, rowRanges)
+importMethodsFrom(GenomeInfoDb, "genome<-")
 
 exportPattern("^[^\\.]")
 exportClassPattern("^.*$")
