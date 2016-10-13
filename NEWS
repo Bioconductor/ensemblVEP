@@ -1,11 +1,17 @@
+CHANGES IN VERSION 1.14.0
+------------------------
+
+NEW FEATURES
+
+    o add support for Ensembl release 85 and 86
+
+
 CHANGES IN VERSION 1.12.0
 ------------------------
 
 NEW FEATURES
 
-    o add support for Ensembl release 82
-
-    o add support for Ensembl relase 84
+    o add support for Ensembl release 82 and 84
 
 
 MODIFICATIONS
