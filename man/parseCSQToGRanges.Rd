@@ -56,13 +56,17 @@
       If rownames from the original VCF are provided as 
       \code{VCFRowID} a metadata column is included in the result
       that maps back to the row (variant) in the original VCF.
+
+      If no 'CSQ' column is found the function returns the data in
+      \code{rowRanges()}.
     }
   }
 }
 
 \value{
   Returns a \code{GRanges} object with consequence data as the
-  metadata columns.
+  metadata columns. If no 'CSQ' column is found the \code{GRanges}
+  from \code{rowRanges()} is returned.
 }
 
 \author{
