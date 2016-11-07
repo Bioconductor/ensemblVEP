@@ -46,18 +46,18 @@
 \details{
   \describe{
     \item{}{
-      When \code{ensemblVEP} returns a \code{VCF} object, the
-      consequence data are returned unparsed in the 'CSQ' INFO 
-      column. \code{parseCSQToGRanges} parses these data into a 
-      \code{GRanges} object that is expanded to match the dimension 
-      of the 'CSQ' data. Because each variant can have multiple 
+      When \code{ensemblVEP} returns a \code{VCF} object, the consequence data
+      are returned unparsed in the 'CSQ' INFO column. \code{parseCSQToGRanges}
+      parses these data into a \code{GRanges} object that is expanded to match
+      the dimension of the 'CSQ' data. Because each variant can have multiple
       matches, the ranges in the \code{GRanges} are repeated.
 
-      If rownames from the original VCF are provided as 
-      \code{VCFRowID} a metadata column is included in the result
-      that maps back to the row (variant) in the original VCF.
+      If rownames from the original VCF are provided as \code{VCFRowID} a
+      metadata column is included in the result that maps back to the row
+      (variant) in the original VCF.  This option is only applicable when the
+      \code{info.key} field has data (is not empty).
 
-      If no 'CSQ' column is found the function returns the data in
+      If no \code{info.key} column is found the function returns the data in
       \code{rowRanges()}.
     }
   }
