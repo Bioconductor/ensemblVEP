@@ -78,7 +78,7 @@ outputOpts <- function(version, ..., variant_class=logical(1),
                        individual=character(), phased=logical(1),
                        allele_number=integer(), total_length=character(),
                        numbers=character(), domains=character(),
-                       no_escape=logical(1), terms="so", hgvs=logical(1),
+                       no_escape=logical(1), hgvs=logical(1),
                        gene=logical(1), protein=logical(1), hgnc=logical(1),
                        ccds=logical(1), canonical=logical(1),
                        xref_refseq=logical(1),
@@ -88,7 +88,7 @@ outputOpts <- function(version, ..., variant_class=logical(1),
                        original=logical(1))
 {
     if (any(version == 67)) {
-        list(terms=terms, sift=sift, polyphen=polyphen, regulatory=regulatory,
+        list(terms="so", sift=sift, polyphen=polyphen, regulatory=regulatory,
              cell_type=cell_type, hgvs=hgvs, gene=gene, protein=protein,
              hgnc=hgnc, ccds=ccds, canonical=canonical, 
              xref_refseq=xref_refseq,
@@ -101,16 +101,18 @@ outputOpts <- function(version, ..., variant_class=logical(1),
              cell_type=cell_type, custom=custom, plugin=plugin,
              individual=individual, phased=phased, allele_number=allele_number,
              total_length=total_length, numbers=numbers, domains=domains,
-             no_escape=no_escape, terms=terms)
+             no_escape=no_escape, terms="so")
         if (version > 81)
             opts$gene_phenotype <- gene_phenotype
+        if (version >= 88)
+            opts$terms <- "SO" 
         opts
     } else {
         list(sift=sift, polyphen=polyphen, regulatory=regulatory,
              cell_type=cell_type, custom=custom, plugin=plugin,
              individual=individual, phased=phased, allele_number=allele_number,
              total_length=total_length, numbers=numbers, domains=domains,
-             no_escape=no_escape, terms=terms)
+             no_escape=no_escape, terms="so")
     }
 }
 

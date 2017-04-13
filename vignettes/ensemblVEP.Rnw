@@ -45,6 +45,10 @@ returns the results as \R objects or a file on disk. To use this
 package the Ensembl VEP perl script must be installed in your path.
 See the package README for details.
 
+NOTE: As of Ensembl version 88 the VEP script has been renamed from
+variant\_effect\_predictor.pl to vep. The ensemblVEP package code
+and documentation have been updated to reflect this change.
+
 \noindent Downloads:
 \url{http://uswest.ensembl.org/info/docs/tools/vep/index.html}
 \\
@@ -54,7 +58,7 @@ See the package README for details.
 \noindent To test that Ensembl VEP is properly installed, enter the
 name of the script from the command line:
 
-{\it variant\_effect\_predictor.pl}
+{\it vep}
 \\
 
 

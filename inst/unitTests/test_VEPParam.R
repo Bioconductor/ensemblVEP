@@ -1,7 +1,7 @@
 test_VEPParam_construction <- function()
 {
-    p82 <- VEPParam()
-    checkIdentical(VEPParam(82), p82) 
+    p88 <- VEPParam()
+    checkIdentical(VEPParam(88), p88) 
     p78 <- VEPParam(78)
     p77 <- VEPParam(77)
     p75 <- VEPParam(75)

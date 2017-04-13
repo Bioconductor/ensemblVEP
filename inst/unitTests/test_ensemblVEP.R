@@ -1,9 +1,8 @@
-file <- system.file("extdata", "structural.vcf", 
-                    package="VariantAnnotation")
+file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation") 
 
 test_ensemblVEP <- function()
 {
-    gr <- ensemblVEP(file, param=VEPParam(input=c(format="vcf")))
+    gr <- ensemblVEP(file)
     checkIdentical(unique(nzchar(as.matrix(mcols(gr)))), TRUE)
     target <- c("Allele", "Gene", "Feature", "Feature_type",
                 "Consequence", "cDNA_position", "CDS_position", 

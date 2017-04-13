@@ -73,5 +73,14 @@ setClass("VEPParam82", contains="VEPParam",
         colocatedVariants="list",
         dataformat="list"),
     prototype(
-        version=82),
+        version=c(82,83,84,85,86,87)),
+    validity=.validity)
+
+setClass("VEPParam88", contains="VEPParam",
+    representation(
+        identifier="list",
+        colocatedVariants="list",
+        dataformat="list"),
+    prototype(
+        version=c(88)),
     validity=.validity)

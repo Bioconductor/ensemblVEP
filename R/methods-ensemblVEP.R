@@ -7,10 +7,12 @@
     ## only needed on the BioC build system
     if (nchar(Sys.getenv("VEP_PATH")))
         return(Sys.getenv("VEP_PATH"))
-    loc <- unname(Sys.which("variant_effect_predictor.pl"))
-    if (!grepl("variant", loc, ignore.case=TRUE))
-        stop("Couldn't find variant_effect_predictor.pl in your PATH.")
-    loc
+    loc0 <- unname(Sys.which("variant_effect_predictor.pl"))
+    loc1 <- unname(Sys.which("vep"))
+    if (!grepl("variant_effect_predictor.pl", loc0, ignore.case=TRUE) &&
+        !grepl("vep", loc1, ignore.case=TRUE)) 
+        stop("Couldn't find variant_effect_predictor.pl or vep in your PATH.")
+    ifelse(nchar(loc0) > 0L, loc0, loc1)
 }
 
 setMethod("ensemblVEP", "character", 
