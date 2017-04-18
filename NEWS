@@ -1,14 +1,21 @@
 CHANGES IN VERSION 1.16.0
 ------------------------
 
-NOTE
-
-    o As of Ensembl release 88 the name of the script was changed
+NOTE: As of Ensembl release 88 the name of the script was changed
       from variant_effect_predictor.pl to vep.
 
 NEW FEATURES
 
     o add support for Ensembl release 85-88
+
+MODIFICATIONS
+
+    o document parseCSQToGRanges() behavior when no 'CSQ' data are found 
+
+    o parseCSQToGRanges() returns mcols with names from CSQ field when 
+      CSQ is present but empty 
+
+    o add DBI perl module to SystemRequirements 
 
 
 CHANGES IN VERSION 1.14.0
