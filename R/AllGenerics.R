@@ -29,7 +29,7 @@ setGeneric("parseCSQToGRanges", signature = "x",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### VEPParam 
 ###
-
+setGeneric(".validity", function(object) standardGeneric(".validity"))
 setGeneric("basic", function(x) standardGeneric("basic"))
 setGeneric("basic<-", function(x, value) standardGeneric("basic<-"))
 setGeneric("input", function(x) standardGeneric("input"))
@@ -52,3 +52,5 @@ setGeneric("colocatedVariants<-",
     function(x, value) standardGeneric("colocatedVariants<-"))
 setGeneric("dataformat", function(x) standardGeneric("dataformat"))
 setGeneric("dataformat<-", function(x, value) standardGeneric("dataformat<-"))
+setGeneric("flags", function(x) standardGeneric("flags"))
+setGeneric("flags<-", function(x, value) standardGeneric("flags<-"))
