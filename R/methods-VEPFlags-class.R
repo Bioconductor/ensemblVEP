@@ -71,6 +71,7 @@ setMethod("flags<-", "VEPFlags",
     value <- .formatList(value)
     value <- flagOpts(value)
     slot(x, "flags")[names(value)] <- value
+    x
 })
 
 # version and scriptpath see methods-VEPParm-class.R
