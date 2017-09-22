@@ -5,6 +5,7 @@
 ### -------------------------------------------------------------------------
 ### VEPParam (VIRTUAL)
 ###
+setGeneric(".validity", function(object) standardGeneric(".validity"))
 
 setClass("VEPParam",
     representation("VIRTUAL",

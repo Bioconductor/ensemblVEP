@@ -11,9 +11,14 @@ VEPFlags <- function(version=max(unlist(currentVEP())),
                      flags=list(), ...){
 
     .version_error(version)
-    new("VEPFlags", ..., flags=flags, version=version,
-        scriptPath=scriptPath)
-    
+    s <- supportedVEP()
+    v <- s[[length(s)]]
+    if(any(version %in% v[1]:v[2])){
+        new("VEPFlags", ..., flags=flags, version=version,
+            scriptPath=scriptPath)
+    }else{
+        stop("undefined VEPFlags version. Try VEPParam()")
+    }
 }
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

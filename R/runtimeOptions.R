@@ -6,7 +6,7 @@
 {
     if (!any(x %in% unlist(supportedVEP())))
         stop(paste0("'version' must be one of ", 
-             paste(unname(unlist(supportedVEP())), collapse=",")))
+             paste(unique(unname(unlist(supportedVEP()))), collapse=",")))
 }
 
 ### basicOpts, advancedOpts are the same for all versions

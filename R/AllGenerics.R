@@ -11,6 +11,10 @@ setGeneric("ensemblVEP", signature = "file",
                standardGeneric("ensemblVEP")
 )
 
+setGeneric(".runtimeOpts", signature = "param",
+           function(param, ...)
+           standardGeneric(".runtimeOpts"))
+
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### parseCSQToGRanges 
 ###
@@ -29,7 +33,6 @@ setGeneric("parseCSQToGRanges", signature = "x",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### VEPParam 
 ###
-setGeneric(".validity", function(object) standardGeneric(".validity"))
 setGeneric("basic", function(x) standardGeneric("basic"))
 setGeneric("basic<-", function(x, value) standardGeneric("basic<-"))
 setGeneric("input", function(x) standardGeneric("input"))

@@ -69,7 +69,7 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
         else if (any(version %in% c(88)))
             VEP_class <- "VEPParam88"
         else
-            stop("undefined VEP version")
+            stop("undefined VEPParam version. Try VEPFlags()")
 
         new(VEP_class, ..., basic=basic_opts,
             database=database_opts, advanced=advanced_opts,
