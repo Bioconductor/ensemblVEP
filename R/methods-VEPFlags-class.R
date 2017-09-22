@@ -43,6 +43,8 @@ flagOpts <- function(flags){
         flags = c(flags, terms="SO")
     if (!("database" %in% nm))
         flags = c(flags, database=TRUE)
+    if (!("vcf" %in% nm))
+        flags = c(flags, vcf=FALSE)
     flags
 }
 
