@@ -9,4 +9,8 @@ test_ensemblVEP <- function()
                 "Protein_position", "Amino_acids", "Codons",
                 "Existing_variation", "DISTANCE", "STRAND")
     checkTrue(all(target %in% names(mcols(gr))))
+    # check bad arguments/flags
+    checkException(ensemblVEP("ImNotAFile"))
+    checkException(ensemblVEP(fl, VEPFlags(flags=list(nofound=20))))
+    checkException(ensemblVEP(fl, VEPFlags(flags=list(sift=20))))
 }
