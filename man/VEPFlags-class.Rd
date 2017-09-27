@@ -16,7 +16,7 @@
 \alias{flags<-}
 \alias{flags,VEPFlags-method}
 \alias{flags<-,VEPFlags-method}
-\
+
 % helpers:
 \alias{currentVEP}
 \alias{supportedVEP}
