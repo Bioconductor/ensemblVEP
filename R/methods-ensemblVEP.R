@@ -58,9 +58,6 @@ setMethod("ensemblVEP", "character", function(file, param=VEPFlags(), ...){
 
 })
 
-
-
-
 setMethod(.runtimeOpts, "VEPParam", function(param, ...){
     ops <- c(basic(param), input(param), cache(param),
              output(param), filterqc(param),
