@@ -31,6 +31,8 @@ flagOpts <- function(flags){
         flags = c(flags, host="useastdb.ensembl.org")
     if (!("database" %in% nm))
         flags = c(flags, database=TRUE)
+    if (!("vcf" %in% nm))
+        flags = c(flags, vcf=FALSE)
     flags
 }
 
