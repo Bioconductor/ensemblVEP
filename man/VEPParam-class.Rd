@@ -111,36 +111,32 @@
 \alias{colocatedVariants,VEPParam88-method}
 \alias{colocatedVariants<-,VEPParam88-method}
 
-% helpers:
-\alias{currentVEP}
-\alias{supportedVEP}
-
 % "show" method:
 \alias{show,VEPParam-method}
 
 \title{VEPParam objects}
 
 \description{
-  \code{VEPParam} is a VIRTUAL class with concrete subclasses 
+  \code{VEPParam} is a VIRTUAL class with concrete subclasses
   that store runtime options for the Ensembl Variant Effect Predictor.
 }
 
 \details{
   \itemize{
     \item{}{
-      The \code{VEPParam} family of objects stores runtime options for querying 
-      the Ensembl Variant Effect Predictor (VEP). Brief descriptions of the 
-      options are provided below. For complete details, see the Ensembl VEP 
+      The \code{VEPParam} family of objects stores runtime options for querying
+      the Ensembl Variant Effect Predictor (VEP). Brief descriptions of the
+      options are provided below. For complete details, see the Ensembl VEP
       web page.
 
       \url{http://uswest.ensembl.org/info/docs/tools/vep/script/vep_options.html}
     }
     \item{VEPParam subclasses}:{
-      As of \code{ensemblVEP} version >= 1.3.3 a new subclass of 
-      \code{VEPParam} is created when there is a substantial change 
-      in the Ensembl variant database API. The subclass will support all 
-      versions up until the next 'substantial' version change. The 
-      \code{version} accessor on a \code{VEPParam} object lists all versions 
+      As of \code{ensemblVEP} version >= 1.3.3 a new subclass of
+      \code{VEPParam} is created when there is a substantial change
+      in the Ensembl variant database API. The subclass will support all
+      versions up until the next 'substantial' version change. The
+      \code{version} accessor on a \code{VEPParam} object lists all versions
       that particular \code{VEPParam} class supports. By default the
       \code{VEPParam} constructor creates a subclass that supports the
       current version. To create a \code{VEPParam} for a specific version,
@@ -149,33 +145,33 @@
     }
     \item{Archived versions}:{
       Past versions of the VEP script and corresponding data are available
-      on the Ensembl archive page. 
+      on the Ensembl archive page.
 
       \url{http://uswest.ensembl.org/info/website/archives/index.html}
 
       Archived scripts can query cached data or perform a live query
-      against the European mirror. (The US mirror, useastdb, hosts 
-      the current release only.) The appropriate version of cached data 
-      can be downloaded from the same page as the archived script. 
+      against the European mirror. (The US mirror, useastdb, hosts
+      the current release only.) The appropriate version of cached data
+      can be downloaded from the same page as the archived script.
     }
     \item{Multiple versions}:{
-      By default, the variant_effect_predictor.pl script found in the 
-      PATH is the script used. If multiple versions of the script are 
+      By default, the variant_effect_predictor.pl script found in the
+      PATH is the script used. If multiple versions of the script are
       installed locally a few steps must be taken to ensure the
       proper version is used.
 
       \itemize{
-        \item{scriptPath}{
-          Provide the full path to the variant_effect_predictor.pl script
-          (including the .pl extension) as the \code{scriptPath} argument 
-          to the \code{VEPParam} constructor. 
-        }
-        \item{cache directories}{
-          By default, the cache runtime options \code{dir}, \code{dir_cache} 
-          and \code{dir_plugins} are set to $HOME/.vep. These locations
-          need to be specified if the data are not in the default
-          $HOME/.vep location. 
-        }
+	\item{scriptPath}{
+	  Provide the full path to the variant_effect_predictor.pl script
+	  (including the .pl extension) as the \code{scriptPath} argument
+	  to the \code{VEPParam} constructor.
+	}
+	\item{cache directories}{
+	  By default, the cache runtime options \code{dir}, \code{dir_cache}
+	  and \code{dir_plugins} are set to $HOME/.vep. These locations
+	  need to be specified if the data are not in the default
+	  $HOME/.vep location.
+	}
       }
     }
   }
@@ -194,43 +190,43 @@
 \section{Constructor}{
   \describe{
     \item{}{
-      \code{VEPParam(version=max(unlist(currentVEP()), basic=basicOpts(), 
-                     input=inputOpts(), cache=cacheOpts(), output=outputOpts(),
-                     filterqc=filterqcOpts(), database=databaseOpts(), 
-                     advanced=advancedOpts(), identifier=identifierOpts(), 
-                     colocatedVariants=colocatedVariantsOpts(),
-                     dataformat=dataformatOpts(), scriptPath=character(), 
-                     ...)}
+      \code{VEPParam(version=max(unlist(currentVEP()), basic=basicOpts(),
+		     input=inputOpts(), cache=cacheOpts(), output=outputOpts(),
+		     filterqc=filterqcOpts(), database=databaseOpts(),
+		     advanced=advancedOpts(), identifier=identifierOpts(),
+		     colocatedVariants=colocatedVariantsOpts(),
+		     dataformat=dataformatOpts(), scriptPath=character(),
+		     ...)}
       Creates a \code{VEPParam} object.
       \describe{
-        \item{\code{version}}{
-          Numeric specifying the Ensembl API version(s) supported.}
-        \item{\code{basic}}{
-          \code{list} of basic options}
-        \item{\code{input}}{
-          \code{list} of input options}
-        \item{\code{cache}}{
-          \code{list} of cache options}
-        \item{\code{output}}{
-          \code{list} of output options}
-        \item{\code{filterqc}}{
-          \code{list} of filterqc options}
-        \item{\code{database}}{
-          \code{list} of database options}
-        \item{\code{advanced}}{
-          \code{list} of advanced options}
-        \item{\code{scriptPath}}{
-          \code{character} path to variant_effect_predictor.pl script;
-          applicable when multiple versions of the script are installed locally}
+	\item{\code{version}}{
+	  Numeric specifying the Ensembl API version(s) supported.}
+	\item{\code{basic}}{
+	  \code{list} of basic options}
+	\item{\code{input}}{
+	  \code{list} of input options}
+	\item{\code{cache}}{
+	  \code{list} of cache options}
+	\item{\code{output}}{
+	  \code{list} of output options}
+	\item{\code{filterqc}}{
+	  \code{list} of filterqc options}
+	\item{\code{database}}{
+	  \code{list} of database options}
+	\item{\code{advanced}}{
+	  \code{list} of advanced options}
+	\item{\code{scriptPath}}{
+	  \code{character} path to variant_effect_predictor.pl script;
+	  applicable when multiple versions of the script are installed locally}
       }
       Supported for VEPParam73 and later:
       \describe{
-        \item{\code{identifier}}{
-          \code{list} of identifier options}
-        \item{\code{colocatedVariants}}{
-          \code{list} of colocatedVariants options}
-        \item{\code{dataformat}}{
-          \code{list} of dataformat options}
+	\item{\code{identifier}}{
+	  \code{list} of identifier options}
+	\item{\code{colocatedVariants}}{
+	  \code{list} of colocatedVariants options}
+	\item{\code{dataformat}}{
+	  \code{list} of dataformat options}
       }
     }
   }
@@ -239,7 +235,7 @@
 \section{Accessors}{
   In the following code, \code{x} is a \code{VEPParam} object
   and \code{value} is a named \code{list} or \code{character}
-  vector. 
+  vector.
   \describe{
     \item{}{\code{basic(x)}, \code{basic(x) <- value}}
     \item{}{\code{input(x)}, \code{input(x) <- value}}
@@ -270,11 +266,11 @@
     \item{}{
       \code{supportedVEP()}:
       Invoked with no arguments.
-      Returns a list of \code{VEPParam} subclasses and the Ensembl 
+      Returns a list of \code{VEPParam} subclasses and the Ensembl
       API versions they support.
     }
   }
-  The following functions create a \code{list} of runtime options and are 
+  The following functions create a \code{list} of runtime options and are
   used in the \code{VEPParam} constructor.
   \describe{
     \item{}{\code{basicOpts(version, ...)}}
@@ -299,30 +295,28 @@
   \itemize{
     \item The \code{runtimeOptions} man page.
     \item The \code{ensemblVEP} function man page.
+    \item The \code{VEPFlags} class page for current API.
   }
 }
 
 \examples{
   ## -----------------------------------------------------------------------
-  ## Current API version
+  ## Archived API versions
   ## -----------------------------------------------------------------------
-  ## The default constructor supports the most current version
-  ## of the Ensembl variant API.
-  param <- VEPParam()
+  ## Create a VEPParam for an archived version by supplying the
+  ## version to the constructor.
+  ## See ?VEPFlags for Current API version
+  param <- VEPParam(version=85)
   class(param)
 
   ## The 'version' slot lists all API versions supported by the class.
   version(param)
 
-  ## The 'supportedVEP' helper returns a list of VEPParam classes and the 
-  ## corresponding API versions they support. 
+  ## The 'supportedVEP' helper returns a list of VEPParam classes and the
+  ## corresponding API versions they support.
   supportedVEP()
 
-  ## -----------------------------------------------------------------------
-  ## Archived API versions
-  ## -----------------------------------------------------------------------
-  ## Create a VEPParam for an archived version by supplying the 
-  ## version to the constructor.
+  ## A different archieved version
   param67 <- VEPParam(67)
   param67
 
@@ -331,10 +325,10 @@
   database(param67)$host
 
   ## By default the VEP script used is the one found in the PATH.
-  ## To specify a script in a non-standard location use the 'scriptPath' 
+  ## To specify a script in a non-standard location use the 'scriptPath'
   ## setter. Include the full path and the name of the script with the
   ## .pl extension.
-  \dontrun{ 
+  \dontrun{
   scriptPath(param) <- "fullPathToScript/variant_effect_predictor.pl"
   }
 
@@ -358,7 +352,7 @@
   ## Write the output to myfile.vcf instead of returning a VCF object.
   ## Return the sift and polyphen predictions only (not scores).
   param <- VEPParam(input=c(output_file="path/myfile.vcf"),
-                    output=c(sift="p", polyphen="p"))
+		    output=c(sift="p", polyphen="p"), version=88)
 
   ## 'sift' and 'polyphen' are runtime options that require
   ## a character value, (i.e., 's', 'p', or 'b').
@@ -366,7 +360,7 @@
 
   ## To turn off 'sift' or 'polyphen' set the value to an
   ## empty character (i.e., character()).
-  output(param)$sift <- character() 
+  output(param)$sift <- character()
 }
 
 \keyword{methods}

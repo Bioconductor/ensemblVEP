@@ -9,14 +9,14 @@
 }
 
 \description{
-  Parse the CSQ column in a VCF object returned from the Ensembl 
+  Parse the CSQ column in a VCF object returned from the Ensembl
   Variant Effect Predictor (VEP).
 }
 
 \usage{
-\S4method{parseCSQToGRanges}{character}(x, VCFRowID=character(), 
+\S4method{parseCSQToGRanges}{character}(x, VCFRowID=character(),
     ..., info.key = "CSQ")
-\S4method{parseCSQToGRanges}{VCF}(x, VCFRowID=character(), 
+\S4method{parseCSQToGRanges}{VCF}(x, VCFRowID=character(),
     ..., info.key = "CSQ")
 }
 
@@ -25,13 +25,13 @@
     The \code{character} name of a vcf file on disk or a \code{VCF} object
   }
   \item{VCFRowID}{
-    A \code{character} vector of rownames from the original VCF. 
-    When provided, the result includes a metadata column named 
-    \sQuote{VCFRowID} which maps the result back to the row 
+    A \code{character} vector of rownames from the original VCF.
+    When provided, the result includes a metadata column named
+    \sQuote{VCFRowID} which maps the result back to the row
     (variant) in the original VCF.
 
     When \code{VCFRowID} is not provided no \sQuote{VCFRowID}
-    column is included. 
+    column is included.
   }
   \item{info.key}{
     The name of the INFO key that VEP writes the consequences to in the output
@@ -70,7 +70,7 @@
 }
 
 \author{
-  Valerie Obenchain 
+  Valerie Obenchain
 }
 
 \seealso{
@@ -84,12 +84,12 @@
 }
 
 \examples{
-  file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation") 
-  vep <- ensemblVEP(file, param=VEPParam(dataformat=c(vcf=TRUE)))
- 
+  file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation")
+  vep <- ensemblVEP(file, param=VEPFlags(flags=list(vcf=TRUE)))
+
   ## The returned 'CSQ' data are unparsed.
   info(vep)$CSQ
- 
+
   ## Parse into a GRanges and include the 'VCFRowID' column.
   vcf <- readVcf(file, "hg19")
   csq <- parseCSQToGRanges(vep, VCFRowID=rownames(vcf))
