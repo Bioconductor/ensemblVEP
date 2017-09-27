@@ -106,68 +106,49 @@ returned see the output options at
 \begin{verbatim}
 > head(gr, 3)
 GRanges object with 3 ranges and 23 metadata columns:
-               seqnames             ranges strand |   Allele
-                  <Rle>          <IRanges>  <Rle> | <factor>
-     rs6054257       20 [  14370,   14370]      * |        A
-  20:17330_T/A       20 [  17330,   17330]      * |        A
-     rs6040355       20 [1110696, 1110696]      * |        G
-                         Consequence   IMPACT   SYMBOL            Gene
-                            <factor> <factor> <factor>        <factor>
-     rs6054257    intergenic_variant MODIFIER     <NA>            <NA>
-  20:17330_T/A    intergenic_variant MODIFIER     <NA>            <NA>
-     rs6040355 upstream_gene_variant MODIFIER    PSMF1 ENSG00000125818
-               Feature_type         Feature              BIOTYPE     EXON
-                   <factor>        <factor>             <factor> <factor>
-     rs6054257         <NA>            <NA>                 <NA>     <NA>
-  20:17330_T/A         <NA>            <NA>                 <NA>     <NA>
-     rs6040355   Transcript ENST00000479715 processed_transcript     <NA>
-                 INTRON    HGVSc    HGVSp cDNA_position CDS_position
-               <factor> <factor> <factor>      <factor>     <factor>
-     rs6054257     <NA>     <NA>     <NA>          <NA>         <NA>
-  20:17330_T/A     <NA>     <NA>     <NA>          <NA>         <NA>
-     rs6040355     <NA>     <NA>     <NA>          <NA>         <NA>
-               Protein_position Amino_acids   Codons Existing_variation
-                       <factor>    <factor> <factor>           <factor>
-     rs6054257             <NA>        <NA>     <NA>               <NA>
-  20:17330_T/A             <NA>        <NA>     <NA>               <NA>
-     rs6040355             <NA>        <NA>     <NA>               <NA>
-               DISTANCE   STRAND    FLAGS SYMBOL_SOURCE   HGNC_ID
-               <factor> <factor> <factor>      <factor>  <factor>
-     rs6054257     <NA>     <NA>     <NA>          <NA>      <NA>
-  20:17330_T/A     <NA>     <NA>     <NA>          <NA>      <NA>
-     rs6040355     2610        1     <NA>          HGNC HGNC:9571
+             seqnames         ranges strand |      Allele
+                <Rle>      <IRanges>  <Rle> | <character>
+  rs58108140        1 [10583, 10583]      * |           A
+  rs58108140        1 [10583, 10583]      * |           A
+  rs58108140        1 [10583, 10583]      * |           A
+                         Consequence      IMPACT      SYMBOL            Gene
+                         <character> <character> <character>     <character>
+  rs58108140   upstream_gene_variant    MODIFIER     DDX11L1 ENSG00000223972
+  rs58108140   upstream_gene_variant    MODIFIER     DDX11L1 ENSG00000223972
+  rs58108140 downstream_gene_variant    MODIFIER      WASH7P ENSG00000227232
+             Feature_type         Feature                            BIOTYPE
+              <character>     <character>                        <character>
+  rs58108140   Transcript ENST00000450305 transcribed_unprocessed_pseudogene
+  rs58108140   Transcript ENST00000456328               processed_transcript
+  rs58108140   Transcript ENST00000488147             unprocessed_pseudogene
+                    EXON      INTRON       HGVSc       HGVSp cDNA_position
+             <character> <character> <character> <character>   <character>
+  rs58108140        <NA>        <NA>        <NA>        <NA>          <NA>
+  rs58108140        <NA>        <NA>        <NA>        <NA>          <NA>
+  rs58108140        <NA>        <NA>        <NA>        <NA>          <NA>
+             CDS_position Protein_position Amino_acids      Codons
+              <character>      <character> <character> <character>
+  rs58108140         <NA>             <NA>        <NA>        <NA>
+  rs58108140         <NA>             <NA>        <NA>        <NA>
+  rs58108140         <NA>             <NA>        <NA>        <NA>
+             Existing_variation    DISTANCE      STRAND       FLAGS
+                    <character> <character> <character> <character>
+  rs58108140               <NA>        1427           1        <NA>
+  rs58108140               <NA>        1286           1        <NA>
+  rs58108140               <NA>        3821          -1        <NA>
+             SYMBOL_SOURCE     HGNC_ID
+               <character> <character>
+  rs58108140          HGNC  HGNC:37102
+  rs58108140          HGNC  HGNC:37102
+  rs58108140          HGNC  HGNC:38034
   -------
-  seqinfo: 1 sequence from  genome
+  seqinfo: 1 sequence from  genome; no seqlengths
 \end{verbatim}
 
-Next we use a vcf of structural variants as input
-<<structural_vcf>>=
-fl <- system.file("extdata", "structural.vcf", package="VariantAnnotation")
-@
-
-and request that a \Robject{VCF} object be returned by setting
+Next we request that a \Robject{VCF} object be returned by setting
 the {\it vcf} option in the {\it flags} slot to TRUE. 
 <<set_vcf>>=
 param <- VEPFlags(flags=list(vcf=TRUE))
-@
-
-An call to \Rfunction{ensemblVEP} results in an error.
-\begin{verbatim}
-> vcf <- ensemblVEP(fl, param)
-2012-12-03 16:40:55 - Starting...
-ERROR: Could not detect input file format
-\end{verbatim}
-
-
-In most situations Ensembl VEP can auto-detect the input format. In 
-it cannot, it is possible to explicitly set the {\it format} 
-option to 'vcf'.
-<<set_format>>=
-flags(param)$format <- "vcf"
-@
-
-Try again.
-<<rtn_VCF>>=
 vep <- ensemblVEP(fl, param)
 @
 
@@ -259,7 +240,7 @@ gr <- ensemblVEP(fl, param)
         identifiers, output SO consequence terms:
 <<runtime2, eval=FALSE>>=
 param <- VEPFlags(flag=list(format="vcf",
-                      terms="so",
+                      terms="SO",
                       symbol=TRUE))
 gr <- ensemblVEP(fl, param) 
 @
