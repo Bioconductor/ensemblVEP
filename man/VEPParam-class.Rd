@@ -289,7 +289,7 @@
   }
 }
 
-\author{Valerie Obenchain}
+\author{Valerie Obenchain and Lori Shepherd}
 
 \seealso{
   \itemize{

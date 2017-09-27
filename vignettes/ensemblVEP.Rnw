@@ -24,8 +24,7 @@
 \SweaveOpts{keep.source=TRUE}
 
 \title{Overview of \Rpackage{ensemblVEP}}
-\author{Valerie Obenchain}
-\date{Last modified: December 2012; Compiled: \today}
+\author{Lori Shepherd and Valerie Obenchain}
 
 \begin{document}
 

@@ -51,7 +51,7 @@
 }
 
 \author{
-  Valerie Obenchain
+  Valerie Obenchain and Lori Shepherd
 }
 
 \seealso{

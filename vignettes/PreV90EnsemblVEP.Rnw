@@ -1,4 +1,4 @@
-%\VignetteIndexEntry{oldensemblVEP}
+%\VignetteIndexEntry{PreV90EnsemblVEP}
 %\VignetteDepends{GenomicRanges, VariantAnnotation, Biostrings}
 %\VignetteKeywords{annotation, variants}
 %\VignettePackage{ensemblVEP}
@@ -23,9 +23,8 @@
 
 \SweaveOpts{keep.source=TRUE}
 
-\title{Overview of \Rpackage{ensemblVEP}}
-\author{Valerie Obenchain}
-\date{Last modified: December 2012; Compiled: \today}
+\title{Overview of \Rpackage{ensemblVEP} Pre Ensembl 90}
+\author{Valerie Obenchain and Lori Shepherd}
 
 \begin{document}
 

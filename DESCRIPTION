@@ -1,7 +1,7 @@
 Package: ensemblVEP
-Version: 1.17.0
+Version: 1.19.0
 Title: R Interface to Ensembl Variant Effect Predictor 
-Author: Valerie Obenchain
+Author: Valerie Obenchain and Lori Shepherd
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
 Depends: methods, BiocGenerics, GenomicRanges, VariantAnnotation
 Imports: S4Vectors (>= 0.9.25), Biostrings, SummarizedExperiment, 
