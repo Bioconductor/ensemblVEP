@@ -27,7 +27,6 @@ setClass("VEPFlags",
              scriptPath="character"),
          validity=.validity)
 
-
 ### -------------------------------------------------------------------------
 ### VEPParam67, VEPParam73, VEPParam75, VEPParam77
 ###

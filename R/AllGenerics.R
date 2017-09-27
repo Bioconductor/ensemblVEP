@@ -1,13 +1,13 @@
 ### =========================================================================
-### Generics. 
+### Generics.
 ### =========================================================================
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### ensemblVEP 
+### ensemblVEP
 ###
 
 setGeneric("ensemblVEP", signature = "file",
-           function(file, param=VEPParam(), ...) 
+           function(file, param=VEPParam(), ...)
                standardGeneric("ensemblVEP")
 )
 
@@ -16,22 +16,22 @@ setGeneric(".runtimeOpts", signature = "param",
            standardGeneric(".runtimeOpts"))
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### parseCSQToGRanges 
+### parseCSQToGRanges
 ###
 
 setGeneric("parseCSQToGRanges", signature = "x",
-           function(x, VCFRowID=TRUE, ...) 
+           function(x, VCFRowID=TRUE, ...)
                standardGeneric("parseCSQToGRanges")
 )
 
 
 setGeneric("parseCSQToGRanges", signature = "x",
-           function(x, VCFRowID=TRUE, ...) 
+           function(x, VCFRowID=TRUE, ...)
                standardGeneric("parseCSQToGRanges")
 )
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### VEPParam 
+### VEPParam
 ###
 setGeneric("basic", function(x) standardGeneric("basic"))
 setGeneric("basic<-", function(x, value) standardGeneric("basic<-"))

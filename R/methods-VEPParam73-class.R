@@ -1,5 +1,5 @@
 ### =========================================================================
-### VEPParam73 class methods 
+### VEPParam73 class methods
 ### =========================================================================
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -9,7 +9,7 @@
 ### See methods-VECParam-class.R
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Validity 
+### Validity
 ###
 
 setMethod(.validity, "VEPParam73",
@@ -44,15 +44,15 @@ setMethod("identifier<-", "VEPParam73",
     slot(x, "identifier")[names(value)] <- value
     msg <- .valid.VEPParam.identifier(x)
     if (!is.null(msg))
-        stop(msg) 
-    x 
+        stop(msg)
+    x
 }
 
 setMethod("colocatedVariants", "VEPParam73",
     function(x) slot(x, "colocatedVariants"))
 setMethod("colocatedVariants<-", "VEPParam73",
     function(x, value) .colocatedVariants_setter(x, value)
-) 
+)
 
 .colocatedVariants_setter <- function(x, value)
 {
@@ -60,14 +60,14 @@ setMethod("colocatedVariants<-", "VEPParam73",
     slot(x, "colocatedVariants")[names(value)] <- value
     msg <- .valid.VEPParam.colocated(x)
     if (!is.null(msg))
-        stop(msg) 
-    x 
+        stop(msg)
+    x
 }
 
 setMethod("dataformat", "VEPParam73",
     function(x) slot(x, "dataformat"))
 setMethod("dataformat<-", "VEPParam73",
-    function(x, value) .dataformat_setter(x, value) 
+    function(x, value) .dataformat_setter(x, value)
 )
 
 .dataformat_setter <- function(x, value)
@@ -76,6 +76,6 @@ setMethod("dataformat<-", "VEPParam73",
     slot(x, "dataformat")[names(value)] <- value
     msg <- .valid.VEPParam.dataformat(x)
     if (!is.null(msg))
-        stop(msg) 
-    x 
+        stop(msg)
+    x
 }

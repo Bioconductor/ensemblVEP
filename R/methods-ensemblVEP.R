@@ -70,7 +70,6 @@ setMethod(.runtimeOpts, "VEPParam", function(param, ...){
     paste0(" --", names(ops)[keep], " ", ops[keep], collapse=" ")
 })
 
-
 setMethod(.runtimeOpts, "VEPFlags", function(param, ...){
 
     ops = flags(param)

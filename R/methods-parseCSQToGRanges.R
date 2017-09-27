@@ -1,17 +1,17 @@
 ### =========================================================================
-### parseCSQToGRanges methods 
+### parseCSQToGRanges methods
 ### =========================================================================
 
-setMethod("parseCSQToGRanges", "character", 
+setMethod("parseCSQToGRanges", "character",
     function(x, VCFRowID=character(), ..., info.key="CSQ")
     {
         param=ScanVcfParam(info=info.key, geno=NA_character_)
-        vcf <- readVcf(x, "", param=param) 
+        vcf <- readVcf(x, "", param=param)
         callGeneric(vcf, VCFRowID, ...)
     }
 )
 
-setMethod("parseCSQToGRanges", "VCF", 
+setMethod("parseCSQToGRanges", "VCF",
     function(x, VCFRowID=character(), ..., info.key="CSQ")
     {
         ## no 'info.key'
@@ -24,7 +24,7 @@ setMethod("parseCSQToGRanges", "VCF",
         ## 'info.key' without data
         if (all(is.na(ulst))) {
             gr <- rowRanges(x)
-            csq <- 
+            csq <-
                 DataFrame(setNames(replicate(length(nms), character(0)), nms))
         } else {
             ## 'info.key' with data
@@ -36,7 +36,7 @@ setMethod("parseCSQToGRanges", "VCF",
             csq[!nzchar(csq)] <- NA
             colnames(csq) <- nms
             csq <- data.frame(csq, stringsAsFactors=FALSE)
- 
+
             rd <- rowRanges(x)
             gr <- rd[rep(seq_along(rd), elt)]
             if (length(VCFRowID)) {
@@ -47,8 +47,8 @@ setMethod("parseCSQToGRanges", "VCF",
                 csq <- DataFrame(VCFRowID=VCFRowID, csq)
             }
         }
-        mcols(gr) <- csq 
+        mcols(gr) <- csq
         genome(gr) <- genome(x)
-        gr 
+        gr
     }
 )
