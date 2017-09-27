@@ -92,58 +92,16 @@ flags(param)
 @
 
 Using a vcf file from \Rpackage{VariantAnnotation} as input, we query 
-Ensembl VEP with the default runtime parameters.
-<<rtn_GRanges, eval=FALSE>>=
-fl <- system.file("extdata", "gl_chr1.vcf", package="VariantAnnotation")
-gr <- ensemblVEP(fl)
-@
-
-Consequence data are parsed into the metadata columns of
-the \Robject{GRanges}. To control the type and amount of data 
-returned see the output options at 
+Ensembl VEP with the default runtime parameters. Consequence data are 
+parsed into the metadata columns of the \Robject{GRanges}. To control 
+the type and amount of data returned see the output options at 
 \url{http://uswest.ensembl.org/info/docs/tools/vep/script/vep_options.html}.
 
-\begin{verbatim}
-> head(gr, 3)
-GRanges object with 3 ranges and 23 metadata columns:
-             seqnames         ranges strand |      Allele
-                <Rle>      <IRanges>  <Rle> | <character>
-  rs58108140        1 [10583, 10583]      * |           A
-  rs58108140        1 [10583, 10583]      * |           A
-  rs58108140        1 [10583, 10583]      * |           A
-                         Consequence      IMPACT      SYMBOL            Gene
-                         <character> <character> <character>     <character>
-  rs58108140   upstream_gene_variant    MODIFIER     DDX11L1 ENSG00000223972
-  rs58108140   upstream_gene_variant    MODIFIER     DDX11L1 ENSG00000223972
-  rs58108140 downstream_gene_variant    MODIFIER      WASH7P ENSG00000227232
-             Feature_type         Feature                            BIOTYPE
-              <character>     <character>                        <character>
-  rs58108140   Transcript ENST00000450305 transcribed_unprocessed_pseudogene
-  rs58108140   Transcript ENST00000456328               processed_transcript
-  rs58108140   Transcript ENST00000488147             unprocessed_pseudogene
-                    EXON      INTRON       HGVSc       HGVSp cDNA_position
-             <character> <character> <character> <character>   <character>
-  rs58108140        <NA>        <NA>        <NA>        <NA>          <NA>
-  rs58108140        <NA>        <NA>        <NA>        <NA>          <NA>
-  rs58108140        <NA>        <NA>        <NA>        <NA>          <NA>
-             CDS_position Protein_position Amino_acids      Codons
-              <character>      <character> <character> <character>
-  rs58108140         <NA>             <NA>        <NA>        <NA>
-  rs58108140         <NA>             <NA>        <NA>        <NA>
-  rs58108140         <NA>             <NA>        <NA>        <NA>
-             Existing_variation    DISTANCE      STRAND       FLAGS
-                    <character> <character> <character> <character>
-  rs58108140               <NA>        1427           1        <NA>
-  rs58108140               <NA>        1286           1        <NA>
-  rs58108140               <NA>        3821          -1        <NA>
-             SYMBOL_SOURCE     HGNC_ID
-               <character> <character>
-  rs58108140          HGNC  HGNC:37102
-  rs58108140          HGNC  HGNC:37102
-  rs58108140          HGNC  HGNC:38034
-  -------
-  seqinfo: 1 sequence from  genome; no seqlengths
-\end{verbatim}
+<<rtn_GRanges, results=verbatim>>=
+fl <- system.file("extdata", "gl_chr1.vcf", package="VariantAnnotation")
+gr <- ensemblVEP(fl)
+head(gr, 3)
+@
 
 Next we request that a \Robject{VCF} object be returned by setting
 the {\it vcf} option in the {\it flags} slot to TRUE. 
