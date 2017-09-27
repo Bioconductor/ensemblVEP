@@ -1,7 +1,7 @@
 test_VEPParam_construction <- function()
 {
-    p88 <- VEPParam()
-    checkIdentical(VEPParam(88), p88) 
+    checkException(VEPParam())
+    p88 <- VEPParam(88)
     p78 <- VEPParam(78)
     p77 <- VEPParam(77)
     p75 <- VEPParam(75)
@@ -15,12 +15,12 @@ test_VEPParam_construction <- function()
     checkTrue(all(slotNames(p77) %in% slotNames(p78)))
     checkTrue(all(slotNames(p78) %in% slotNames(p82)))
 
-    p <- VEPParam()
-    p <- VEPParam(basic=list())
-    checkException(VEPParam(foo=list()), p, silent=TRUE)
-    checkException(VEPParam(basic=list(foo="")), silent=TRUE)
-    checkException(VEPParam(basic=list(quiet="yes")), silent=TRUE)
-    checkException(VEPParam(basic=c(verbose="foo")), silent=TRUE)
+    p <- VEPParam(88)
+    p <- VEPParam(basic=list(), version=88)
+    checkException(VEPParam(foo=list(), version=88), p, silent=TRUE)
+    checkException(VEPParam(basic=list(foo=""), version=88), silent=TRUE)
+    checkException(VEPParam(basic=list(quiet="yes"), version=88), silent=TRUE)
+    checkException(VEPParam(basic=c(verbose="foo"), version=88), silent=TRUE)
 }
 
 test_VEPParam82_new_flags <- function()
@@ -86,16 +86,16 @@ test_VEPParam67_defaults <- function()
 test_VEPParam_replace <- function()
 {
     ## single values
-    p1 <- p2  <- VEPParam()
+    p1 <- p2  <- VEPParam(88)
     basic(p1) <- list(verbose=TRUE)
     basic(p2) <- c(verbose=TRUE)
-    checkIdentical(p1, p2) 
+    checkIdentical(p1, p2)
     checkException(basic(p1)$verbose <- "foo", silent=TRUE)
     checkException(basic(p1)$config <- TRUE, silent=TRUE)
 
     ## multiple values
-    p1 <- p2  <- VEPParam()
+    p1 <- p2  <- VEPParam(88)
     basic(p1) <- c(verbose=TRUE, config="myconfig.txt")
     basic(p2) <- list(verbose=TRUE, config="myconfig.txt")
-    checkIdentical(p1, p2) 
+    checkIdentical(p1, p2)
 }
