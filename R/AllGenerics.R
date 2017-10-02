@@ -1,35 +1,38 @@
 ### =========================================================================
-### Generics. 
+### Generics.
 ### =========================================================================
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### ensemblVEP 
+### ensemblVEP
 ###
 
 setGeneric("ensemblVEP", signature = "file",
-           function(file, param=VEPParam(), ...) 
+           function(file, param=VEPParam(), ...)
                standardGeneric("ensemblVEP")
 )
 
+setGeneric(".runtimeOpts", signature = "param",
+           function(param, ...)
+           standardGeneric(".runtimeOpts"))
+
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### parseCSQToGRanges 
+### parseCSQToGRanges
 ###
 
 setGeneric("parseCSQToGRanges", signature = "x",
-           function(x, VCFRowID=TRUE, ...) 
+           function(x, VCFRowID=TRUE, ...)
                standardGeneric("parseCSQToGRanges")
 )
 
 
 setGeneric("parseCSQToGRanges", signature = "x",
-           function(x, VCFRowID=TRUE, ...) 
+           function(x, VCFRowID=TRUE, ...)
                standardGeneric("parseCSQToGRanges")
 )
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### VEPParam 
+### VEPParam
 ###
-
 setGeneric("basic", function(x) standardGeneric("basic"))
 setGeneric("basic<-", function(x, value) standardGeneric("basic<-"))
 setGeneric("input", function(x) standardGeneric("input"))
@@ -52,3 +55,5 @@ setGeneric("colocatedVariants<-",
     function(x, value) standardGeneric("colocatedVariants<-"))
 setGeneric("dataformat", function(x) standardGeneric("dataformat"))
 setGeneric("dataformat<-", function(x, value) standardGeneric("dataformat<-"))
+setGeneric("flags", function(x) standardGeneric("flags"))
+setGeneric("flags<-", function(x, value) standardGeneric("flags<-"))

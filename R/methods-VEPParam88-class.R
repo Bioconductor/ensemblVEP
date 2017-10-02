@@ -1,5 +1,5 @@
 ### =========================================================================
-### VEPParam88 class methods 
+### VEPParam88 class methods
 ### =========================================================================
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -9,7 +9,7 @@
 ### See methods-VECParam-class.R
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Validity 
+### Validity
 ###
 
 setMethod(.validity, "VEPParam88",
@@ -37,16 +37,16 @@ setMethod("identifier", "VEPParam88",
     function(x) slot(x, "identifier"))
 setMethod("identifier<-", "VEPParam88",
     function(x, value) .identifier_setter(x, value)
-) 
+)
 
 setMethod("colocatedVariants", "VEPParam88",
     function(x) slot(x, "colocatedVariants"))
 setMethod("colocatedVariants<-", "VEPParam88",
     function(x, value) .colocatedVariants_setter(x, value)
-) 
+)
 
 setMethod("dataformat", "VEPParam88",
     function(x) slot(x, "dataformat"))
 setMethod("dataformat<-", "VEPParam88",
     function(x, value) .dataformat_setter(x, value)
-) 
+)

@@ -1,11 +1,10 @@
 ### =========================================================================
-### All Classes. 
+### All Classes.
 ### =========================================================================
 
-### ------------------------------------------------------------------------- 
+### -------------------------------------------------------------------------
 ### VEPParam (VIRTUAL)
 ###
-
 setGeneric(".validity", function(object) standardGeneric(".validity"))
 
 setClass("VEPParam",
@@ -21,7 +20,14 @@ setClass("VEPParam",
         scriptPath="character"),
     validity=.validity)
 
-### ------------------------------------------------------------------------- 
+setClass("VEPFlags",
+         representation(
+             flags="list",
+             version="numeric",
+             scriptPath="character"),
+         validity=.validity)
+
+### -------------------------------------------------------------------------
 ### VEPParam67, VEPParam73, VEPParam75, VEPParam77
 ###
 

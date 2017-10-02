@@ -1,5 +1,5 @@
 ### =========================================================================
-### VEPParam77 class methods 
+### VEPParam77 class methods
 ### =========================================================================
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -9,7 +9,7 @@
 ### See methods-VECParam-class.R
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Validity 
+### Validity
 ###
 
 setMethod(.validity, "VEPParam77",
@@ -36,16 +36,16 @@ setMethod("identifier", "VEPParam77",
     function(x) slot(x, "identifier"))
 setMethod("identifier<-", "VEPParam77",
     function(x, value) .identifier_setter(x, value)
-) 
+)
 
 setMethod("colocatedVariants", "VEPParam77",
     function(x) slot(x, "colocatedVariants"))
 setMethod("colocatedVariants<-", "VEPParam77",
     function(x, value) .colocatedVariants_setter(x, value)
-) 
+)
 
 setMethod("dataformat", "VEPParam77",
     function(x) slot(x, "dataformat"))
 setMethod("dataformat<-", "VEPParam77",
     function(x, value) .dataformat_setter(x, value)
-) 
+)

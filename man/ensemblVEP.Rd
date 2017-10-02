@@ -8,12 +8,12 @@
 }
 
 \description{
-  Retrieve variant annotation data from the Ensembl Variant Effect 
+  Retrieve variant annotation data from the Ensembl Variant Effect
   Predictor (VEP).
 }
 
 \usage{
-\S4method{ensemblVEP}{character}(file, param=VEPParam(), ...)
+\S4method{ensemblVEP}{character}(file, param=VEPFlags(), ...)
 }
 
 \arguments{
@@ -23,7 +23,7 @@
     Valid input file types are described on the Ensembl VEP web page.
     \url{http://www.ensembl.org/info/docs/variation/vep/vep_script.html#running}
   }
-  \item{param}{An instance of \code{VEPParam} specifying runtime options.
+  \item{param}{An instance of \code{VEPFlags} specifying runtime options.
   }
   \item{\dots}{Additional arguments passed to methods.
   }
@@ -33,12 +33,14 @@
   \describe{
     \item{}{
       The Ensembl VEP tool is described in detail on the home page
-      (link in `see also` section). The \code{ensemblVEP} function 
-      wraps the perl API and requires a local install of the Ensembl 
-      VEP available in the user's path. The \code{VEPParam} class 
-      provides a way to specify runtime options. Results are returned 
-      from Ensembl VEP as \code{GRanges} (default) or \code{VCF} objects. 
+      (link in `see also` section). The \code{ensemblVEP} function
+      wraps the perl API and requires a local install of the Ensembl
+      VEP available in the user's path. The \code{VEPFlags} class
+      provides a way to specify runtime options. Results are returned
+      from Ensembl VEP as \code{GRanges} (default) or \code{VCF} objects.
       Alternatively, results can be written directly to a file.
+      Note: if using vep version < 90 the param is an instance of
+      \code{VEPParam} instead of \code{VEPFlags}
     }
   }
 }
@@ -49,11 +51,11 @@
 }
 
 \author{
-  Valerie Obenchain 
+  Valerie Obenchain and Lori Shepherd
 }
 
 \seealso{
-  \link{VEPParam-class}
+  \link{VEPFlags-class}
 }
 
 \references{
@@ -70,75 +72,69 @@
   ## -----------------------------------------------------------------------
   ## The default behavior returns a GRanges with the consequence
   ## data as metadata columns.
-  file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation") 
+  file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation")
   \dontrun{
   gr <- ensemblVEP(file)
   gr[1:3]
   }
   ## When the 'vcf' option is TRUE, a VCF object is returned.
-  myparam <- VEPParam(dataformat=c(vcf=TRUE))
+  myparam <- VEPFlags(flags=list(vcf=TRUE))
   vcf <- ensemblVEP(file, param=myparam)
   vcf
- 
+
   ## The consequence data are returned as the 'CSQ' column in info.
   info(vcf)$CSQ
- 
+
   ## To parse this column use parseCSQToGRanges().
   csq <- parseCSQToGRanges(vcf)
   head(csq, 4)
- 
-  ## The columns returned are controlled by the 'fields' option. 
-  ## By default all fields are returned. See ?VEPParam for details.
- 
+
+  ## The columns returned are controlled by the 'fields' option.
+  ## By default all fields are returned. See ?VEPFlags for details.
+
   ## When comparing ensemblVEP() results to the data in the
   ## input vcf we see variant 20:1230237 was not returned.
   vcf_input <- readVcf(file, "hg19")
   rowRanges(vcf_input)
   rowRanges(vcf)
- 
+
   ## This variant has no alternate allele and is called a
   ## monomorphic reference. The Ensembl VEP automatically
-  ## drops these variants. 
+  ## drops these variants.
   rowRanges(vcf)[,c("REF", "ALT")]
- 
+
   ## -----------------------------------------------------------------------
   ## Results written to disk
   ## -----------------------------------------------------------------------
   ## Write a file to disk by providing a path and file name as 'output_file'.
-  ## Different output file formats are specified using the 'dataformat' 
+  ## Different output file formats are specified using the 'dataformat'
   ## runtime options.
- 
+
   ## Write a vcf file to myfile.vcf:
-  myparam <- VEPParam(dataformat=c(vcf=TRUE), 
-                      input=c(output_file="/path/myfile.vcf"))
+  myparam <- VEPFlags(flags=list(vcf=TRUE,
+		      output_file="/path/myfile.vcf"))
   ## Write a gvf file to myfile.gvf:
-  myparam <- VEPParam(dataformat=c(gvf=TRUE), 
-                      input=c(output_file="/path/myfile.gvf"))
- 
+  myparam <- VEPFlags(flags=list(gvf=TRUE,
+		      output_file="/path/myfile.gvf"))
+
   ## -----------------------------------------------------------------------
   ## Runtime options
   ## -----------------------------------------------------------------------
-  ## All runtime options are controlled by specifying a VEPParam.
-  ## See ?VEPParam for complete details.
-  param <- VEPParam()
- 
+  ## All runtime options are controlled by specifying a VEPFlags.
+  ## See ?VEPFlags for complete details.
+  param <- VEPFlags()
+
   ## Logical options are turned on/off with TRUE/FALSE. By
   ## default, 'quiet' is FALSE.
-  basic(param)$quiet
- 
   ## Setting 'quiet' to TRUE will suppress all status and warnings.
-  basic(param)$quiet <- TRUE
- 
-  ## Characater options are turned on/off by specifying a character 
-  ## value or an empty character (i.e., character()). By default no 
+  flags(param)$quiet <- TRUE
+
+  ## Characater options are turned on/off by specifying a character
+  ## value or an empty character (i.e., character()). By default no
   ## 'sift' results are returned.
-  output(param)$sift
- 
   ## Setting 'sift' to 'b' will return both predictions and scores.
-  output(param)$sift <- 'b'
- 
-  ## Return 'sift' to the original state of no results returned.
-  output(param)$sift <- character() 
+  flags(param)$sift <- 'b'
+
 }
 
 \keyword{methods}

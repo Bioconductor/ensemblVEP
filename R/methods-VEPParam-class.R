@@ -1,5 +1,5 @@
 ### =========================================================================
-### VEPParam class methods 
+### VEPParam class methods
 ### =========================================================================
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -13,14 +13,14 @@
         return(x)
     x <- as.list(x)
     idx <- x %in% c("TRUE", "FALSE")
-    x[idx] <- as.logical(x[idx]) 
+    x[idx] <- as.logical(x[idx])
     x
-} 
+}
 
-VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(), 
-                      input=list(), cache=list(), output=list(), 
-                      filterqc=list(), database=list(), advanced=list(), 
-                      identifier=list(), colocatedVariants=list(), 
+VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
+                      input=list(), cache=list(), output=list(),
+                      filterqc=list(), database=list(), advanced=list(),
+                      identifier=list(), colocatedVariants=list(),
                       dataformat=list(), scriptPath=character(), ...)
 {
     .version_error(version)
@@ -37,7 +37,7 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
     output_opts[names(output)] <- .formatList(output)
 
     filterqc_opts <- filterqcOpts(version)
-    filterqc_opts[names(filterqc)] <- .formatList(filterqc) 
+    filterqc_opts[names(filterqc)] <- .formatList(filterqc)
 
     database_opts <- databaseOpts(version)
     database_opts[names(database)] <- .formatList(database)
@@ -50,7 +50,7 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
         identifier_opts[names(identifier)] <- .formatList(identifier)
 
         colocated_opts <- colocatedVariantsOpts(version)
-        colocated_opts[names(colocatedVariants)] <- 
+        colocated_opts[names(colocatedVariants)] <-
             .formatList(colocatedVariants)
 
         dataformat_opts <- dataformatOpts(version)
@@ -69,13 +69,13 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
         else if (any(version %in% c(88)))
             VEP_class <- "VEPParam88"
         else
-            stop("undefined VEP version")
+            stop("undefined VEPParam version. Try VEPFlags()")
 
-        new(VEP_class, ..., basic=basic_opts, 
+        new(VEP_class, ..., basic=basic_opts,
             database=database_opts, advanced=advanced_opts,
-            input=input_opts, cache=cache_opts, 
-            output=output_opts, filterqc=filterqc_opts, 
-            identifier=identifier_opts, colocatedVariants=colocated_opts, 
+            input=input_opts, cache=cache_opts,
+            output=output_opts, filterqc=filterqc_opts,
+            identifier=identifier_opts, colocatedVariants=colocated_opts,
             dataformat=dataformat_opts, scriptPath=scriptPath)
     } else {
         new("VEPParam67", ..., basic=basic_opts, input=input_opts,
@@ -86,14 +86,14 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
 }
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Validity 
+### Validity
 ###
 
 .checkNames <- function(current, target)
 {
     invalid <- !names(current) %in% names(target)
     if (any(invalid))
-        return(paste0("invalid runtime options '", 
+        return(paste0("invalid runtime options '",
                paste(names(current)[invalid], "'", sep=",")))
     NULL
 }
@@ -103,10 +103,10 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
     logic <- current[names(target)[target %in% c(TRUE, FALSE)]]
     invalid <- !logic %in% c(TRUE, FALSE)
     if (any(invalid))
-        return(paste0("runtime options '", 
-                      paste(names(logic)[invalid], sep=","), 
+        return(paste0("runtime options '",
+                      paste(names(logic)[invalid], sep=","),
                       "' must be TRUE or FALSE"))
-    NULL 
+    NULL
 }
 
 .valid.VEPParam.basic <- function(x)
@@ -119,19 +119,19 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
 
     target <- basicOpts(version(x))
     c(.checkNames(current, target), .checkLogicals(current, target))
-} 
+}
 
 .valid.VEPParam.input <- function(x)
 {
     current <- input(x)
     if (!identical(character(), current$format))
-        if (!current$format %in% 
+        if (!current$format %in%
             c("ensembl", "vcf", "pileup", "hgvs", "id", "vep"))
             return(paste0("'format' must be one of 'ensembl', ",
                           "'vcf', 'pileup', 'hgvs', 'id' or 'vep'."))
     target <- inputOpts(version(x))
     c(.checkNames(current, target), .checkLogicals(current, target))
-} 
+}
 
 .valid.VEPParam.cache <- function(x)
 {
@@ -188,11 +188,19 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
 {
     s <- supportedVEP()
     v <- unname(unlist(s[names(s) == class(x)]))
-    if (any(version(x) %in% v))
-        NULL 
-    else
-        paste0("for class ", class(x), " version(x) must be one of ", 
-               paste(v, collapse=","))
+    if(class(x) == "VEPFlags"){
+        if (any(version(x) %in% v[1]:v[2]))
+           NULL
+        else
+            paste0("for class ", class(x), " version(x) must be one of ",
+                   paste(unique(v), collapse=","))
+    }else{
+        if (any(version(x) %in% v))
+            NULL
+        else
+            paste0("for class ", class(x), " version(x) must be one of ",
+                   paste(v, collapse=","))
+    }
 }
 
 .valid.VEPParam.identifier <- function(x)
@@ -234,102 +242,102 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
 ###
 
 setMethod("basic", "VEPParam",
-    function(x) slot(x, "basic")) 
+    function(x) slot(x, "basic"))
 setMethod("basic<-", "VEPParam",
-    function(x, value) 
+    function(x, value)
 {
     value <- .formatList(value)
     slot(x, "basic")[names(value)] <- value
     msg <- .valid.VEPParam.basic(x)
     if (!is.null(msg))
-        stop(msg) 
+        stop(msg)
     x
 })
 
 setMethod("input", "VEPParam",
-    function(x) slot(x, "input")) 
+    function(x) slot(x, "input"))
 setMethod("input<-", "VEPParam",
-    function(x, value) 
+    function(x, value)
 {
     value <- .formatList(value)
     slot(x, "input")[names(value)] <- value
     msg <- .valid.VEPParam.input(x)
     if (!is.null(msg))
-        stop(msg) 
-    x 
+        stop(msg)
+    x
 })
 
 setMethod("cache", "VEPParam",
-    function(x) slot(x, "cache")) 
+    function(x) slot(x, "cache"))
 setMethod("cache<-", "VEPParam",
-    function(x, value) 
+    function(x, value)
 {
     value <- .formatList(value)
     slot(x, "cache")[names(value)] <- value
     msg <- .valid.VEPParam.cache(x)
     if (!is.null(msg))
-        stop(msg) 
-    x 
+        stop(msg)
+    x
 })
 
 setMethod("output", "VEPParam",
     function(x) slot(x, "output"))
 setMethod("output<-", "VEPParam",
-    function(x, value) 
+    function(x, value)
 {
     value <- .formatList(value)
     slot(x, "output")[names(value)] <- value
     msg <- .valid.VEPParam.output(x)
     if (!is.null(msg))
-        stop(msg) 
-    x 
+        stop(msg)
+    x
 })
 
 setMethod("filterqc", "VEPParam",
     function(x) slot(x, "filterqc"))
 setMethod("filterqc<-", "VEPParam",
-    function(x, value) 
+    function(x, value)
 {
     value <- .formatList(value)
     slot(x, "filterqc")[names(value)] <- value
     msg <- .valid.VEPParam.filterqc(x)
     if (!is.null(msg))
-        stop(msg) 
-    x 
+        stop(msg)
+    x
 })
 
 setMethod("database", "VEPParam",
     function(x) slot(x, "database"))
 setMethod("database<-", "VEPParam",
-    function(x, value) 
+    function(x, value)
 {
     value <- .formatList(value)
     slot(x, "database")[names(value)] <- value
     msg <- .valid.VEPParam.database(x)
     if (!is.null(msg))
-        stop(msg) 
-    x 
+        stop(msg)
+    x
 })
 
 setMethod("advanced", "VEPParam",
     function(x) slot(x, "advanced"))
 setMethod("advanced<-", "VEPParam",
-    function(x, value) 
+    function(x, value)
 {
     value <- .formatList(value)
     slot(x, "advanced")[names(value)] <- value
     msg <- .valid.VEPParam.advanced(x)
     if (!is.null(msg))
-        stop(msg) 
-    x 
+        stop(msg)
+    x
 })
 
 version <- function(x)
     slot(x, "version")
-`version<-` <- function(x, value) 
+`version<-` <- function(x, value)
 {
     if (!is.numeric(value))
-        stop("'value' must be numeric") 
+        stop("'value' must be numeric")
         initialize(x, version=as.numeric(value))
 }
 
@@ -343,23 +351,28 @@ scriptPath <- function(x)
 }
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### helpers / utils 
+### helpers / utils
 ###
 
-supportedVEP <- function() list("VEPParam67"=67, "VEPParam73"=c(73, 74), 
-                                "VEPParam75"=75, "VEPParam77"=77, 
+supportedVEP <- function() list("VEPParam67"=67, "VEPParam73"=c(73, 74),
+                                "VEPParam75"=75, "VEPParam77"=77,
                                 "VEPParam78"=c(78, 80, 81),
                                 "VEPParam82"=c(82, 83, 84, 85, 86, 87),
-                                "VEPParam88"=c(88))
-currentVEP <- function() tail(supportedVEP(), 1) 
+                                "VEPParam88"=c(88), "VEPFlags"=c(90,90)) # VEPFlags only min (90) and current version assuming everything in between will work
+currentVEP <- function() tail(supportedVEP(), 1)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### show 
+### show
 ###
 
 setMethod(show, "VEPParam",
     function(object)
 {
+    .show(object)
+})
+
+.show <- function(object){
+
     scat <- function(fmt, vals=character(), exdent=2, ...)
     {
         vals <- ifelse(nzchar(vals), vals, "''")
@@ -379,4 +392,4 @@ setMethod(show, "VEPParam",
     }
     cat(paste0("version: ", paste(version(object), collapse=","), "\n"))
     cat(paste0("scriptPath: ", scriptPath(object)), "\n")
-})
+}

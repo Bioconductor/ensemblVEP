@@ -1,13 +1,13 @@
 Package: ensemblVEP
-Version: 1.16.0
+Version: 1.19.0
 Title: R Interface to Ensembl Variant Effect Predictor 
-Author: Valerie Obenchain
+Author: Valerie Obenchain and Lori Shepherd
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
 Depends: methods, BiocGenerics, GenomicRanges, VariantAnnotation
 Imports: S4Vectors (>= 0.9.25), Biostrings, SummarizedExperiment, 
     GenomeInfoDb, stats
 Suggests: RUnit
-Description: Query the Ensembl Variant Effect Predictor via the perl API
+Description: Query the Ensembl Variant Effect Predictor via the perl API.
 SystemRequirements: Ensembl VEP (API version 88) and the Perl modules 
         DBI and DBD::mysql must be installed. See the package README and
         Ensembl installation instructions: 
