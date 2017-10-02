@@ -1,3 +1,15 @@
+CHANGES IN VERSION 1.20.0
+------------------------
+NEW FEATURES
+
+    o add support for Ensembl release 90
+
+MODIFICATIONS
+
+    o param object is now VEPFlags instead of VEPParam; a more generalized
+    object with a single flags=list() argument to control ensembl vep runtime
+    options
+
 CHANGES IN VERSION 1.16.0
 ------------------------
 
