@@ -7,7 +7,7 @@
 ###
 
 setGeneric("ensemblVEP", signature = "file",
-           function(file, param=VEPParam(), ...)
+           function(file, param=VEPParam(), ..., verbose=FALSE)
                standardGeneric("ensemblVEP")
 )
 

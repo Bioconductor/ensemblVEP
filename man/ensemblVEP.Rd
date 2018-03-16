@@ -13,7 +13,7 @@
 }
 
 \usage{
-\S4method{ensemblVEP}{character}(file, param=VEPFlags(), ...)
+\S4method{ensemblVEP}{character}(file, param=VEPFlags(), ..., verbose=FALSE)
 }
 
 \arguments{
@@ -27,6 +27,7 @@
   }
   \item{\dots}{Additional arguments passed to methods.
   }
+  \item{verbose}{logical(1) should system call to vep be printed}
 }
 
 \details{

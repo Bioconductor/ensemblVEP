@@ -15,7 +15,8 @@
     ifelse(nchar(loc0) > 0L, loc0, loc1)
 }
 
-setMethod("ensemblVEP", "character", function(file, param=VEPFlags(), ...){
+setMethod("ensemblVEP", "character", function(file, param=VEPFlags(),
+                                              ..., verbose=FALSE){
 
     if (!length(path <- scriptPath(param)))
         path <- .getVepPath()
@@ -49,10 +50,12 @@ setMethod("ensemblVEP", "character", function(file, param=VEPFlags(), ...){
             fun <- parseCSQToGRanges
             call <- paste0(call, " --vcf --output_file ", dQuote(dest))
         }
+        if (verbose) message("Running:\n", call, "\n")
         system2("perl", call)
         fun(dest, genome="")
     } else {
         ## write to file or STDOUT
+        if (verbose) message("Running:\n", call, "\n")
         system2("perl", call)
     }
 
