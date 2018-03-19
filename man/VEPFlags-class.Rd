@@ -137,8 +137,13 @@
   ## See ?VEPParam for more details
 
   ## Archive versions can query the cache or the European mirror. The
-  ## default 'host' for live queries is set to 'ensembldb.ensembl.org'.
+  ## default 'host' for live queries is set to 'useastdb.ensembl.org'.
   flags(param)$host
+
+  ## For older versions of VEP the host will have to be changed as
+  ## this host only supports current or current minus 1 VEP versions
+  ## The recommendation is 'ensembldb.ensembl.org'
+  param <- VEPFlags(flags=list(host="ensembldb.ensembl.org"))
 
   ## By default the VEP script used is the one found in the PATH.
   ## To specify a script in a non-standard location use the 'scriptPath'
