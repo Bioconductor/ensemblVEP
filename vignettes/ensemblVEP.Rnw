@@ -90,12 +90,13 @@ param
 flags(param)
 @
 
-Of note is the 'host'. The default 'host' for queries is set to
-'useastdb.ensembl.org' which only supports the current or current minus 1
-version of VEP. For older versions the 'host' would have to be specified.
+Of note is the 'host'. The default 'host' for queries is character() and
+therefore is set to the vep default of 'ensembldb.ensembl.org'. Users in
+the US may find connection and transfer speeds quicker using our East
+coast mirror, 'useastdb.ensembl.org'.
 
-<<hostChange, eval=FALSE>>=
-param <- VEPFlags(flags=list(host="ensembldb.ensembl.org"))
+<<hostChange, eval=TRUE>>=
+param <- VEPFlags(flags=list(host="useastdb.ensembl.org"))
 @
 
 Using a vcf file from \Rpackage{VariantAnnotation} as input, we query
@@ -106,14 +107,14 @@ the type and amount of data returned see the output options at
 
 <<rtn_GRanges, results=verbatim>>=
 fl <- system.file("extdata", "gl_chr1.vcf", package="VariantAnnotation")
-gr <- ensemblVEP(fl)
+gr <- ensemblVEP(fl, param)
 head(gr, 3)
 @
 
 Next we request that a \Robject{VCF} object be returned by setting
 the {\it vcf} option in the {\it flags} slot to TRUE.
 <<set_vcf>>=
-param <- VEPFlags(flags=list(vcf=TRUE))
+param <- VEPFlags(flags=list(vcf=TRUE, host="useastdb.ensembl.org"))
 vep <- ensemblVEP(fl, param)
 @
 
@@ -197,7 +198,7 @@ fl <- system.file("extdata", "ex2.vcf", package="VariantAnnotation")
 \begin{itemize}
   \item Add regulatory region consequences:
 <<runtime1, eval=FALSE>>=
-param <- VEPFlags(flags=list(regulatory=TRUE))
+param <- VEPFlags(flags=list(regulatory=TRUE, host="useastdb.ensembl.org"))
 gr <- ensemblVEP(fl, param)
 @
 
@@ -206,7 +207,7 @@ gr <- ensemblVEP(fl, param)
 <<runtime2, eval=FALSE>>=
 param <- VEPFlags(flag=list(format="vcf",
                       terms="SO",
-                      symbol=TRUE))
+                      symbol=TRUE, host="useastdb.ensembl.org"))
 gr <- ensemblVEP(fl, param)
 @
 
@@ -215,7 +216,7 @@ gr <- ensemblVEP(fl, param)
 <<runtime3, eval=FALSE>>=
 param <- VEPFlags(flags=list(coding_only=TRUE,
                       check_existing=TRUE,
-                      symbol=TRUE))
+                      symbol=TRUE, host="useastdb.ensembl.org"))
 gr <- ensemblVEP(fl, param)
 @
 
@@ -224,7 +225,7 @@ gr <- ensemblVEP(fl, param)
 \begin{verbatim}
 fl <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
 param <- VEPFlags(flags=list(sift="b", polyphen="p",
-                  vcf=TRUE))
+                  vcf=TRUE, host="useastdb.ensembl.org"))
 vcf <- ensemblVEP(fl, param)
 csq <- parseCSQToGRanges(vcf)
 

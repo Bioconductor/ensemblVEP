@@ -27,8 +27,6 @@ flagOpts <- function(flags){
     # set some defaults if not given
     nm<- names(flags)
 
-    if (!("host" %in% nm))
-        flags = c(flags, host="useastdb.ensembl.org")
     if (!("database" %in% nm))
         flags = c(flags, database=TRUE)
     if (!("vcf" %in% nm))

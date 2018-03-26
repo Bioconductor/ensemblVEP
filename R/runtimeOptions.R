@@ -116,8 +116,7 @@ outputOpts <- function(version, ..., variant_class=logical(1),
     }
 }
 
-databaseOpts <- function(version, ..., database=TRUE,
-                         host="useastdb.ensembl.org",
+databaseOpts <- function(version, ..., database=TRUE, host=character(),
                          user=character(), password=character(),
                          port=numeric(), genomes=logical(1),
                          gencode_basic=logical(1), refseq=logical(1),

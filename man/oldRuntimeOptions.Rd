@@ -267,8 +267,11 @@
       \itemize{
 	\item{database:} \code{logical}, default TRUE; enable the VEP to
 	  use local or remote databases
-	\item{host:} \code{character}, default 'useast.ensembl.db.org';
-	  database host
+	\item{host:} \code{character}, default  \code{character()};
+	database host. This will use the default as defined by vep
+	'ensembldb.ensembl.org'. Users in the US may find connection
+	and transfer speeds quicker using the East coast mirror,
+	'useastdb.ensembl.org'.
 	\item{user:} \code{character} default \code{character()};
 	  database user
 	\item{password:} \code{character}, default \code{character()};

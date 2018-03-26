@@ -41,11 +41,11 @@
       from Ensembl VEP as \code{GRanges} (default) or \code{VCF} objects.
       Alternatively, results can be written directly to a file.
       Note: if using vep version < 90 the param is an instance of
-      \code{VEPParam} instead of \code{VEPFlags}. The default host used is
-      \code{useastdb.ensembl.org} which only supports the current or
-      current minus 1 VEP version. If an older version of VEP is
-      utilized, please specify your host (suggestion:
-      \code{ensembldb.ensembl.org}) in \code{VEPParam} or \code{VEPFlags}.
+      \code{VEPParam} instead of \code{VEPFlags}. The default host is
+      not specified and therefore will use vep default of
+      \code{ensembldb.ensembl.org}. Users in the US may find connection
+      and transfer speeds quicker using our East coast mirror,
+      \code{useastdb.ensembl.org}.
     }
   }
 }
@@ -83,7 +83,7 @@
   gr[1:3]
   }
   ## When the 'vcf' option is TRUE, a VCF object is returned.
-  myparam <- VEPFlags(flags=list(vcf=TRUE))
+  myparam <- VEPFlags(flags=list(vcf=TRUE, host="useastdb.ensembl.org"))
   vcf <- ensemblVEP(file, param=myparam)
   vcf
 

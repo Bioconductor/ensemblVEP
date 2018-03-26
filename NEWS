@@ -1,3 +1,14 @@
+CHANGES IN VERSION 1.22.0
+------------------------
+MODIFICATIONS
+
+    o The default 'host' is not specified, defaulting to vep default of
+      'ensembldb.ensembl.org'. The default previously was 'useastdb.ensembl.org'
+      Users in the US may find connection and transfer speeds quicker using the
+      East coast mirror, 'useastdb.ensembl.org'. It was updated because the
+      mirror only supports current and current minus one vep version, and to
+      bring the default in line with the default of vep.
+
 CHANGES IN VERSION 1.20.0
 ------------------------
 NEW FEATURES
