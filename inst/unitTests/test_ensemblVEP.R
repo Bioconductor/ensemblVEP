@@ -2,7 +2,8 @@ file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation")
 
 test_ensemblVEP <- function()
 {
-    gr <- ensemblVEP(file)
+    myparam <- VEPFlags(flags=list(host="useastdb.ensembl.org"))
+    gr <- ensemblVEP(file, param=myparam)
     checkIdentical(unique(nzchar(as.matrix(mcols(gr)))), TRUE)
     target <- c("Allele", "Gene", "Feature", "Feature_type",
                 "Consequence", "cDNA_position", "CDS_position",
