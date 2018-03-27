@@ -1,5 +1,9 @@
 CHANGES IN VERSION 1.22.0
 ------------------------
+NEW FEATURES
+
+    o add support for Ensembl release 91
+
 MODIFICATIONS
 
     o The default 'host' is not specified, defaulting to vep default of
