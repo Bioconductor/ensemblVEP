@@ -2,6 +2,7 @@ CHANGES IN VERSION 1.22.0
 ------------------------
 NEW FEATURES
 
+    o add support for Ensembl release 92
     o add support for Ensembl release 91
 
 MODIFICATIONS
