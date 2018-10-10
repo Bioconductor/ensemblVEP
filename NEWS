@@ -1,3 +1,9 @@
+CHANGES IN VERSION 1.24.0
+------------------------
+NEW FEATURES
+
+    o add support for Ensembl release 94 (this should also encompass 93)
+
 CHANGES IN VERSION 1.22.0
 ------------------------
 NEW FEATURES
@@ -38,12 +44,12 @@ NEW FEATURES
 
 MODIFICATIONS
 
-    o document parseCSQToGRanges() behavior when no 'CSQ' data are found 
+    o document parseCSQToGRanges() behavior when no 'CSQ' data are found
 
-    o parseCSQToGRanges() returns mcols with names from CSQ field when 
-      CSQ is present but empty 
+    o parseCSQToGRanges() returns mcols with names from CSQ field when
+      CSQ is present but empty
 
-    o add DBI perl module to SystemRequirements 
+    o add DBI perl module to SystemRequirements
 
 
 CHANGES IN VERSION 1.14.0
@@ -74,7 +80,7 @@ CHANGES IN VERSION 1.10.0
 
 NEW FEATURES
 
-    o VEPParam78 class supports Ensembl 80 
+    o VEPParam78 class supports Ensembl 80
 
 
 CHANGES IN VERSION 1.8.0
