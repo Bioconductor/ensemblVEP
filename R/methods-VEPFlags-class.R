@@ -13,7 +13,7 @@ VEPFlags <- function(version=max(unlist(currentVEP())),
     .version_error(version)
     s <- supportedVEP()
     v <- s[[length(s)]]
-    if(any(version %in% v[1]:v[2])){
+    if(any(version %in% v)){
         flags_opts<- flagOpts(flags)
         new("VEPFlags", ..., flags=flags_opts, version=version,
             scriptPath=scriptPath)
