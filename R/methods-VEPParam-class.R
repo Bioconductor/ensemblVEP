@@ -189,7 +189,7 @@ VEPParam  <- function(version=max(unlist(currentVEP())), basic=list(),
     s <- supportedVEP()
     v <- unname(unlist(s[names(s) == class(x)]))
     if(class(x) == "VEPFlags"){
-        if (any(version(x) %in% v[1]:v[2]))
+        if (any(version(x) %in% v))
            NULL
         else
             paste0("for class ", class(x), " version(x) must be one of ",
@@ -358,7 +358,7 @@ supportedVEP <- function() list("VEPParam67"=67, "VEPParam73"=c(73, 74),
                                 "VEPParam75"=75, "VEPParam77"=77,
                                 "VEPParam78"=c(78, 80, 81),
                                 "VEPParam82"=c(82, 83, 84, 85, 86, 87),
-                                "VEPParam88"=c(88), "VEPFlags"=c(90,96)) # VEPFlags only min (90) and current version assuming everything in between will work
+                                "VEPParam88"=c(88), "VEPFlags"=c(90:96)) # VEPFlags only min (90) and current version assuming everything in between will work
 currentVEP <- function() tail(supportedVEP(), 1)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
