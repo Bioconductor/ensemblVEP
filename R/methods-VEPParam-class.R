@@ -358,7 +358,7 @@ supportedVEP <- function() list("VEPParam67"=67, "VEPParam73"=c(73, 74),
                                 "VEPParam75"=75, "VEPParam77"=77,
                                 "VEPParam78"=c(78, 80, 81),
                                 "VEPParam82"=c(82, 83, 84, 85, 86, 87),
-                                "VEPParam88"=c(88), "VEPFlags"=c(90:99)) # VEPFlags only min (90) and current version assuming everything in between will work
+                                "VEPParam88"=c(88), "VEPFlags"=c(90:100)) # VEPFlags only min (90) and current version assuming everything in between will work
 currentVEP <- function() tail(supportedVEP(), 1)
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
