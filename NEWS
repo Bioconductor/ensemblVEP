@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.33.0
+------------------------
+    o add support for Ensembl release 102/103
+
 CHANGES IN VERSION 1.32.0
 ------------------------
     o add support for Ensembl release 100/101
