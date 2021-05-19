@@ -1,5 +1,5 @@
 Package: ensemblVEP
-Version: 1.33.2
+Version: 1.34.0
 Title: R Interface to Ensembl Variant Effect Predictor
 Author: Valerie Obenchain and Lori Shepherd
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
