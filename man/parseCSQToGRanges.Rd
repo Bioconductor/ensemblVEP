@@ -45,7 +45,7 @@
 
 \details{
   \describe{
-    \item{}{
+    \item{-}{
       When \code{ensemblVEP} returns a \code{VCF} object, the consequence data
       are returned unparsed in the 'CSQ' INFO column. \code{parseCSQToGRanges}
       parses these data into a \code{GRanges} object that is expanded to match

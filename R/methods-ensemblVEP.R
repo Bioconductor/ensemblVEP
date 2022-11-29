@@ -7,12 +7,10 @@
     ## only needed on the BioC build system
     if (nchar(Sys.getenv("VEP_PATH")))
         return(Sys.getenv("VEP_PATH"))
-    loc0 <- unname(Sys.which("variant_effect_predictor.pl"))
     loc1 <- unname(Sys.which("vep"))
-    if (!grepl("variant_effect_predictor.pl", loc0, ignore.case=TRUE) &&
-        !grepl("vep", loc1, ignore.case=TRUE))
-        stop("Couldn't find variant_effect_predictor.pl or vep in your PATH.")
-    ifelse(nchar(loc0) > 0L, loc0, loc1)
+    if (!grepl("vep", loc1, ignore.case=TRUE))
+        stop("Couldn't find vep in your PATH.")
+    loc1
 }
 
 setMethod("ensemblVEP", "character", function(file, param=VEPFlags(),
@@ -51,12 +49,12 @@ setMethod("ensemblVEP", "character", function(file, param=VEPFlags(),
             call <- paste0(call, " --vcf --output_file ", dQuote(dest))
         }
         if (verbose) message("Running:\n", call, "\n")
-        system2("perl", call)
+        system(call)
         fun(dest, genome="")
     } else {
         ## write to file or STDOUT
         if (verbose) message("Running:\n", call, "\n")
-        system2("perl", call)
+        system(call)
     }
 
 })
@@ -79,7 +77,10 @@ setMethod(.runtimeOpts, "VEPFlags", function(param, ...){
     keep <- sapply(ops, function(x)
                    ifelse (is.logical(x), x == TRUE, length(x) > 0))
     if(length(keep)==0L)
-        ""
+        ans = ""
     else
-        paste0(" --", names(ops)[keep], " ", ops[keep], collapse=" ")
+        ans = paste0(" --", names(ops)[keep], " ", ops[keep], collapse=" ")
+    ans = gsub("TRUE", "", ans) # VJC Nov 28 2022 hack ... 'vep' script doesn't want logical values
+    ans = gsub("FALSE", "", ans) 
+    ans
 })

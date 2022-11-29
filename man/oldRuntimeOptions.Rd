@@ -243,7 +243,7 @@
 	  to turn on filters, See web page for details.
 	\item{check_frequency:} \code{logical}, default FALSE; turn on
 	  frequency filtering, must also specify all of the
-	  --freq\_* flags. See web page for details.
+	  --freq_* flags. See web page for details.
 	\item{freq_pop:} \code{character}, default \code{character()};
 	  population to use in frequency filter
 	\item{freq_freq:} \code{numeric}, default \code{numeric()};

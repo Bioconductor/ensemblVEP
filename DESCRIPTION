@@ -1,5 +1,5 @@
 Package: ensemblVEP
-Version: 1.41.0
+Version: 1.41.1
 Title: R Interface to Ensembl Variant Effect Predictor
 Author: Valerie Obenchain and Lori Shepherd
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
@@ -15,3 +15,4 @@ SystemRequirements: Ensembl VEP (API version 105) and the Perl modules
 License: Artistic-2.0
 LazyLoad: yes
 biocViews: Annotation, VariantAnnotation, SNP
+RoxygenNote: 7.2.2

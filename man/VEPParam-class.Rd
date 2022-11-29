@@ -123,7 +123,7 @@
 
 \details{
   \itemize{
-    \item{}{
+    \item{-}{
       The \code{VEPParam} family of objects stores runtime options for querying
       the Ensembl Variant Effect Predictor (VEP). Brief descriptions of the
       options are provided below. For complete details, see the Ensembl VEP
@@ -189,7 +189,7 @@
 
 \section{Constructor}{
   \describe{
-    \item{}{
+    \item{-}{
       \code{VEPParam(version=max(unlist(currentVEP()), basic=basicOpts(),
 		     input=inputOpts(), cache=cacheOpts(), output=outputOpts(),
 		     filterqc=filterqcOpts(), database=databaseOpts(),
@@ -237,33 +237,33 @@
   and \code{value} is a named \code{list} or \code{character}
   vector.
   \describe{
-    \item{}{\code{basic(x)}, \code{basic(x) <- value}}
-    \item{}{\code{input(x)}, \code{input(x) <- value}}
-    \item{}{\code{cache(x)}, \code{cache(x) <- value}}
-    \item{}{\code{output(x)}, \code{output(x) <- value}}
-    \item{}{\code{filterqc(x)}, \code{filterqc(x) <- value}}
-    \item{}{\code{database(x)}, \code{database(x) <- value}}
-    \item{}{\code{advanced(x)}, \code{advanced(x) <- value}}
-    \item{}{\code{version(x)}, \code{version(x) <- value}}
-    \item{}{\code{scriptPath(x)}, \code{scriptPath(x) <- value}}
+    \item{-}{\code{basic(x)}, \code{basic(x) <- value}}
+    \item{-}{\code{input(x)}, \code{input(x) <- value}}
+    \item{-}{\code{cache(x)}, \code{cache(x) <- value}}
+    \item{-}{\code{output(x)}, \code{output(x) <- value}}
+    \item{-}{\code{filterqc(x)}, \code{filterqc(x) <- value}}
+    \item{-}{\code{database(x)}, \code{database(x) <- value}}
+    \item{-}{\code{advanced(x)}, \code{advanced(x) <- value}}
+    \item{-}{\code{version(x)}, \code{version(x) <- value}}
+    \item{-}{\code{scriptPath(x)}, \code{scriptPath(x) <- value}}
   }
   Supported for VEPParam73 and later:
   \describe{
-    \item{}{\code{identifier(x)}, \code{identifier(x) <- value}}
-    \item{}{\code{colocatedVariants(x)}, \code{colocatedVariants(x) <- value}}
-    \item{}{\code{dataformat(x)}, \code{dataformat(x) <- value}}
+    \item{-}{\code{identifier(x)}, \code{identifier(x) <- value}}
+    \item{-}{\code{colocatedVariants(x)}, \code{colocatedVariants(x) <- value}}
+    \item{-}{\code{dataformat(x)}, \code{dataformat(x) <- value}}
   }
 }
 
 \section{Helper functions}{
   \describe{
-    \item{}{
+    \item{-}{
       \code{currentVEP()}:
       Invoked with no arguments.
       Returns the most current \code{VEPParam} class and supported
       Ensembl API versions. A single class may support more than one version.
     }
-    \item{}{
+    \item{-}{
       \code{supportedVEP()}:
       Invoked with no arguments.
       Returns a list of \code{VEPParam} subclasses and the Ensembl
@@ -273,19 +273,19 @@
   The following functions create a \code{list} of runtime options and are
   used in the \code{VEPParam} constructor.
   \describe{
-    \item{}{\code{basicOpts(version, ...)}}
-    \item{}{\code{inputOpts(version, ...)}}
-    \item{}{\code{cacheOpts(version, ...)}}
-    \item{}{\code{outputOpts(version, ...)}}
-    \item{}{\code{filterqcOpts(version, ...)}}
-    \item{}{\code{databaseOpts(version, ...)}}
-    \item{}{\code{advancedOpts(version, ...)}}
+    \item{-}{\code{basicOpts(version, ...)}}
+    \item{-}{\code{inputOpts(version, ...)}}
+    \item{-}{\code{cacheOpts(version, ...)}}
+    \item{-}{\code{outputOpts(version, ...)}}
+    \item{-}{\code{filterqcOpts(version, ...)}}
+    \item{-}{\code{databaseOpts(version, ...)}}
+    \item{-}{\code{advancedOpts(version, ...)}}
   }
   Supported for VEPParam73 and later:
   \describe{
-    \item{}{\code{identifierOpts(version, ...)}}
-    \item{}{\code{colocatedVariantsOpts(version, ...)}}
-    \item{}{\code{dataformatOpts(version, ...)}}
+    \item{-}{\code{identifierOpts(version, ...)}}
+    \item{-}{\code{colocatedVariantsOpts(version, ...)}}
+    \item{-}{\code{dataformatOpts(version, ...)}}
   }
 }
 

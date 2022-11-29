@@ -9,7 +9,7 @@ software must be installed.
 Download and Install Ensembl VEP
 ----------------------------------
 Follow the download and installation instructions on this page:
-http://uswest.ensembl.org/info/docs/tools/vep/script/index.html
+https://useast.ensembl.org/info/docs/tools/vep/script/vep_download.html
 
 On Windows you may need to install the perl modules 
 perl-DBD-mysql and perl-DBI if you do not have them.
@@ -28,6 +28,3 @@ On Unix and Mac:
 On Windows:
   perl vep
 
-Note: 
-Versions Ensembl release <88 the name of the script is 
-variant_effect_predictor.pl

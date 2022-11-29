@@ -33,7 +33,7 @@
 
 \details{
   \itemize{
-    \item{}{
+    \item{-}{
       The \code{VEPFlags} family of objects stores runtime options for querying
       the Ensembl Variant Effect Predictor (VEP). For complete details,
       see the Ensembl VEP web page.
@@ -55,7 +55,7 @@
 
 \section{Constructor}{
   \describe{
-    \item{}{
+    \item{-}{
       \code{VEPFlags(version=max(unlist(currentVEP())),
 	scriptPath=character(), flags=list(), ...)}
       Creates a \code{VEPFlags} object.
@@ -77,19 +77,19 @@
   and \code{value} is a named \code{list} or \code{character}
   vector.
   \describe{
-    \item{}{\code{flags(x)}, \code{flags(x) <- value}}
+    \item{-}{\code{flags(x)}, \code{flags(x) <- value}}
  }
 }
 
 \section{Helper functions}{
   \describe{
-    \item{}{
+    \item{-}{
       \code{currentVEP()}:
       Invoked with no arguments.
       Returns the most current \code{VEPFlags} class and supported
       Ensembl API versions.
     }
-    \item{}{
+    \item{-}{
       \code{supportedVEP()}:
       Invoked with no arguments.
       Returns a list of \code{VEPParam} and \code{VEPFlags} subclasses
@@ -99,7 +99,7 @@
   The following functions create a \code{list} of runtime options and are
   used in the \code{VEPFlags} constructor.
   \describe{
-    \item{}{\code{flagOpts(version, ...)}}
+    \item{-}{\code{flagOpts(version, ...)}}
   }
 }
 

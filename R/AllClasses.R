@@ -90,3 +90,5 @@ setClass("VEPParam88", contains="VEPParam",
     prototype(
         version=c(88)),
     validity=.validity)
+
+# NO MORE ... after 88 we use VEPFlags

@@ -32,7 +32,7 @@
 
 \details{
   \describe{
-    \item{}{
+    \item{-}{
       The Ensembl VEP tool is described in detail on the home page
       (link in `see also` section). The \code{ensemblVEP} function
       wraps the perl API and requires a local install of the Ensembl
