@@ -1,6 +1,6 @@
-library(httr)
-
 #' helper function to construct inputs for VEP REST API
+#' @import httr
+#' @import jsonlite
 #' @param chr character(1)
 #' @param pos numeric(1)
 #' @param id character(1)
@@ -18,6 +18,7 @@ variant_body = function(chr, pos, id, ref, alt) {
 #' @param ref character(1) reference allele
 #' @param alt character(1) alternative allele
 #' @note This function prepares a POST to rest.ensembl.org/vep/homo_sapiens/region endpoint.
+#' @return Instance of 'response' defined in httr package.
 #' @examples
 #' chk = post_Hs_region("7", 155800001, "chk", "A", "T")
 #' chk
@@ -38,38 +39,21 @@ post_Hs_region = function(chr, pos, id, ref, alt) {
  ans
 }
 
-
-if (FALSE) {
-basic_chr = c(21,21)
-basic_pos = c(26960070, 26965148)
-basic_id = c("rs116645811", "rs116645811")
-basic_ref = c("G", "G")
-basic_alt = c("A", "A")
-
-z = post_Hs_region(basic_chr, basic_pos, basic_id, basic_ref, basic_alt) 
-
-file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation")
-library(VariantAnnotation)
-rv = readVcf(file)
-erv = expand(rv)
-#vr = as(rv, "VRanges")
-rr = rowRanges(erv)
-rrc = as.character(seqnames(rr))
-rrp = start(rr)
-rr_id = rep("X", length(rrp))
-rr_ref = as.character(rr$REF)
-rr_alt = as.character(rr$ALT)
-
-zz = post_Hs_region(rrc, rrp, rr_id, rr_ref, rr_alt)
-}
-
-post_Hs_region(7, 155800001, "chk", "A", "T")
-
-fl <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
-r22 = readVcf(fl)
-dr = which(width(rowRanges(r22))!=1)
-r22s = r22[-dr]
-
+#' Use the VEP region API on variant information in a VCF object as defined in VariantAnnotation.
+#' @param vcfobj instance of VCF class; note the difference between the CollapsedVCF and
+#' ExpandedVCF instances.
+#' @param snv_only logical(1) if TRUE filter the VCF to information about single nucleotide addresses
+#' @param chk_max logical(1) requests to ensembl VEP API are limited to 200 positions; if
+#' TRUE and the request involves more than 200 positions, an error is thrown by this function.
+#' @return instance of 'response' from httr package
+#' @examples
+#' fl <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
+#' r22 = readVcf(fl)
+#' dr = which(width(rowRanges(r22))!=1)
+#' r22s = r22[-dr]
+#' res = vep_by_region(r22[1:100], snv_only=FALSE, chk_max=FALSE)
+#' ans = fromJSON(toJSON(content(res)))
+#' @export
 vep_by_region = function(vcfobj, snv_only=TRUE, chk_max=TRUE) {
  if (snv_only) {
   dr = which(width(rowRanges(vcfobj))!=1)
@@ -86,5 +70,4 @@ vep_by_region = function(vcfobj, snv_only=TRUE, chk_max=TRUE) {
                  alt = as.character(unlist(rr$ALT)) )
 }
 
-ans = vep_by_region(r22[1:100], snv_only=FALSE, chk_max=FALSE)
-     
+

@@ -13,6 +13,13 @@
     loc1
 }
 
+#' basic method
+#' @param file A \code{character} specifying the full path to the file,
+#' including the file name.
+#' @param param An instance of \code{VEPFlags} specifying runtime options.
+#' @param \dots Additional arguments passed to methods.
+#' @param verbose logical(1) should system call to vep be printed
+#' @export
 setMethod("ensemblVEP", "character", function(file, param=VEPFlags(),
                                               ..., verbose=FALSE){
 

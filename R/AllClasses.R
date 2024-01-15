@@ -1,3 +1,15 @@
+#' @rawNamespace import(methods)
+#' @rawNamespace importFrom(stats, setNames)
+#' @rawNamespace import(BiocGenerics)
+#' @rawNamespace import(S4Vectors)
+#' @rawNamespace import(GenomicRanges)
+#' @rawNamespace import(VariantAnnotation)
+#' @rawNamespace importClassesFrom(Biostrings, DNAStringSet)
+#' @rawNamespace importMethodsFrom(SummarizedExperiment, rowRanges)
+#' @rawNamespace importMethodsFrom(GenomeInfoDb, "genome<-")
+#' @rawNamespace exportPattern("^[^\\.]")
+#' @rawNamespace exportClassPattern("^.*$")
+
 ### =========================================================================
 ### All Classes.
 ### =========================================================================
