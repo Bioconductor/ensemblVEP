@@ -74,7 +74,6 @@
 }
 
 \seealso{
-  \link{ensemblVEP}
   \link{VEPParam-class}
 }
 

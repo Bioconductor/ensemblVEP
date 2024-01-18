@@ -12,6 +12,7 @@ output:
     number_sections: yes
     theme: united
     toc: yes
+bibliography: ens.bib
 ---
 
 ```{r setup,echo=FALSE,results="hide",message=FALSE}
@@ -22,7 +23,10 @@ library(ensemblVEP)
 
 # Introduction
 
-Prior to Bioconductor 3.19, the ensemblVEP package worked
+Ensembl's Variant Effect Predictor is described in @McLaren2016.
+
+Prior to Bioconductor 3.19, the ensemblVEP package provided
+access to Ensembl's predictions
 through an interface between Perl and MySQL.
 
 In 3.19 this package focuses on use of the VEP component
@@ -118,3 +122,5 @@ An important element of prior work in ensemblVEP supports
 feeding annotation back into the VCF used to generate
 the effect prediction query.  This seems feasible but
 concrete use cases are of interest.
+
+# References

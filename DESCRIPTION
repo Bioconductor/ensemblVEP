@@ -7,8 +7,9 @@ Depends: R (>= 4.3), methods, BiocGenerics, GenomicRanges, VariantAnnotation,
     jsonlite, httr
 Imports: S4Vectors (>= 0.9.25), Biostrings, SummarizedExperiment,
     GenomeInfoDb, stats, curl
-Suggests: RUnit, BiocStyle, DT, rjsoncons
+Suggests: RUnit, BiocStyle, DT, rjsoncons, knitr
 Description: Query the Ensembl Variant Effect Predictor via the REST API.
+VignetteBuilder: knitr
 License: Artistic-2.0
 LazyLoad: yes
 biocViews: Annotation, VariantAnnotation, SNP
