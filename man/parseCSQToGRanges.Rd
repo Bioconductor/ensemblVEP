@@ -84,6 +84,10 @@
 }
 
 \examples{
+\dontrun{
+#
+# material retained for comparison with REST-based approach
+#
   file <- system.file("extdata", "ex2.vcf", package="VariantAnnotation")
   vep <- ensemblVEP(file, param=VEPFlags(flags=list(vcf=TRUE, host="useastdb.ensembl.org")))
 
@@ -94,6 +98,7 @@
   vcf <- readVcf(file, "hg19")
   csq <- parseCSQToGRanges(vep, VCFRowID=rownames(vcf))
   csq[1:4]
+  }
 }
 
 \keyword{methods}

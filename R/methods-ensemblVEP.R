@@ -23,6 +23,7 @@
 setMethod("ensemblVEP", "character", function(file, param=VEPFlags(),
                                               ..., verbose=FALSE){
 
+.Deprecated(new="vep_by_region", msg="This package now focuses on the ensemblVEP REST API, see, e.g., 'https://rest.ensembl.org/documentation/info/vep_region_post'")
     if (!length(path <- scriptPath(param)))
         path <- .getVepPath()
     old.quotes <- getOption("useFancyQuotes")

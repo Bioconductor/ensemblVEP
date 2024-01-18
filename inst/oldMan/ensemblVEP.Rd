@@ -83,6 +83,11 @@
   gr[1:3]
   }
   ## When the 'vcf' option is TRUE, a VCF object is returned.
+  \dontrun{
+  ##
+  ## material is retained as illustration of prior functionality
+  ## for comparison with capabilities of REST API
+  ##
   myparam <- VEPFlags(flags=list(vcf=TRUE, host="useastdb.ensembl.org"))
   vcf <- ensemblVEP(file, param=myparam)
   vcf
@@ -139,6 +144,7 @@
   ## 'sift' results are returned.
   ## Setting 'sift' to 'b' will return both predictions and scores.
   flags(param)$sift <- 'b'
+  }
 
 }
 

@@ -1,6 +1,4 @@
 #' helper function to construct inputs for VEP REST API
-#' @import httr
-#' @import jsonlite
 #' @param chr character(1)
 #' @param pos numeric(1)
 #' @param id character(1)
@@ -18,7 +16,7 @@ variant_body = function(chr, pos, id, ref, alt) {
 #' @param ref character(1) reference allele
 #' @param alt character(1) alternative allele
 #' @note This function prepares a POST to rest.ensembl.org/vep/homo_sapiens/region endpoint.
-#' @return Instance of 'response' defined in httr package.
+#' @value Instance of 'response' defined in httr package.
 #' @examples
 #' chk = post_Hs_region("7", 155800001, "chk", "A", "T")
 #' chk
@@ -55,7 +53,6 @@ post_Hs_region = function(chr, pos, id, ref, alt) {
 #' ans = fromJSON(toJSON(content(res)))
 #' @export
 vep_by_region = function(vcfobj, snv_only=TRUE, chk_max=TRUE) {
- stopifnot(inherits(vcfobj, "VCF"))
  if (snv_only) {
   dr = which(width(rowRanges(vcfobj))!=1)
   if (length(dr)>0) vcfobj = vcfobj[-dr]
